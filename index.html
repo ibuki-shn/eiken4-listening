@@ -135,6 +135,21 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 }
 .hawaiiword b{font-family:"Pacifico",cursive; font-weight:400; font-size:15px}
 
+/* コーチのホヌ */
+.mascot{display:flex; gap:12px; align-items:flex-end; margin-top:18px}
+.mascot .turtle{width:82px; flex:none; filter:drop-shadow(0 5px 10px rgba(46,155,114,.3))}
+@keyframes honu-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.mascot .turtle{animation:honu-float 3.6s ease-in-out infinite}
+.mascot .bubble{
+  position:relative; background:var(--card); border:1px solid var(--line);
+  border-radius:20px 20px 20px 5px; padding:11px 15px; margin-bottom:10px;
+  font-size:14px; font-weight:700; line-height:1.55;
+  box-shadow:var(--shadow-card);
+}
+.mascot .bubble small{display:block; font-size:10.5px; color:var(--sub); letter-spacing:.06em; margin-bottom:1px}
+.qresult .honu{width:72px; margin:6px auto 0; display:block; filter:drop-shadow(0 4px 8px rgba(46,155,114,.3))}
+.honuline{font-size:14px; font-weight:900; color:var(--green); margin-top:6px}
+
 .lesson-card{
   background:var(--card); border:1px solid var(--line); border-radius:28px;
   padding:24px 20px; margin-top:18px; text-align:center;
@@ -534,6 +549,8 @@ nav .nbadge[hidden]{display:none}
   <div class="mission">🎯 <span id="mission-line">今日の目標：<b>10問（約10分）</b></span></div>
   <div class="hawaiiword">🌺 きょうのハワイ語：<b id="hw-word">Aloha</b><span id="hw-mean">＝こんにちは</span></div>
 
+  <div class="mascot" id="mascot"></div>
+
   <!-- モード選択カード -->
   <div class="lesson-card" id="hero-select">
     <svg class="corner" viewBox="0 0 40 40"><g fill="var(--pink)" opacity=".9"><ellipse cx="20" cy="10" rx="5.5" ry="8.5"/><ellipse cx="29" cy="17" rx="5.5" ry="8.5" transform="rotate(72 29 17)"/><ellipse cx="25.5" cy="27.5" rx="5.5" ry="8.5" transform="rotate(144 25.5 27.5)"/><ellipse cx="14.5" cy="27.5" rx="5.5" ry="8.5" transform="rotate(216 14.5 27.5)"/><ellipse cx="11" cy="17" rx="5.5" ry="8.5" transform="rotate(288 11 17)"/></g><circle cx="20" cy="20" r="4" fill="var(--sun)"/></svg>
@@ -838,6 +855,60 @@ function renderBadges(){
   el("bdg-count").textContent = got + " / " + BADGES.length;
 }
 
+/* ---------- コーチのホヌ ---------- */
+const TURTLE_SVG =
+  '<svg viewBox="0 0 130 104" fill="none" aria-label="コーチのホヌ">' +
+  '<ellipse cx="56" cy="97" rx="40" ry="5" fill="rgba(0,0,0,.1)"/>' +
+  '<ellipse cx="30" cy="83" rx="12" ry="7" fill="#3DA97F" transform="rotate(-24 30 83)"/>' +
+  '<path d="M16 60 Q7 62 11 69 Q18 69 21 64 Z" fill="#46B98C"/>' +
+  '<ellipse cx="56" cy="70" rx="42" ry="11" fill="#2E9B72"/>' +
+  '<ellipse cx="56" cy="54" rx="40" ry="28" fill="#46B98C"/>' +
+  '<circle cx="40" cy="47" r="7" fill="#7FD6B0"/><circle cx="61" cy="41" r="8.5" fill="#7FD6B0"/>' +
+  '<circle cx="75" cy="55" r="6" fill="#7FD6B0"/><circle cx="47" cy="63" r="6" fill="#7FD6B0"/>' +
+  '<ellipse cx="80" cy="85" rx="14" ry="8" fill="#46B98C" transform="rotate(-16 80 85)"/>' +
+  '<circle cx="105" cy="56" r="15" fill="#63C9A0"/>' +
+  '<circle cx="110" cy="52" r="2.7" fill="#23413A"/><circle cx="111" cy="51" r="1" fill="#fff"/>' +
+  '<path d="M104 62 Q108 66 113 62" stroke="#23413A" stroke-width="1.8" stroke-linecap="round"/>' +
+  '<circle cx="100" cy="60" r="2.8" fill="#FF9FB4" opacity=".75"/>' +
+  '<circle cx="91" cy="64" r="3.6" fill="#F2547D"/><circle cx="96" cy="69" r="3.6" fill="#FFB94E"/><circle cx="89" cy="71" r="3.3" fill="#FF8FA9"/>' +
+  '</svg>';
+const doy = () => { const t = today(); return Math.floor((t - new Date(t.getFullYear(),0,1)) / 864e5); };
+function pick(arr){ return arr[doy() % arr.length]; }
+function honuMessage(){
+  const t = today();
+  if (done[keyOf(t)]) return pick([
+    "今日の分、やりきったね！花丸ゲット🌺 また明日！",
+    "Mahalo! 今日もいい波に乗れたね🌊",
+    "えらい！この積み重ねが本番の点になるよ"
+  ]);
+  if (wrong.length >= 5) return "復習が" + wrong.length + "問たまってるよ。先にいっしょに片づけよう！";
+  const s = streak();
+  if (s >= 3) return pick([
+    "連続" + s + "日目！すごくいい波に乗ってるよ🌊",
+    s + "日つづいてる！ホヌもうれしい〜",
+    "連続" + s + "日！今日もこの波を切らさないでいこう"
+  ]);
+  if (mock.best >= 21) return "模試は合格圏だったね！今日もコツコツいこう";
+  const h = new Date().getHours();
+  if (h < 11) return pick(["おはよう！今日の10問、いっしょにがんばろう🌺","朝の10分がいちばん頭に入るよ！さあ行こう〜"]);
+  if (h < 18) return pick(["今日の10問、まだなら今がチャンス！","1日10分。コツコツがいちばん強いんだよ🐢"]);
+  return pick(["今日の分、寝る前にサクッとやっちゃおう！","夜の復習は記憶に残りやすいよ。10分だけ！"]);
+}
+function renderMascot(){
+  const m = el("mascot");
+  if (!m) return;
+  m.innerHTML = '<span class="turtle">' + TURTLE_SVG + '</span>' +
+    '<div class="bubble"><small>コーチのホヌ</small><span id="honu-line"></span></div>';
+  document.getElementById("honu-line").textContent = honuMessage();
+}
+function honuCheer(perfect, good, mode, ok){
+  if (mode === "mock") return ok >= 21 ? "合格圏だ〜！！ホヌ、泣きそう…🌈" : "模試おつかれさま！挑戦したこと自体がすごいよ";
+  if (mode === "review") return wrong.length ? "その調子！弱点がどんどん消えてるよ" : "全部片づいた！ピカピカだね✨";
+  if (perfect) return "パーフェクト！！ホヌ、感動しちゃった…🌺";
+  if (good) return "いい波きてる！この調子🌊";
+  return "だいじょうぶ、ホヌがついてるよ。復習すれば必ず伸びる！";
+}
+
 /* ---------- きょうのハワイ語 ---------- */
 const HAWAII = [
   ["Aloha","こんにちは・愛"],["Mahalo","ありがとう"],["Ohana","家族"],["Honu","ウミガメ"],
@@ -888,6 +959,7 @@ function renderDay(){
     ? "自己ベスト " + mock.best + "/30" + (mock.best >= 21 ? "（合格圏！）" : "") + "・約20分"
     : "本番と同じ30問・合否判定つき（約20分）";
   renderLevel();
+  renderMascot();
   renderJourney();
   updateNavBadge();
 }
@@ -1307,6 +1379,8 @@ function showResult(){
     '<div class="score">' + ok + '<small> / ' + list.length + ' 問</small></div>' +
     '<div class="xp">＋' + quiz.xp + ' XP</div>' +
     (newBadges > 0 ? '<div class="newbadges">🎖️ 新しいごほうびバッジを ' + newBadges + ' 個ゲット！「きろく」タブで見られます</div>' : '') +
+    '<span class="honu">' + TURTLE_SVG + '</span>' +
+    '<div class="honuline">「' + honuCheer(perfect, good, mode, ok) + '」</div>' +
     '<div class="msg">' + resultMsg(perfect, good, mode, ok) + '</div>' +
     '<div class="acts"></div>';
   const acts = r.querySelector(".acts");
@@ -1582,7 +1656,7 @@ const ONB_ART =
   '</svg>';
 const ONB_PAGES = [
   {h:"英検4級リスニング講座",
-   p:"1日10問・約10分。28日で本番およそ9回分（280問）を聞き切る、通勤時間のためのリスニング講座です。音声はすべてプロ品質のナレーションで収録しています。",
+   p:"1日10問・約10分。28日で本番およそ9回分（280問）を聞き切る、通勤時間のためのリスニング講座です。音声はすべてプロ品質のナレーションで収録。相棒の<b>コーチのホヌ🐢</b>が、毎日いっしょに応援します。",
    steps:null},
   {h:"毎日の流れは、3つだけ",
    p:"",
@@ -1600,6 +1674,7 @@ function renderOnb(){
   const inner = el("onb-inner");
   inner.innerHTML =
     ONB_ART +
+    (onbPage === 0 ? '<span style="display:block;width:80px;margin:-6px auto 0">' + TURTLE_SVG + '</span>' : '') +
     '<div class="aloha">Aloha!</div>' +
     '<h2>' + pg.h + '</h2>' +
     (pg.p ? '<p>' + pg.p + '</p>' : '') +
