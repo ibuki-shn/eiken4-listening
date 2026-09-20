@@ -90,8 +90,9 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .wavebar{display:block; width:100%; height:14px; margin-top:20px; color:var(--sea); opacity:.3}
 
 /* ---------- ホーム ---------- */
-.top-row{display:flex; align-items:center; justify-content:space-between; gap:10px}
-.date-line{font-size:13.5px; color:var(--sub); font-weight:700; letter-spacing:.05em}
+.top-row{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+.top-row .eyebrow{min-width:0}
+.date-line{font-size:13.5px; color:var(--sub); font-weight:700; letter-spacing:.05em; margin-top:8px}
 .streak-chip{
   display:flex; align-items:center; gap:6px; background:var(--glass);
   backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
@@ -100,7 +101,7 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
   box-shadow:0 4px 14px -6px rgba(70,45,25,.18);
 }
 .streak-chip b{font-size:18px; color:var(--coral); font-variant-numeric:tabular-nums}
-.greet{font-size:26px; font-weight:900; margin-top:10px; letter-spacing:.01em}
+.greet{font-size:25px; font-weight:900; margin-top:2px; letter-spacing:.01em; line-height:1.35}
 .greet .hib{display:inline-block; width:26px; height:26px; vertical-align:-3px; margin-left:6px; filter:drop-shadow(0 2px 3px rgba(242,84,125,.3))}
 
 /* レベルバー */
@@ -128,8 +129,8 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 }
 .mission b{color:var(--ink)}
 .hawaiiword{
-  margin-top:10px; display:inline-flex; align-items:center; gap:8px;
-  background:var(--pink-soft); border-radius:999px; padding:6px 18px;
+  margin-top:10px; display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;
+  max-width:100%; background:var(--pink-soft); border-radius:18px; padding:6px 16px;
   font-size:13.5px; font-weight:700; color:var(--pink);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
 }
@@ -156,11 +157,12 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
   box-shadow:var(--shadow-card);
   position:relative; overflow:hidden;
 }
-.lesson-card .corner{position:absolute; top:14px; right:14px; width:46px; height:46px; opacity:.95; pointer-events:none; filter:drop-shadow(0 3px 5px rgba(242,84,125,.25))}
+.lesson-card .corner{position:absolute; bottom:-18px; right:-16px; width:126px; height:126px; opacity:.08; pointer-events:none; z-index:0}
+.lesson-card > *:not(.corner){position:relative; z-index:1}
 .day-row{display:flex; align-items:center; justify-content:center; gap:4px}
 .day-row button{width:44px; height:44px; border-radius:50%; border:none; background:none; font-size:22px; color:var(--sub)}
 .day-row button:active{background:var(--ring-bg)}
-.day-title{font-size:21px; font-weight:900; min-width:190px; letter-spacing:.02em}
+.day-title{font-size:21px; font-weight:900; flex:1; min-width:0; letter-spacing:.02em}
 .day-title small{display:block; font-size:12.5px; color:var(--sub); font-weight:700; margin-top:2px; letter-spacing:.04em}
 .mode-btns{display:flex; flex-direction:column; gap:13px; margin-top:18px}
 .mode-btn{
@@ -184,7 +186,10 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .mode-btn .t small{display:block; font-size:12px; font-weight:700; opacity:.9; margin-top:2px; letter-spacing:.02em}
 .mode-btn .arrow{margin-left:auto; font-size:20px; opacity:.7}
 .mode-listen{background:var(--grad-sea); color:var(--sea-ink); box-shadow:0 12px 28px -10px rgba(14,155,166,.55)}
-.mode-quiz{background:var(--grad-pink); color:#fff; box-shadow:0 12px 28px -10px rgba(242,84,125,.55)}
+.mode-voice{background:var(--grad-sunset); color:#fff; box-shadow:0 12px 28px -10px rgba(242,84,125,.5)}
+.mode-quiz{background:var(--bg); color:var(--ink); border:1.5px solid var(--line)}
+.mode-quiz::after{display:none}
+.mode-quiz .ico{background:var(--sea-soft)}
 .mode-btn:active{transform:scale(.97)}
 .done-badge,.score-badge{
   display:inline-flex; align-items:center; gap:5px; margin-top:14px; margin-inline:4px;
@@ -249,13 +254,13 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .journey-head span{font-size:13px; color:var(--sub); font-weight:700; font-variant-numeric:tabular-nums}
 .week{
   background:var(--card); border:1px solid var(--line); border-radius:24px;
-  padding:14px 12px 10px; margin-top:12px; box-shadow:var(--shadow-card);
+  padding:14px 9px 10px; margin-top:12px; box-shadow:var(--shadow-card);
 }
 .week .wk-label{font-family:"Pacifico",cursive; font-size:14px; color:var(--sea); margin:0 8px 8px; letter-spacing:.06em}
 .week .nodes{display:grid; grid-template-columns:repeat(7,1fr); gap:2px}
 .node{position:relative; border:none; background:none; padding:0; display:flex; flex-direction:column; align-items:center; gap:3px}
 .node .c{
-  position:relative; width:44px; height:44px; border-radius:50%;
+  position:relative; width:100%; max-width:46px; aspect-ratio:1; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
   font-size:15px; font-weight:900; font-variant-numeric:tabular-nums;
   background:var(--bg); border:1.5px solid var(--line); color:var(--sub);
@@ -376,6 +381,41 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .qresult .msg{font-size:14px; color:var(--sub); font-weight:700; margin-top:8px}
 .qresult .acts{display:flex; flex-direction:column; gap:11px; margin-top:24px}
 .qresult .newbadges{margin-top:12px; font-size:14px; font-weight:900; color:var(--pink)}
+
+/* ---------- 声で答えるモード ---------- */
+.vq{
+  position:fixed; inset:0; z-index:55;
+  background-color:var(--bg);
+  background-image:var(--sky); background-repeat:no-repeat; background-size:100% 320px;
+  display:flex; flex-direction:column; overflow-y:auto;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 18px calc(24px + env(safe-area-inset-bottom,0px));
+}
+.vq .wrap{max-width:560px; width:100%; margin:0 auto; flex:1; display:flex; flex-direction:column}
+.vq .stage{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:14px 0 6px}
+.vq .qno{font-size:13px; font-weight:900; color:var(--sea); letter-spacing:.08em}
+.vq .big{font-size:30px; font-weight:900; margin-top:6px; line-height:1.35}
+.vq .big.ok{color:var(--green)}
+.vq .big.ng{color:var(--pink)}
+.vq .sub{font-size:14px; color:var(--sub); font-weight:700; margin-top:8px; min-height:44px}
+.vq .mic{
+  width:104px; height:104px; border-radius:50%; margin:16px auto 4px;
+  display:flex; align-items:center; justify-content:center; font-size:42px;
+  background:var(--sea-soft); color:var(--sea);
+}
+.vq .mic.live{background:var(--grad-sunset); color:#fff; animation:micpulse 1.3s ease-in-out infinite}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(242,84,125,.45)}50%{box-shadow:0 0 0 20px rgba(242,84,125,0)}}
+.vq .nums{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:16px}
+.vq .nums.n3{grid-template-columns:repeat(3,1fr)}
+.vq .num{
+  min-height:86px; border-radius:24px; background:var(--card); border:2px solid var(--line);
+  font-size:36px; font-weight:900; color:var(--ink); box-shadow:var(--shadow-card);
+  font-variant-numeric:tabular-nums;
+}
+.vq .num:active{transform:scale(.95)}
+.vq .num.correct{background:var(--green-soft); border-color:var(--green); color:var(--green)}
+.vq .num.wrong{background:var(--pink-soft); border-color:var(--pink); color:var(--pink)}
+.vq .num:disabled{opacity:.55}
+.vq .hint{font-size:12px; color:var(--sub); font-weight:700; text-align:center; margin-top:14px; line-height:1.6}
 
 /* ---------- 分析 ---------- */
 .stats{display:flex; gap:10px; margin-top:16px}
@@ -532,10 +572,8 @@ nav .nbadge[hidden]{display:none}
     <div class="eyebrow">Aloha, English!</div>
     <div class="streak-chip">🔥 連続 <b id="streak-num">0</b> 日</div>
   </div>
-  <div class="top-row">
-    <div class="greet" id="greet">こんにちは<svg class="hib" viewBox="0 0 40 40"><g fill="var(--pink)"><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(0 20 20)"/><ellipse cx="29.5" cy="17" rx="6" ry="9" transform="rotate(72 29.5 17)"/><ellipse cx="26" cy="28" rx="6" ry="9" transform="rotate(144 26 28)"/><ellipse cx="14" cy="28" rx="6" ry="9" transform="rotate(216 14 28)"/><ellipse cx="10.5" cy="17" rx="6" ry="9" transform="rotate(288 10.5 17)"/></g><circle cx="20" cy="20" r="4.5" fill="var(--sun)"/></svg></div>
-    <div class="date-line" id="today-line"></div>
-  </div>
+  <div class="date-line" id="today-line"></div>
+  <div class="greet" id="greet">こんにちは<svg class="hib" viewBox="0 0 40 40"><g fill="var(--pink)"><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(0 20 20)"/><ellipse cx="29.5" cy="17" rx="6" ry="9" transform="rotate(72 29.5 17)"/><ellipse cx="26" cy="28" rx="6" ry="9" transform="rotate(144 26 28)"/><ellipse cx="14" cy="28" rx="6" ry="9" transform="rotate(216 14 28)"/><ellipse cx="10.5" cy="17" rx="6" ry="9" transform="rotate(288 10.5 17)"/></g><circle cx="20" cy="20" r="4.5" fill="var(--sun)"/></svg></div>
 
   <div class="lvl">
     <div class="medal" id="lvl-num">Lv.1</div>
@@ -562,12 +600,17 @@ nav .nbadge[hidden]{display:none}
     <div class="mode-btns">
       <button class="mode-btn mode-listen" id="btn-mode-listen">
         <span class="ico">🚗</span>
-        <span class="t">聞くレッスン<small>運転中はこちら。1タップで10問すべて自動再生</small></span>
+        <span class="t">聞き流し<small>画面を消してもOK。10問ぜんぶ自動で流れます</small></span>
+        <span class="arrow">›</span>
+      </button>
+      <button class="mode-btn mode-voice" id="btn-mode-voice">
+        <span class="ico">🎤</span>
+        <span class="t">声で答える<small>「2番」と声で。まちがえた時だけ解説が流れます</small></span>
         <span class="arrow">›</span>
       </button>
       <button class="mode-btn mode-quiz" id="btn-mode-quiz">
         <span class="ico">✏️</span>
-        <span class="t">実戦ドリル<small>タップで答えて即採点。弱点分析にも反映</small></span>
+        <span class="t">実戦ドリル<small>画面を見て解く。おうち向け</small></span>
         <span class="arrow">›</span>
       </button>
     </div>
@@ -637,12 +680,13 @@ nav .nbadge[hidden]{display:none}
   <details class="howto">
     <summary>使い方・合格までの進め方</summary>
     <div class="body">
-      <b>毎日の流れ：</b>
+      <b>3つの使い方：</b>
       <ol>
-        <li>車では<b>「聞くレッスン」</b>。走り出す前に再生を1回押すだけ。<b>画面を消してもポケットの中でも再生は続き</b>、ハンドルの「次の曲」ボタンで次の問題へ飛べます。</li>
-        <li>おうちでは<b>「実戦ドリル」</b>。同じ10問に自分で答えると、聞き流しの何倍も定着します。</li>
-        <li>間違えた問題は<b>「復習」タブ</b>に自動でたまります。解き直して正解すれば消えます。</li>
+        <li><b>🚗 聞き流し</b>…走り出す前に再生を1回押すだけ。<b>画面を消してもポケットの中でも再生は続き</b>、ハンドルの「次の曲」ボタンで次の問題へ飛べます。長い日本語の案内は入っていないので、すぐ第1問から始まります。</li>
+        <li><b>🎤 声で答える</b>…問題のあと<b>「2番」と声に出す</b>と、正解ならピンポン♪ですぐ次へ。まちがえた時だけ日本語の解説が流れます。声が使えないときは画面の大きな数字ボタンでもOK。<b>このモードは画面をつけたままで</b>使ってください。</li>
+        <li><b>✏️ 実戦ドリル</b>…おうちで画面を見ながら解くモード。英文と解説が文字でも読めます。</li>
       </ol>
+      まちがえた問題は、どのモードでも<b>「復習」タブ</b>に自動でたまります。解き直して正解すれば消えます。<br><br>
       <b>合格までの進め方：</b><br>
       ・毎日10問（約10分）。28日で一周、本番約9回分の280問。<br>
       ・週に1回は<b>「模試」</b>か「過去問」タブで30問を通しで。<br>
@@ -735,6 +779,25 @@ nav .nbadge[hidden]{display:none}
     <div class="qcount" id="qcount">1/10</div>
   </div>
   <div class="qwrap" id="qwrap"></div>
+</div>
+
+<!-- ================= 声で答えるモード ================= -->
+<div class="vq" id="vq" hidden>
+  <div class="quiz-top">
+    <button id="vq-close" aria-label="やめる">✕</button>
+    <div class="qbar"><i id="vq-bar"></i></div>
+    <div class="qcount" id="vq-count">1 / 10</div>
+  </div>
+  <div class="wrap">
+    <div class="stage">
+      <div class="qno" id="vq-no"></div>
+      <div class="big" id="vq-big"></div>
+      <div class="mic" id="vq-mic">🎧</div>
+      <div class="sub" id="vq-sub"></div>
+    </div>
+    <div class="nums" id="vq-nums"></div>
+    <div class="hint">運転中は画面を見ずに、声で「2番」と答えてください。<br>正解ならピンポン♪ですぐ次へ。まちがえた時だけ解説が流れます。</div>
+  </div>
 </div>
 
 <!-- ================= はじめてガイド ================= -->
@@ -974,16 +1037,19 @@ function switchDay(d){
 
 el("btn-mode-listen").addEventListener("click", () => {
   el("hero-select").hidden = true;
+  el("btn-mock").hidden = true;
   el("hero-listen").hidden = false;
   el("listen-day").textContent = "Day " + (viewDay+1);
   el("listen-theme").textContent = "テーマ：" + META.days[viewDay].theme;
 });
+el("btn-mode-voice").addEventListener("click", () => startVoiceQuiz(viewDay));
 el("btn-mode-quiz").addEventListener("click", () => startQuiz("day", viewDay));
 el("btn-mock").addEventListener("click", () => startQuiz("mock"));
 el("listen-back").addEventListener("click", () => { pauseIfPlaying(); closeListen(); });
 function closeListen(){
   el("hero-listen").hidden = true;
   el("hero-select").hidden = false;
+  el("btn-mock").hidden = false;
   el("review").innerHTML = ""; revealed = 0;
   setRing(0);
   el("status").textContent = "今日の10問・約10分";
@@ -1171,31 +1237,38 @@ function playSeg(file, t0, t1, cb){
 function stopSeg(){ segEnd = null; onSegEnd = null; qp.pause(); }
 
 let actx = null;
-function beep(ok){
+function audioCtx(){
   try{
     actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-    const t0 = actx.currentTime;
-    const freqs = ok ? [[660,0],[990,.12]] : [[220,0]];
-    freqs.forEach(([f, dt]) => {
-      const o = actx.createOscillator(), g = actx.createGain();
-      o.type = "sine"; o.frequency.value = f;
-      g.gain.setValueAtTime(.0001, t0+dt);
-      g.gain.exponentialRampToValueAtTime(.15, t0+dt+.02);
-      g.gain.exponentialRampToValueAtTime(.0001, t0+dt+(ok?.25:.35));
-      o.connect(g).connect(actx.destination);
-      o.start(t0+dt); o.stop(t0+dt+.5);
-    });
-  }catch(e){}
+    if (actx.state === "suspended") actx.resume();
+    return actx;
+  }catch(e){ return null; }
 }
+function playTones(specs){
+  const c = audioCtx();
+  if (!c) return;
+  const t0 = c.currentTime;
+  specs.forEach(s => {
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = s.type || "sine"; o.frequency.value = s.f;
+    g.gain.setValueAtTime(.0001, t0 + s.t);
+    g.gain.exponentialRampToValueAtTime(s.g || .2, t0 + s.t + .015);
+    g.gain.exponentialRampToValueAtTime(.0001, t0 + s.t + s.d);
+    o.connect(g).connect(c.destination);
+    o.start(t0 + s.t); o.stop(t0 + s.t + s.d + .05);
+  });
+}
+/* ピンポーン／ブブー */
+function sndCorrect(){ playTones([{f:1046.5,t:0,d:.45,g:.26},{f:1396.9,t:.17,d:.8,g:.26}]); }
+function sndWrong(){ playTones([{f:196,t:0,d:.26,g:.22,type:"square"},{f:174.6,t:.3,d:.55,g:.22,type:"square"}]); }
+function beep(ok){ ok ? sndCorrect() : sndWrong(); }
 
 let quiz = null;
 function segTimes(day, n){
-  const ms = META.days[day].questions;
-  const m = ms[n-1];
-  const next = ms[n];
+  const m = META.days[day].questions[n-1];
   return {
-    q0: m.start, q1: m.ans - META.think,
-    a0: m.ans,   a1: next ? next.start - 0.2 : META.days[day].duration
+    q0: m.start,                      q1: m.ans - META.think,   // 問題＋選択肢（考える時間の手前まで）
+    a0: m.ans + (META.chime || 0),    a1: m.end                 // チャイムを飛ばして解説だけ
   };
 }
 function buildMockList(){
@@ -1413,6 +1486,193 @@ function resultMsg(perfect, good, mode, ok){
   if (good) return "本番の合格ラインは6〜7割。十分に合格圏です";
   return "間違えた問題は「復習」タブに保存しました。解き直しが最短の近道です";
 }
+
+/* ---------- 声で答えるモード ---------- */
+const SR_CLS = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, recActive = false, recWarmed = false, vq = null;
+
+function parseChoice(txt, max){
+  const t = String(txt).replace(/[\s　]/g, "");
+  const z = t.replace(/[１-４]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+  const d = z.match(/[1-4]/);
+  if (d){ const n = +d[0]; if (n >= 1 && n <= max) return n; }
+  const w = [[4, /四|よん|ヨン|フォー|four/i], [3, /三|さん|サン|スリー|three/i],
+             [2, /二|にばん|ニバン|ツー|two/i], [1, /一|いち|イチ|ワン|one/i]];
+  for (const [n, re] of w) if (n <= max && re.test(t)) return n;
+  return 0;
+}
+function makeRec(){
+  if (!SR_CLS) return null;
+  const r = new SR_CLS();
+  r.lang = "ja-JP"; r.continuous = false; r.interimResults = true; r.maxAlternatives = 3;
+  r.onresult = e => {
+    if (!vq || vq.phase !== "listen") return;
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      for (let j = 0; j < e.results[i].length; j++){
+        const n = parseChoice(e.results[i][j].transcript, vq.max);
+        if (n){ vqAnswer(n, true); return; }
+      }
+    }
+  };
+  r.onerror = e => {
+    recActive = false;
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") vqMicOff();
+  };
+  r.onend = () => { recActive = false; };
+  return r;
+}
+function recStart(){
+  if (!rec || recActive) return;
+  try{ rec.start(); recActive = true; }
+  catch(e){ setTimeout(() => { try{ rec.start(); recActive = true; }catch(e2){} }, 350); }
+}
+function recStop(){ if (rec && recActive){ try{ rec.stop(); }catch(e){} } }
+function vqMicOff(){
+  if (vq) vq.mic = false;
+  const m = el("vq-mic");
+  m.classList.remove("live"); m.textContent = "👆";
+  if (vq && vq.phase === "listen") el("vq-sub").textContent = "マイクが使えないので、下のボタンで答えてください";
+}
+function setVqBig(t, cls){
+  const b = el("vq-big");
+  b.textContent = t; b.className = "big" + (cls ? " " + cls : "");
+}
+function buildNums(n){
+  const w = el("vq-nums");
+  w.className = "nums" + (n === 3 ? " n3" : "");
+  w.innerHTML = "";
+  for (let k = 1; k <= n; k++){
+    const b = document.createElement("button");
+    b.className = "num"; b.textContent = k;
+    b.setAttribute("aria-label", k + "番");
+    b.addEventListener("click", () => vqAnswer(k, false));
+    w.appendChild(b);
+  }
+}
+function startVoiceQuiz(dayIdx){
+  pauseIfPlaying();
+  audioCtx();
+  if (SR_CLS && !rec) rec = makeRec();
+  if (rec && !recWarmed){            // マイク許可はタップ操作の中で出す
+    recWarmed = true;
+    try{ rec.start(); recActive = true; setTimeout(recStop, 250); }catch(e){}
+  }
+  vq = {day: dayIdx, list: marksFor(dayIdx).map(m => ({day: dayIdx, n: m.n})),
+        i: 0, ok: 0, xp: 0, max: 4, phase: "", mic: !!SR_CLS, timer: null,
+        badgesBefore: earnedBadges().length};
+  el("vq").hidden = false;
+  document.body.style.overflow = "hidden";
+  vqShow();
+}
+function vqShow(){
+  const it = vq.list[vq.i];
+  const q = questionData(it.day, it.n);
+  vq.q = q; vq.st = segTimes(it.day, it.n); vq.max = q.o.length; vq.phase = "play";
+  el("vq-bar").style.width = (vq.i / vq.list.length * 100) + "%";
+  el("vq-count").textContent = (vq.i + 1) + " / " + vq.list.length;
+  el("vq-no").textContent = "第" + it.n + "問 ・ " + partName(it.n);
+  setVqBig("聞いてください", "");
+  el("vq-sub").textContent = "答えが決まったら、声かボタンでどうぞ";
+  const m = el("vq-mic");
+  m.classList.remove("live"); m.textContent = "🎧";
+  buildNums(q.o.length);
+  playSeg(META.days[it.day].file, vq.st.q0, vq.st.q1, vqListen);
+}
+function vqListen(){
+  if (!vq || vq.phase !== "play") return;
+  vq.phase = "listen";
+  setVqBig("答えをどうぞ", "");
+  const m = el("vq-mic");
+  if (vq.mic){
+    m.textContent = "🎤"; m.classList.add("live");
+    el("vq-sub").textContent = "「2番」と声に出すか、下のボタンを押してください";
+    recStart();
+  } else {
+    m.textContent = "👆";
+    el("vq-sub").textContent = "下のボタンで答えてください";
+  }
+  vq.timer = setTimeout(() => vqAnswer(0, false), 13000);
+}
+function vqAnswer(k, byVoice){
+  if (!vq || vq.phase === "verdict") return;
+  clearTimeout(vq.timer);
+  recStop(); stopSeg();
+  vq.phase = "verdict";
+  el("vq-mic").classList.remove("live");
+  const q = vq.q, it = vq.list[vq.i], st = vq.st;
+  const answered = k > 0, ok = answered && k === q.a;
+
+  [...el("vq-nums").children].forEach((b, idx) => {
+    b.disabled = true;
+    if (idx + 1 === q.a) b.classList.add("correct");
+    else if (idx + 1 === k) b.classList.add("wrong");
+  });
+
+  if (answered){
+    vq.xp += ok ? 2 : 1;
+    stats.answered++; if (ok) stats.correct++;
+    saveJSON("eiken4.stats", stats);
+    const p = String(partOf(it.n));
+    s2.parts[p].a++; if (ok) s2.parts[p].c++;
+    const dk = keyOf(today());
+    if (!s2.days[dk]) s2.days[dk] = {a:0, c:0};
+    s2.days[dk].a++; if (ok) s2.days[dk].c++;
+    saveJSON("eiken4.stats2", s2);
+    const iw = wrong.findIndex(x => x.day === it.day && x.n === it.n);
+    if (!ok && iw < 0) wrong.push({day: it.day, n: it.n});
+    saveJSON("eiken4.wrong", wrong);
+    updateNavBadge();
+  }
+
+  if (ok){
+    vq.ok++;
+    sndCorrect();
+    el("vq-mic").textContent = "⭕";
+    setVqBig("正解！", "ok");
+    el("vq-sub").textContent = byVoice ? "声で正解しました。次の問題へ" : "次の問題へ";
+    setTimeout(vqNext, 1600);
+  } else {
+    sndWrong();
+    el("vq-mic").textContent = answered ? "✕" : "⏱";
+    setVqBig(answered ? "不正解" : "時間切れ", "ng");
+    el("vq-sub").textContent = "正解は " + q.a + " 番。解説を聞いてください";
+    setTimeout(() => {
+      if (!vq || vq.phase !== "verdict") return;
+      playSeg(META.days[it.day].file, st.a0, st.a1, vqNext);
+    }, 1000);
+  }
+}
+function vqNext(){
+  if (!vq) return;
+  vq.i++;
+  if (vq.i < vq.list.length) vqShow(); else vqFinish();
+}
+function vqFinish(){
+  const v = vq;
+  closeVq(true);
+  quiz = {mode: "day", dayIdx: v.day, list: v.list, i: v.list.length,
+          ok: v.ok, answered: true, xp: v.xp, badgesBefore: v.badgesBefore};
+  el("quiz").hidden = false;
+  document.body.style.overflow = "hidden";
+  showResult();
+}
+function closeVq(silent){
+  if (vq) clearTimeout(vq.timer);
+  recStop(); stopSeg();
+  vq = null;
+  el("vq").hidden = true;
+  document.body.style.overflow = "";
+  if (!silent){ renderDay(); renderReview(); }
+}
+let vqCloseArmed = 0;
+el("vq-close").addEventListener("click", () => {
+  if (vq && vq.i < vq.list.length && Date.now() - vqCloseArmed > 2500){
+    vqCloseArmed = Date.now();
+    el("vq-count").textContent = "もう一度✕で終了";
+    return;
+  }
+  closeVq(false);
+});
 
 /* ---------- 復習タブ ---------- */
 function renderReview(){
@@ -1661,9 +1921,9 @@ const ONB_PAGES = [
   {h:"毎日の流れは、3つだけ",
    p:"",
    steps:[
-     ["🚗 車では「聞くレッスン」","再生を1回押すだけ。正解と解説まで自動で流れ、画面を消しても再生は続きます"],
-     ["✏️ おうちで「実戦ドリル」","同じ10問に自分で答えて定着。がんばった分だけXPとバッジがたまります"],
-     ["🌊 間違いは「復習」へ","自動でたまる解き直しリスト。消していくほど弱点が減ります"]]},
+     ["🚗 聞き流し","再生を1回押すだけ。すぐ第1問から始まり、画面を消しても流れつづけます"],
+     ["🎤 声で答える","「2番」と声に出すと即判定。正解ならピンポン♪、まちがえた時だけ解説が流れます"],
+     ["✏️ 実戦ドリル","おうちで画面を見て解くモード。まちがいは「復習」に自動でたまります"]]},
   {h:"記録が、続ける力になる",
    p:"やった日はカレンダーに<b>花丸</b>、マップには<b>ハイビスカス</b>が咲きます。<b>パート別の弱点・強み</b>は「きろく」タブが自動で分析。<br><br>力がついたら<b>模試（30問・合否判定つき）</b>にチャレンジ。本番は<b>6〜7割で合格圏</b>です。<br><br>💡 ホーム画面の下にある<b>「📲 ホーム画面に追加してアプリにする」</b>をやっておくと、次からアイコン1タップで開けます。それでは、今日の10問から始めましょう！",
    steps:null}
