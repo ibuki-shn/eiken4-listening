@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2547D">
+<title>デザインガイドライン — 英検4級リスニング講座</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Pacifico&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;
+  font-size:var(--fs-body); line-height:1.75;
+}
+.wrap{max-width:860px; margin:0 auto; padding:var(--sp-6) var(--sp-4) var(--sp-8)}
+.eyebrow{font-family:"Pacifico",cursive; font-size:17px; color:var(--sea-text); letter-spacing:.05em}
+h1{font-size:var(--fs-display); font-weight:900; margin:var(--sp-1) 0 var(--sp-2); line-height:1.3}
+.lede{color:var(--sub); font-size:var(--fs-sm); max-width:62ch; margin:0}
+h2{font-size:var(--fs-h2); font-weight:900; margin:var(--sp-8) 0 var(--sp-1); scroll-margin-top:var(--sp-4)}
+h2 .n{font-family:"Pacifico",cursive; color:var(--sea-text); font-size:15px; display:block; font-weight:400}
+h3{font-size:var(--fs-lead); font-weight:900; margin:var(--sp-6) 0 var(--sp-2)}
+p{margin:var(--sp-2) 0; font-size:var(--fs-sm); color:var(--sub); max-width:62ch}
+p b, li b{color:var(--ink)}
+ul{margin:var(--sp-2) 0; padding-left:1.25em; font-size:var(--fs-sm); color:var(--sub)}
+li{margin-bottom:var(--sp-1)}
+code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.88em;
+  background:var(--sea-soft); color:var(--sea-text); border-radius:6px; padding:1px 6px;
+}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r-xl); padding:var(--sp-5); box-shadow:var(--shadow-card); margin-top:var(--sp-3)}
+.toc{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-4)}
+.toc a{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-full);
+  padding:9px 16px; font-size:var(--fs-xs); font-weight:900; color:var(--ink); text-decoration:none;
+  min-height:var(--tap); display:inline-flex; align-items:center;
+}
+.rule{border-left:4px solid var(--sun); border-radius:3px; padding:2px 0 2px 13px; margin:var(--sp-3) 0; font-size:var(--fs-sm)}
+.rule b{display:block; color:var(--gold-text); font-size:var(--fs-xs)}
+.rule span{color:var(--sub)}
+.rule.no{border-color:var(--pink)} .rule.no b{color:var(--pink-text)}
+.rule.yes{border-color:var(--green)} .rule.yes b{color:var(--green-text)}
+
+/* 色見本 */
+.swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:var(--sp-2); margin-top:var(--sp-3)}
+.sw{border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden; background:var(--card)}
+.sw .chip{height:56px}
+.sw .meta{padding:8px 10px}
+.sw .nm{font-size:var(--fs-2xs); font-weight:900; font-family:ui-monospace,Menlo,monospace}
+.sw .use{font-size:var(--fs-2xs); color:var(--sub); line-height:1.5}
+.ratio{display:grid; gap:var(--sp-1); margin-top:var(--sp-3)}
+.ratio .r{display:flex; align-items:center; gap:var(--sp-2); font-size:var(--fs-xs); flex-wrap:wrap}
+.ratio .sample{border-radius:var(--r-sm); padding:7px 13px; font-weight:900; white-space:nowrap}
+.ratio .val{font-variant-numeric:tabular-nums; font-weight:900; color:var(--ink)}
+.pass{background:var(--green-soft); color:var(--green-text); border-radius:var(--r-full); padding:2px 10px; font-size:var(--fs-2xs); font-weight:900}
+
+/* 文字サイズ見本 */
+.type div{margin-bottom:var(--sp-2); line-height:1.35}
+.type .lab{font-size:var(--fs-2xs); color:var(--sub); font-family:ui-monospace,Menlo,monospace; font-weight:400; margin-left:8px}
+
+/* コンポーネント見本 */
+.demo{display:flex; flex-wrap:wrap; gap:var(--sp-3); align-items:flex-start; margin-top:var(--sp-3)}
+.btn-primary,.btn-danger,.btn-quiet{
+  border:none; border-radius:var(--r-full); min-height:56px; padding:0 26px;
+  font-family:inherit; font-size:var(--fs-lead); font-weight:900; cursor:pointer; letter-spacing:.04em;
+}
+.btn-primary{background:var(--grad-sea-strong); color:var(--on-strong)}
+.btn-danger{background:var(--grad-pink-strong); color:var(--on-strong)}
+.btn-quiet{background:var(--bg); color:var(--ink); border:1.5px solid var(--line)}
+.badges{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-3)}
+.badge{border-radius:var(--r-full); padding:4px 15px; font-size:var(--fs-xs); font-weight:900}
+.b-sea{background:var(--sea-soft); color:var(--sea-text)}
+.b-pink{background:var(--pink-soft); color:var(--pink-text)}
+.b-gold{background:var(--sun-soft); color:var(--gold-text)}
+.b-solid{background:var(--pink-solid); color:var(--on-strong)}
+.opt-demo{display:flex; flex-direction:column; gap:10px; margin-top:var(--sp-3); max-width:420px}
+.opt{display:flex; align-items:center; gap:12px; border:1.5px solid var(--line); background:var(--card);
+  border-radius:var(--r-lg); padding:14px 15px; font-size:var(--fs-body); font-weight:700}
+.opt .no{width:32px; height:32px; border-radius:50%; flex:none; background:var(--bg); border:1.5px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-weight:900}
+.opt.correct{border-color:var(--green-text); background:var(--green-soft)}
+.opt.correct .no{background:var(--green-solid); border-color:var(--green-solid); color:var(--on-strong)}
+.opt.correct::after{content:"\2713"; margin-left:auto; font-size:19px; font-weight:900; color:var(--green-text)}
+.opt.wrong{border-color:var(--pink-text); background:var(--pink-soft)}
+.opt.wrong .no{background:var(--pink-solid); border-color:var(--pink-solid); color:var(--on-strong)}
+.opt.wrong::after{content:"\2715"; margin-left:auto; font-size:19px; font-weight:900; color:var(--pink-text)}
+.tap{display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap); min-height:var(--tap);
+  border:2px dashed var(--coral); border-radius:var(--r-md); color:var(--coral-text); font-size:var(--fs-2xs); font-weight:900; padding:0 8px}
+a:focus-visible, button:focus-visible{outline:3px solid var(--sea-text); outline-offset:3px; border-radius:6px}
+.foot{margin-top:var(--sp-8); padding-top:var(--sp-4); border-top:1.5px dotted var(--line); font-size:var(--fs-xs); color:var(--sub)}
+.foot a{color:var(--sea-text)}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important; animation:none!important} }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Design Guidelines</div>
+  <h1>デザインガイドライン</h1>
+  <p class="lede">英検4級リスニング講座のUIを組み立てるための規約です。配色・文字・部品・アクセシビリティの4章からなり、値はアプリ本体と同じ <code>tokens.css</code> を読み込んで表示しています。ここの見た目が変われば、アプリの見た目も変わっています。</p>
+
+  <nav class="toc">
+    <a href="#color">1. カラー</a>
+    <a href="#type">2. タイポグラフィ</a>
+    <a href="#comp">3. コンポーネント</a>
+    <a href="#a11y">4. アクセシビリティ</a>
+  </nav>
+
+  <!-- ================= 1. カラー ================= -->
+  <h2 id="color"><span class="n">Color</span>1. カラー</h2>
+  <p>ハワイの海と夕焼けを出発点にした配色です。もっとも重要な原則は、<b>同じ色名でも「塗るための色」と「文字にするための色」を分けて持つ</b>ことです。鮮やかな色をそのまま文字に使うと、明るい背景の上でほぼ読めなくなるためです。</p>
+
+  <h3>塗るための色（装飾）</h3>
+  <p>面・グラフ・アイコンの地など、文字が乗らない場所に使います。ブランドの鮮やかさはここで表現します。</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:var(--sea)"></div><div class="meta"><div class="nm">--sea</div><div class="use">海。進捗・情報</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--pink)"></div><div class="meta"><div class="nm">--pink</div><div class="use">ハイビスカス。達成・現在地</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--coral)"></div><div class="meta"><div class="nm">--coral</div><div class="use">夕焼け。連続記録</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--sun)"></div><div class="meta"><div class="nm">--sun</div><div class="use">陽。ごほうび・助言</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--green)"></div><div class="meta"><div class="nm">--green</div><div class="use">正解</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--grad-sea)"></div><div class="meta"><div class="nm">--grad-sea</div><div class="use">装飾グラデ（文字は乗せない）</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--grad-sunset)"></div><div class="meta"><div class="nm">--grad-sunset</div><div class="use">同上</div></div></div>
+  </div>
+
+  <h3>文字を乗せるための色</h3>
+  <p>ボタンやバッジのように白文字を乗せる面は <code>--*-solid</code> と <code>--grad-*-strong</code>、文章やラベルの文字色は <code>--*-text</code> を使います。どちらも<b>ライト・ダーク両方で4.5:1以上</b>になるよう決めた値です。</p>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:var(--grad-sea-strong)"></div><div class="meta"><div class="nm">--grad-sea-strong</div><div class="use">主ボタン（白文字）</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--grad-sunset-strong)"></div><div class="meta"><div class="nm">--grad-sunset-strong</div><div class="use">強調ボタン（白文字）</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--grad-pink-strong)"></div><div class="meta"><div class="nm">--grad-pink-strong</div><div class="use">復習ボタン（白文字）</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--pink-solid)"></div><div class="meta"><div class="nm">--pink-solid</div><div class="use">バッジの地（白文字）</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--green-solid)"></div><div class="meta"><div class="nm">--green-solid</div><div class="use">正解チップの地（白文字）</div></div></div>
+  </div>
+
+  <h3>実測コントラスト</h3>
+  <p>下の比率はこのページが読み込んだ実際のトークンから、表示時に計算しています（テーマを切り替えると数値も変わります）。</p>
+  <div class="ratio" id="ratios"></div>
+
+  <div class="rule no"><b>してはいけない</b><span><code>--pink</code> のような鮮やかな色を、そのまま文字色や白文字の下地に使う。ライトテーマで2.4〜3.3:1にしかならず、明るい車内では読めません。</span></div>
+  <div class="rule yes"><b>正しい</b><span>文字色は <code>--pink-text</code>、白文字を乗せる面は <code>--pink-solid</code>。鮮やかな <code>--pink</code> は文字が乗らない装飾だけに使う。</span></div>
+
+  <!-- ================= 2. タイポグラフィ ================= -->
+  <h2 id="type"><span class="n">Typography</span>2. タイポグラフィ</h2>
+  <p>本文は <b>Zen Maru Gothic</b>（丸ゴシック）。やわらかさを出しつつ、字面が大きく50代以降でも読みやすい書体です。英字の飾りだけ <b>Pacifico</b> を使い、南国の空気を担当させます。日本語には絶対に使いません。</p>
+  <div class="card type">
+    <div style="font-size:var(--fs-display); font-weight:900">画面の主役<span class="lab">--fs-display / 25px</span></div>
+    <div style="font-size:var(--fs-h1); font-weight:900">タブの見出し<span class="lab">--fs-h1 / 22px</span></div>
+    <div style="font-size:var(--fs-h2); font-weight:900">セクション見出し<span class="lab">--fs-h2 / 19px</span></div>
+    <div style="font-size:var(--fs-lead); font-weight:900">ボタンの文字<span class="lab">--fs-lead / 17px</span></div>
+    <div style="font-size:var(--fs-body)">本文・選択肢<span class="lab">--fs-body / 16px</span></div>
+    <div style="font-size:var(--fs-sm); color:var(--sub)">補足説明<span class="lab">--fs-sm / 14px</span></div>
+    <div style="font-size:var(--fs-xs); color:var(--sub)">ラベル・バッジ<span class="lab">--fs-xs / 12.5px</span></div>
+    <div style="font-size:var(--fs-2xs); color:var(--sub)">最小サイズ<span class="lab">--fs-2xs / 11.5px</span></div>
+  </div>
+  <ul>
+    <li><b>11.5px より小さい文字は使わない。</b>主な利用者は57歳で、運転前後の短時間に見ます。</li>
+    <li>ウェイトは <b>400 / 700 / 900</b> の3段階のみ。強調は太さで行い、色を増やさない。</li>
+    <li>数字が縦に並ぶ場所（点数・日数・時間）は <code>font-variant-numeric: tabular-nums</code> で桁を揃える。</li>
+    <li>見出しの行間は1.3〜1.35、本文は1.7前後。日本語は行間を詰めると一気に読みにくくなります。</li>
+  </ul>
+
+  <!-- ================= 3. コンポーネント ================= -->
+  <h2 id="comp"><span class="n">Components</span>3. コンポーネント</h2>
+
+  <h3>ボタン</h3>
+  <p>役割は3段階だけです。1画面に主ボタンは原則1つ。迷わせないことを最優先します。</p>
+  <div class="demo">
+    <button class="btn-primary">はじめる</button>
+    <button class="btn-danger">解き直す</button>
+    <button class="btn-quiet">もどる</button>
+  </div>
+  <ul>
+    <li><b>主</b>（<code>--grad-sea-strong</code>）…その画面でいちばんやってほしい操作。</li>
+    <li><b>強調</b>（<code>--grad-pink-strong</code>）…復習など、注意を引きたい操作。</li>
+    <li><b>控えめ</b>…戻る・閉じるなど。枠線のみ。</li>
+    <li>角丸は完全な丸（<code>--r-full</code>）。高さは56px以上、押すと0.97倍に縮む。</li>
+  </ul>
+
+  <h3>カード</h3>
+  <p>情報のまとまりはすべてカードに入れます。角丸は <code>--r-xl</code>(28px)、影は黒ではなく<b>夕焼け色を含んだ影</b>（<code>--shadow-card</code>）を使い、紙が浮いているように見せます。</p>
+  <div class="card">
+    <div style="font-weight:900; font-size:var(--fs-lead)">カードの例</div>
+    <p style="margin-bottom:0">境界は1pxの <code>--line</code>。入れ子のカードは作らない（階層が深く見えると迷います）。</p>
+  </div>
+
+  <h3>バッジ</h3>
+  <p>状態を短い語で示します。淡い地に濃い文字が基本。白文字にするのは強い通知だけです。</p>
+  <div class="badges">
+    <span class="badge b-sea">ドリル最高 9 / 10</span>
+    <span class="badge b-pink">クリアずみ</span>
+    <span class="badge b-gold">＋24 XP</span>
+    <span class="badge b-solid">きょう</span>
+  </div>
+
+  <h3>選択肢</h3>
+  <p>正誤は<b>色・枠線・記号の3つ</b>で同時に示します。色が見分けにくい人でも判断できるようにするためです。</p>
+  <div class="opt-demo">
+    <div class="opt"><span class="no">1</span><span>I'll go tomorrow.</span></div>
+    <div class="opt correct"><span class="no">2</span><span>I watched a movie.</span></div>
+    <div class="opt wrong"><span class="no">3</span><span>It's my sister's.</span></div>
+  </div>
+
+  <!-- ================= 4. アクセシビリティ ================= -->
+  <h2 id="a11y"><span class="n">Accessibility</span>4. アクセシビリティ</h2>
+  <p>「57歳が、運転の前後に、車内の明るい光の下で使う」ことを基準にしています。装飾よりも読めることを優先します。</p>
+
+  <h3>守っている基準</h3>
+  <ul>
+    <li><b>コントラスト比 4.5:1 以上</b>（大きな太字は3:1）をすべての文字で確保。ライト・ダーク両テーマ、全画面で機械的に検証しています。</li>
+    <li><b>タップ領域は最小44×44px。</b>リンク状のものも高さ44pxを確保します。</li>
+    <li><b>色だけで意味を伝えない。</b>正解・不正解は ✓ / ✕ の記号と枠線も併用します。</li>
+    <li><b>キーボード操作でフォーカス位置が見える。</b>3pxの輪郭線を表示します（下のボタンをTabキーで確認できます）。</li>
+    <li><b>読み上げ対応。</b>タブは <code>role="tab"</code> と <code>aria-selected</code>、正誤と進行状況は <code>aria-live</code> で読み上げられます。</li>
+    <li><b>動きを減らす設定を尊重。</b><code>prefers-reduced-motion</code> が有効ならアニメーションを止めます。</li>
+  </ul>
+  <div class="demo">
+    <button class="btn-quiet">Tabキーで押してみてください</button>
+    <span class="tap">44 × 44</span>
+  </div>
+
+  <h3>運転中の配慮</h3>
+  <ul>
+    <li>運転中に使うモードは<b>画面を見なくても完結</b>させる。判定はピンポン／ブブーの音で伝え、解説は音声で流す。</li>
+    <li>画面を消すとブラウザは処理を止めるため、<b>画面オフで使うモードは音声を1本の連続再生にする</b>（区間制御を挟まない）。</li>
+    <li>走行中に操作が必要な要素は置かない。外部リンクには操作しないよう注意書きを添える。</li>
+  </ul>
+
+  <div class="foot">
+    このページはアプリと同じトークンを読み込んでいます。変更は <code>tokens.css</code> に対して行ってください。<br>
+    <a href="../">← 英検4級リスニング講座に戻る</a>
+  </div>
+</div>
+
+<script>
+"use strict";
+(function(){
+  const PAIRS = [
+    ["本文","--ink","--card","カードの上の本文"],
+    ["補助","--sub","--card","補足説明"],
+    ["海","--sea-text","--sea-soft","淡い青地のバッジ"],
+    ["桃","--pink-text","--pink-soft","淡い桃地のバッジ"],
+    ["珊瑚","--coral-text","--coral-soft","連続日数"],
+    ["金","--gold-text","--sun-soft","ごほうび・助言"],
+    ["緑","--green-text","--green-soft","正解の表示"],
+  ];
+  const rs = getComputedStyle(document.documentElement);
+  function rgb(v){
+    const el = document.createElement("div");
+    el.style.color = v; document.body.appendChild(el);
+    const c = getComputedStyle(el).color; el.remove(); return c;
+  }
+  function lum(c){
+    const m = c.match(/[\d.]+/g).slice(0,3).map(n => {
+      const x = n / 255;
+      return x <= 0.04045 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126*m[0] + 0.7152*m[1] + 0.0722*m[2];
+  }
+  function ratio(a, b){
+    const l = [lum(a), lum(b)].sort((x,y) => y - x);
+    return (l[0] + 0.05) / (l[1] + 0.05);
+  }
+  function render(){
+    const box = document.getElementById("ratios");
+    box.innerHTML = "";
+    PAIRS.forEach(([name, fg, bg, use]) => {
+      const f = rgb(rs.getPropertyValue(fg).trim());
+      const b = rgb(rs.getPropertyValue(bg).trim());
+      const r = ratio(f, b);
+      const row = document.createElement("div");
+      row.className = "r";
+      row.innerHTML =
+        '<span class="sample"></span>' +
+        '<span class="val"></span>' +
+        '<span class="pass">' + (r >= 4.5 ? "AA 適合" : "要改善") + '</span>' +
+        '<span style="color:var(--sub)"></span>';
+      const s = row.querySelector(".sample");
+      s.textContent = name + "のテキスト";
+      s.style.color = f; s.style.background = b;
+      row.querySelector(".val").textContent = r.toFixed(2) + " : 1";
+      row.lastElementChild.textContent = use;
+      box.appendChild(row);
+    });
+  }
+  render();
+  try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render); }catch(e){}
+})();
+</script>
+</html>
