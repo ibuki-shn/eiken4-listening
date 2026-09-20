@@ -1,78 +1,92 @@
 
 /* ============================================================
    デザイントークン（テーマ非依存）
+   Apple Human Interface Guidelines の型・余白・素材の考え方に、
+   ハワイの海を色として乗せる。
    ============================================================ */
 :root{
-  /* タイポグラフィ・スケール */
-  --fs-display:25px; --fs-h1:22px; --fs-h2:19px; --fs-lead:17px;
-  --fs-body:16px; --fs-sm:14px; --fs-xs:12.5px; --fs-2xs:11.5px;
-  /* 余白スケール */
+  /* 書体：iOS/macOS の標準書体を使う。読み込み待ちが無く、OSと同じ文字組みになる */
+  --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+         "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", Meiryo, system-ui, sans-serif;
+  /* タイポグラフィ・スケール（HIG の Text Styles に対応） */
+  --fs-display:34px;  /* Large Title */
+  --fs-h1:28px;       /* Title 1 */
+  --fs-h2:22px;       /* Title 2 */
+  --fs-lead:17px;     /* Headline */
+  --fs-body:17px;     /* Body */
+  --fs-sm:15px;       /* Subheadline */
+  --fs-xs:13px;       /* Footnote */
+  --fs-2xs:12px;      /* Caption */
+  --tr-tight:-.022em; --tr-wide:.06em;
+  /* 余白（8ptグリッド） */
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
-  /* 角丸 */
-  --r-sm:12px; --r-md:16px; --r-lg:22px; --r-xl:28px; --r-full:999px;
-  /* 最小タップ領域 */
+  /* 角丸（連続曲率に近い値） */
+  --r-sm:10px; --r-md:14px; --r-lg:18px; --r-xl:22px; --r-full:999px;
   --tap:44px;
-  /* 文字が乗る面：全テーマ共通・白文字でコントラスト比4.8以上 */
-  --grad-sea-strong:linear-gradient(135deg,#1D7F77 0%,#0B7A84 55%,#05606E 100%);
-  --grad-sunset-strong:linear-gradient(135deg,#9B6700 0%,#D92D00 48%,#C7093F 100%);
-  --grad-pink-strong:linear-gradient(135deg,#E30039 0%,#B8063F 100%);
-  --sea-solid:#0B7A84;   /* 白文字 5.08:1 */
-  --pink-solid:#D50B3F;  /* 白文字 5.32:1 */
-  --green-solid:#2A8057; /* 白文字 4.86:1 */
+  /* 文字が乗る面：全テーマ共通・白文字でコントラスト比4.5以上 */
+  --grad-sea-strong:linear-gradient(180deg,#0E8B96 0%,#096C76 100%);
+  --grad-sunset-strong:linear-gradient(180deg,#D24E24 0%,#B83C12 100%);
+  --grad-pink-strong:linear-gradient(180deg,#D02248 0%,#B01038 100%);
+  --sea-solid:#0A7A85; --pink-solid:#C8073B; --green-solid:#26804F; --coral-solid:#C43A14;
   --on-strong:#FFFFFF;
 }
-/* ---------- ライトテーマ ---------- */
+/* ---------- ライト ---------- */
 :root{
-  --bg:#FBF7F0; --card:#FFFFFF; --ink:#3A332D; --sub:#7C7065;
-  --line:#EFE4D4; --ring-bg:#F1E8DA;
-  --sea:#0E9BA6;   --sea-text:#087881;   --sea-soft:#E1F4F4;
-  --pink:#F2547D;  --pink-text:#D50B3F;  --pink-soft:#FCE7EE;
-  --coral:#FF8261; --coral-text:#D12C00; --coral-soft:#FFEDE6;
-  --sun:#FFB94E;   --gold-text:#A06000;  --sun-soft:#FFF1DA;
-  --green:#3FAE79; --green-text:#2A7C55; --green-soft:#E3F5EC;
-  --glass:rgba(255,255,255,.85);
-  --sky:linear-gradient(180deg,#FFE9CD 0%,#FFDCD2 38%,#FBF7F0 100%);
-  --sunball:radial-gradient(circle at 84% 92px, rgba(255,185,78,.5) 0, rgba(255,185,78,.28) 34px, rgba(255,185,78,0) 72px);
-  --grad-sea:linear-gradient(135deg,#35C7BB 0%,#0E9BA6 55%,#0A7E8C 100%);
-  --grad-sunset:linear-gradient(135deg,#FFC44D 0%,#FF8261 48%,#F2547D 100%);
-  --grad-pink:linear-gradient(135deg,#FF93AE 0%,#EF4F7E 100%);
-  --shadow-card:0 1px 2px rgba(70,45,25,.04), 0 18px 44px -20px rgba(214,102,84,.28);
-  --shadow-pop:0 10px 28px -8px rgba(242,84,125,.4);
+  --bg:#F2F0EB; --card:#FFFFFF; --card-2:#FAF8F4;
+  --ink:#191817; --sub:#6B655B;
+  --line:#E4DFD5; --ring-bg:#E9E4DA; --fill:#EEEAE2;
+  --sea:#12A7B6;   --sea-text:#06707A;   --sea-soft:#E1F4F6;
+  --pink:#F2547D;  --pink-text:#C8073B;  --pink-soft:#FDE8EE;
+  --coral:#FF7A59; --coral-text:#C22C00; --coral-soft:#FFEDE6;
+  --sun:#FFB43F;   --gold-text:#955900;  --sun-soft:#FFF2DC;
+  --green:#34C759; --green-text:#26714E; --green-soft:#E3F6E9;
+  --glass:rgba(255,255,255,.74);
+  --sky:
+    radial-gradient(130% 78% at 0% 0%, rgba(78,206,222,.40) 0%, rgba(78,206,222,0) 58%),
+    radial-gradient(110% 68% at 100% 2%, rgba(255,164,110,.32) 0%, rgba(255,164,110,0) 60%);
+  --sunball:radial-gradient(circle at 86% 74px, rgba(255,180,63,.28) 0, rgba(255,180,63,0) 82px);
+  --grad-sea:linear-gradient(90deg,#3FD0DE 0%,#12A7B6 100%);
+  --grad-sunset:linear-gradient(90deg,#FFC44D 0%,#FF7A59 100%);
+  --grad-pink:linear-gradient(90deg,#FF93AE 0%,#F2547D 100%);
+  --shadow-card:0 1px 2px rgba(25,24,23,.05);
+  --shadow-raise:0 4px 16px -6px rgba(25,24,23,.18);
+  --shadow-pop:0 10px 30px -10px rgba(25,24,23,.3);
 }
-/* ---------- ダークテーマ ---------- */
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-  --bg:#0C1F26; --card:#17313B; --ink:#F3EEE6; --sub:#93A9AC;
-  --line:#25434E; --ring-bg:#1E3C46;
-  --sea:#43D0C5;   --sea-text:#43D0C5;   --sea-soft:#12414A;
-  --pink:#FF7FA3;  --pink-text:#FF7FA3;  --pink-soft:#3E2331;
-  --coral:#FF9877; --coral-text:#FF9877; --coral-soft:#442A20;
-  --sun:#FFC966;   --gold-text:#FFC966;  --sun-soft:#3E331C;
-  --green:#5BCB92; --green-text:#5BCB92; --green-soft:#1B4232;
-  --glass:rgba(21,44,53,.86);
-  --sky:linear-gradient(180deg,#27305C 0%,#16404C 42%,#0C1F26 100%);
-  --sunball:radial-gradient(circle at 84% 84px, rgba(255,214,140,.32) 0, rgba(255,214,140,.14) 32px, rgba(255,214,140,0) 66px);
-  --grad-sea:linear-gradient(135deg,#2AA79B 0%,#137A83 100%);
-  --grad-sunset:linear-gradient(135deg,#E8A73E 0%,#E0674C 48%,#D14C74 100%);
-  --grad-pink:linear-gradient(135deg,#E0708F 0%,#C74069 100%);
-  --shadow-card:0 1px 2px rgba(0,0,0,.25), 0 18px 44px -18px rgba(0,0,0,.5);
-  --shadow-pop:0 10px 28px -8px rgba(0,0,0,.55);
-}
-}
+/* ---------- ダーク ---------- */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0B1113; --card:#171E20; --card-2:#131A1C;
+  --ink:#F1F0EC; --sub:#9AA19E;
+  --line:#242D2F; --ring-bg:#1E2729; --fill:#1C2426;
+  --sea:#4ED4E2;   --sea-text:#4ED4E2;   --sea-soft:#0F373C;
+  --pink:#FF7FA3;  --pink-text:#FF8FA8;  --pink-soft:#3A222C;
+  --coral:#FF9B78; --coral-text:#FF9B78; --coral-soft:#3E271E;
+  --sun:#FFC96B;   --gold-text:#FFC96B;  --sun-soft:#3A2F19;
+  --green:#4BD97A; --green-text:#5FD98D; --green-soft:#16371F;
+  --glass:rgba(23,30,32,.72);
+  --sky:
+    radial-gradient(130% 78% at 0% 0%, rgba(40,150,170,.34) 0%, rgba(40,150,170,0) 58%),
+    radial-gradient(110% 68% at 100% 2%, rgba(190,90,60,.26) 0%, rgba(190,90,60,0) 60%);
+  --sunball:radial-gradient(circle at 86% 74px, rgba(255,201,107,.14) 0, rgba(255,201,107,0) 82px);
+  --shadow-card:0 1px 2px rgba(0,0,0,.35);
+  --shadow-raise:0 6px 20px -8px rgba(0,0,0,.6);
+  --shadow-pop:0 12px 34px -10px rgba(0,0,0,.7);
+}}
 :root[data-theme="dark"]{
-  --bg:#0C1F26; --card:#17313B; --ink:#F3EEE6; --sub:#93A9AC;
-  --line:#25434E; --ring-bg:#1E3C46;
-  --sea:#43D0C5;   --sea-text:#43D0C5;   --sea-soft:#12414A;
-  --pink:#FF7FA3;  --pink-text:#FF7FA3;  --pink-soft:#3E2331;
-  --coral:#FF9877; --coral-text:#FF9877; --coral-soft:#442A20;
-  --sun:#FFC966;   --gold-text:#FFC966;  --sun-soft:#3E331C;
-  --green:#5BCB92; --green-text:#5BCB92; --green-soft:#1B4232;
-  --glass:rgba(21,44,53,.86);
-  --sky:linear-gradient(180deg,#27305C 0%,#16404C 42%,#0C1F26 100%);
-  --sunball:radial-gradient(circle at 84% 84px, rgba(255,214,140,.32) 0, rgba(255,214,140,.14) 32px, rgba(255,214,140,0) 66px);
-  --grad-sea:linear-gradient(135deg,#2AA79B 0%,#137A83 100%);
-  --grad-sunset:linear-gradient(135deg,#E8A73E 0%,#E0674C 48%,#D14C74 100%);
-  --grad-pink:linear-gradient(135deg,#E0708F 0%,#C74069 100%);
-  --shadow-card:0 1px 2px rgba(0,0,0,.25), 0 18px 44px -18px rgba(0,0,0,.5);
-  --shadow-pop:0 10px 28px -8px rgba(0,0,0,.55);
+  --bg:#0B1113; --card:#171E20; --card-2:#131A1C;
+  --ink:#F1F0EC; --sub:#9AA19E;
+  --line:#242D2F; --ring-bg:#1E2729; --fill:#1C2426;
+  --sea:#4ED4E2;   --sea-text:#4ED4E2;   --sea-soft:#0F373C;
+  --pink:#FF7FA3;  --pink-text:#FF8FA8;  --pink-soft:#3A222C;
+  --coral:#FF9B78; --coral-text:#FF9B78; --coral-soft:#3E271E;
+  --sun:#FFC96B;   --gold-text:#FFC96B;  --sun-soft:#3A2F19;
+  --green:#4BD97A; --green-text:#5FD98D; --green-soft:#16371F;
+  --glass:rgba(23,30,32,.72);
+  --sky:
+    radial-gradient(130% 78% at 0% 0%, rgba(40,150,170,.34) 0%, rgba(40,150,170,0) 58%),
+    radial-gradient(110% 68% at 100% 2%, rgba(190,90,60,.26) 0%, rgba(190,90,60,0) 60%);
+  --sunball:radial-gradient(circle at 86% 74px, rgba(255,201,107,.14) 0, rgba(255,201,107,0) 82px);
+  --shadow-card:0 1px 2px rgba(0,0,0,.35);
+  --shadow-raise:0 6px 20px -8px rgba(0,0,0,.6);
+  --shadow-pop:0 12px 34px -10px rgba(0,0,0,.7);
 }
+
