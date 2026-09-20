@@ -198,6 +198,17 @@ a:focus-visible, button:focus-visible{outline:3px solid var(--sea-text); outline
     <div class="opt wrong"><span class="no">3</span><span>It's my sister's.</span></div>
   </div>
 
+  <h3>祝う（モーション）</h3>
+  <p>続けてもらうための演出は、<b>成果に比例させる</b>のが原則です。毎回同じ強さで祝うと、すぐ意味を失います。</p>
+  <ul>
+    <li><b>正解</b>…ピンポン♪の音と ⭕ のみ。0.2秒。</li>
+    <li><b>7割以上</b>…リングが伸び、点数が数え上がり、淡い紙吹雪。</li>
+    <li><b>満点・模試合格</b>…リングが金色になり、紙吹雪を増やす。</li>
+    <li><b>レベルアップ</b>…専用画面に切り替え、光条・メダル・上昇音。ここだけ画面を占有してよい。</li>
+  </ul>
+  <div class="rule"><b>時間の決まり</b><span>要素は0.45秒で下から現れ、0.1秒ずつずらす。演出全体で1秒以内に読み終えられること。待たせる祝福は邪魔になります。</span></div>
+  <div class="rule yes"><b>必ず守る</b><span><code>prefers-reduced-motion: reduce</code> が有効なら、紙吹雪も数え上げも止めて即座に最終状態を表示する。演出は情報を伝える手段であって、情報そのものではありません。</span></div>
+
   <!-- ================= 4. アクセシビリティ ================= -->
   <h2 id="a11y"><span class="n">Accessibility</span>4. アクセシビリティ</h2>
   <p>「57歳が、運転の前後に、車内の明るい光の下で使う」ことを基準にしています。装飾よりも読めることを優先します。</p>
