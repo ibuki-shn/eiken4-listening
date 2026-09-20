@@ -101,6 +101,7 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
   box-shadow:0 4px 14px -6px rgba(70,45,25,.18);
 }
 .streak-chip b{font-size:18px; color:var(--coral); font-variant-numeric:tabular-nums}
+.streak-chip .ico-fire{width:15px; height:15px; color:var(--coral); flex:none}
 .greet{font-size:25px; font-weight:900; margin-top:2px; letter-spacing:.01em; line-height:1.35}
 .greet .hib{display:inline-block; width:26px; height:26px; vertical-align:-3px; margin-left:6px; filter:drop-shadow(0 2px 3px rgba(242,84,125,.3))}
 
@@ -128,6 +129,7 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
   font-size:14px; font-weight:700; color:var(--sub);
 }
 .mission b{color:var(--ink)}
+.mission .ico-flag{width:17px; height:17px; color:var(--gold); flex:none}
 .hawaiiword{
   margin-top:10px; display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;
   max-width:100%; background:var(--pink-soft); border-radius:18px; padding:6px 16px;
@@ -182,6 +184,7 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
   display:flex; align-items:center; justify-content:center;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.3);
 }
+.mode-btn .ico svg{width:30px; height:30px}
 .mode-btn .t{font-size:18px; line-height:1.35; letter-spacing:.02em}
 .mode-btn .t small{display:block; font-size:12px; font-weight:700; opacity:.9; margin-top:2px; letter-spacing:.02em}
 .mode-btn .arrow{margin-left:auto; font-size:20px; opacity:.7}
@@ -189,7 +192,7 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .mode-voice{background:var(--grad-sunset); color:#fff; box-shadow:0 12px 28px -10px rgba(242,84,125,.5)}
 .mode-quiz{background:var(--bg); color:var(--ink); border:1.5px solid var(--line)}
 .mode-quiz::after{display:none}
-.mode-quiz .ico{background:var(--sea-soft)}
+.mode-quiz .ico{background:var(--sea-soft); color:var(--sea)}
 .mode-btn:active{transform:scale(.97)}
 .done-badge,.score-badge{
   display:inline-flex; align-items:center; gap:5px; margin-top:14px; margin-inline:4px;
@@ -208,9 +211,10 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .mock-card:active{transform:scale(.98)}
 .mock-card .ico{
   width:52px; height:52px; border-radius:50%; flex:none;
-  background:var(--sun-soft); display:flex; align-items:center; justify-content:center; font-size:26px;
+  background:var(--sun-soft); display:flex; align-items:center; justify-content:center;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
 }
+.mock-card .ico svg{width:28px; height:28px; color:var(--sun)}
 .mock-card .t{font-size:17px; font-weight:900; line-height:1.35}
 .mock-card .t small{display:block; font-size:12px; color:var(--sub); font-weight:700; margin-top:1px}
 .mock-card .arrow{margin-left:auto; font-size:20px; color:var(--sub)}
@@ -249,15 +253,32 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 .rev .ja{font-size:13.5px; margin-top:5px}
 
 /* 学習マップ */
-.journey-head{display:flex; align-items:baseline; justify-content:space-between; margin-top:26px}
-.journey-head h2{font-size:19px; font-weight:900; margin:0; letter-spacing:.02em}
-.journey-head span{font-size:13px; color:var(--sub); font-weight:700; font-variant-numeric:tabular-nums}
-.week{
-  background:var(--card); border:1px solid var(--line); border-radius:24px;
-  padding:14px 9px 10px; margin-top:12px; box-shadow:var(--shadow-card);
+.journey-head{display:flex; align-items:flex-end; justify-content:space-between; margin-top:26px; gap:10px}
+.journey-head h2{font-size:20px; font-weight:900; margin:0; letter-spacing:.02em; line-height:1.3}
+.journey-head .eyebrow{font-size:14px}
+.journey-head > span{
+  font-size:12.5px; color:var(--sea); font-weight:900; font-variant-numeric:tabular-nums;
+  background:var(--sea-soft); border-radius:999px; padding:4px 13px; white-space:nowrap;
 }
-.week .wk-label{font-family:"Pacifico",cursive; font-size:14px; color:var(--sea); margin:0 8px 8px; letter-spacing:.06em}
-.week .nodes{display:grid; grid-template-columns:repeat(7,1fr); gap:2px}
+.mapcard{
+  background:linear-gradient(180deg, var(--sea-soft) 0%, var(--card) 34%);
+  border:1px solid var(--line); border-radius:28px;
+  padding:16px 11px 14px; margin-top:12px; box-shadow:var(--shadow-card);
+}
+.voyage{position:relative; margin:22px 10px 20px}
+.voyage .track{height:7px; border-radius:999px; background:rgba(125,125,125,.18); overflow:hidden}
+.voyage .track i{display:block; height:100%; border-radius:999px; background:var(--grad-sunset)}
+.voyage .honu{
+  position:absolute; top:-21px; width:40px; transform:translateX(-50%);
+  filter:drop-shadow(0 3px 5px rgba(46,155,114,.35)); transition:left .5s ease;
+}
+.voyage .honu svg{display:block; width:100%; height:auto}
+.voyage .goal{position:absolute; right:-3px; top:-17px; width:19px; color:var(--coral); opacity:.85}
+.voyage .goal svg{display:block; width:100%; height:auto}
+.wkrow{padding:4px 2px 0}
+.wkrow + .wkrow{border-top:1.5px dotted var(--line); margin-top:12px; padding-top:12px}
+.wkrow .wk-label{font-family:"Pacifico",cursive; font-size:13.5px; color:var(--sea); opacity:.85; margin:0 8px 6px; letter-spacing:.06em}
+.wkrow .nodes{display:grid; grid-template-columns:repeat(7,1fr); gap:2px}
 .node{position:relative; border:none; background:none; padding:0; display:flex; flex-direction:column; align-items:center; gap:3px}
 .node .c{
   position:relative; width:100%; max-width:46px; aspect-ratio:1; border-radius:50%;
@@ -267,19 +288,32 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
   transition:transform .12s ease;
 }
 .node:active .c{transform:scale(.9)}
-.node.done .c{background:var(--pink-soft); border-color:transparent; font-size:20px; box-shadow:inset 0 1px 3px rgba(242,84,125,.15)}
-.node.today .c{background:var(--grad-sunset); border:none; color:#fff; box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 6px 16px -5px rgba(242,84,125,.6)}
+.node.done .c{background:var(--pink-soft); border-color:transparent; color:var(--pink)}
+.node .c svg.hib-node{width:74%; height:74%}
+.node.today .c{border-color:transparent; box-shadow:0 0 0 2.5px var(--card), 0 0 0 5px var(--coral)}
+.node.today:not(.done) .c{background:var(--grad-sunset); color:#fff}
 .node .sc{font-size:10.5px; font-weight:900; color:var(--sea); min-height:15px; line-height:15px; font-variant-numeric:tabular-nums}
 .node .sc.none{color:transparent}
 .node.today .lbl{
   position:absolute; top:-9px; left:50%; transform:translateX(-50%);
   background:var(--pink); color:#fff; font-size:9.5px; font-weight:900;
   border-radius:999px; padding:0 8px; line-height:15px; white-space:nowrap; letter-spacing:.08em;
-  box-shadow:0 3px 8px -2px rgba(242,84,125,.5);
+  box-shadow:0 3px 8px -2px rgba(242,84,125,.5); z-index:2;
 }
 
 .howto{margin-top:18px; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:4px 18px; box-shadow:var(--shadow-card)}
-.howto summary{font-weight:900; padding:12px 0; cursor:pointer; font-size:15px}
+.howto summary{
+  font-weight:900; padding:14px 0; cursor:pointer; font-size:15px;
+  list-style:none; display:flex; align-items:center; gap:10px;
+}
+.howto summary::-webkit-details-marker{display:none}
+.howto summary::after{
+  content:""; margin-left:auto; width:9px; height:9px; flex:none;
+  border-right:2.5px solid var(--sub); border-bottom:2.5px solid var(--sub);
+  transform:rotate(45deg) translate(-2px,-2px); transition:transform .22s ease;
+}
+.howto[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
+.howto[open] summary{border-bottom:1.5px dotted var(--line); margin-bottom:12px}
 .howto .body{font-size:14px; color:var(--sub); font-weight:700; padding-bottom:14px}
 .howto .body b{color:var(--ink)}
 .howto ol{margin:6px 0; padding-left:20px}
@@ -480,8 +514,13 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 
 /* ---------- 過去問 ---------- */
 .exam-card{background:var(--card); border:1px solid var(--line); border-radius:24px; padding:17px; margin-top:14px; box-shadow:var(--shadow-card)}
-.exam-card h3{margin:0 0 2px; font-size:17px; font-weight:900}
-.exam-card .cap{font-size:12.5px; color:var(--sub); font-weight:700; margin-bottom:10px}
+.exam-top{display:flex; align-items:center; gap:9px}
+.exam-card h3{margin:0; font-size:17px; font-weight:900}
+.offi{
+  background:var(--sea-soft); color:var(--sea); border-radius:999px;
+  padding:2px 10px; font-size:11px; font-weight:900; letter-spacing:.08em;
+}
+.exam-card .cap{font-size:12.5px; color:var(--sub); font-weight:700; margin:5px 0 11px}
 .part-row{display:flex; gap:8px}
 .part-row a{
   flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -491,8 +530,11 @@ h1.page{font-size:23px; font-weight:900; margin:2px 0 2px; letter-spacing:.01em}
 }
 .part-row a:active{transform:scale(.95)}
 .part-row a small{font-weight:700; font-size:11px; opacity:.8}
-.pdf-row{display:flex; gap:16px; margin-top:11px; flex-wrap:wrap}
-.pdf-row a{color:var(--sub); font-size:13.5px}
+.pdf-row{display:flex; gap:8px; margin-top:11px; flex-wrap:wrap}
+.pdf-row a{
+  background:var(--bg); border:1px solid var(--line); border-radius:999px;
+  padding:6px 14px; font-size:12.5px; font-weight:700; color:var(--sub); text-decoration:none;
+}
 .notice{font-size:13px; color:var(--sub); font-weight:700; margin-top:14px}
 .notice b{color:var(--pink)}
 
@@ -570,7 +612,7 @@ nav .nbadge[hidden]{display:none}
 <section id="tab-home">
   <div class="top-row">
     <div class="eyebrow">Aloha, English!</div>
-    <div class="streak-chip">🔥 連続 <b id="streak-num">0</b> 日</div>
+    <div class="streak-chip"><svg class="ico-fire" viewBox="0 0 24 24" fill="currentColor"><path d="M13.2 2.1c.4 2.7-.2 4.5-1.7 6-2.3 2.2-4.6 3.7-4.6 7A5.2 5.2 0 0 0 12 20.4a5.2 5.2 0 0 0 5.1-5.6c-.1-2-.9-3.3-.9-3.3-.2 1.1-.8 1.8-1.7 2.1.5-3-1.4-8.8-1.3-11.5Z"/></svg> 連続 <b id="streak-num">0</b> 日</div>
   </div>
   <div class="date-line" id="today-line"></div>
   <div class="greet" id="greet">こんにちは<svg class="hib" viewBox="0 0 40 40"><g fill="var(--pink)"><ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(0 20 20)"/><ellipse cx="29.5" cy="17" rx="6" ry="9" transform="rotate(72 29.5 17)"/><ellipse cx="26" cy="28" rx="6" ry="9" transform="rotate(144 26 28)"/><ellipse cx="14" cy="28" rx="6" ry="9" transform="rotate(216 14 28)"/><ellipse cx="10.5" cy="17" rx="6" ry="9" transform="rotate(288 10.5 17)"/></g><circle cx="20" cy="20" r="4.5" fill="var(--sun)"/></svg></div>
@@ -584,7 +626,7 @@ nav .nbadge[hidden]{display:none}
     </div>
   </div>
 
-  <div class="mission">🎯 <span id="mission-line">今日の目標：<b>10問（約10分）</b></span></div>
+  <div class="mission"><svg class="ico-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.2 21.5V3.2"/><path d="M6.2 4.6h10.6l-2 3.6 2 3.6H6.2"/></svg><span id="mission-line">今日の目標：<b>10問（約10分）</b></span></div>
   <div class="hawaiiword">🌺 きょうのハワイ語：<b id="hw-word">Aloha</b><span id="hw-mean">＝こんにちは</span></div>
 
   <div class="mascot" id="mascot"></div>
@@ -599,17 +641,17 @@ nav .nbadge[hidden]{display:none}
     </div>
     <div class="mode-btns">
       <button class="mode-btn mode-listen" id="btn-mode-listen">
-        <span class="ico">🚗</span>
+        <span class="ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 19.2v-3.5c0-.9.6-1.7 1.4-2l2.2-.7 2.3-3.9a3 3 0 0 1 2.6-1.5h6.6a3 3 0 0 1 2.6 1.5l2.3 3.9 2.2.7c.8.3 1.4 1.1 1.4 2v3.5"/><path d="M7.9 13h16.2M4.2 19.2h23.6"/><circle cx="10" cy="22" r="2.7"/><circle cx="22" cy="22" r="2.7"/></svg></span>
         <span class="t">聞き流し<small>画面を消してもOK。10問ぜんぶ自動で流れます</small></span>
         <span class="arrow">›</span>
       </button>
       <button class="mode-btn mode-voice" id="btn-mode-voice">
-        <span class="ico">🎤</span>
+        <span class="ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="11.8" y="4" width="8.4" height="14.2" rx="4.2" fill="currentColor" stroke="none"/><path d="M7.6 15.2v1.1a8.4 8.4 0 0 0 16.8 0v-1.1"/><path d="M16 24.8V28M12.2 28h7.6"/></svg></span>
         <span class="t">声で答える<small>「2番」と声で。まちがえた時だけ解説が流れます</small></span>
         <span class="arrow">›</span>
       </button>
       <button class="mode-btn mode-quiz" id="btn-mode-quiz">
-        <span class="ico">✏️</span>
+        <span class="ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M6.6 25.4 8 20.1 20.8 7.3a2.8 2.8 0 0 1 4 0l0 0a2.8 2.8 0 0 1 0 4L12 24.1Z"/><path d="M18.6 9.5l4 4"/></svg></span>
         <span class="t">実戦ドリル<small>画面を見て解く。おうち向け</small></span>
         <span class="arrow">›</span>
       </button>
@@ -619,7 +661,7 @@ nav .nbadge[hidden]{display:none}
 
   <!-- 模試 -->
   <button class="mock-card" id="btn-mock">
-    <span class="ico">🏆</span>
+    <span class="ico"><svg viewBox="0 0 32 32" fill="currentColor"><path d="M10 4.6h12v7.2a6 6 0 1 1-12 0Z"/><path d="M10 7.4H6.8a3.4 3.4 0 0 0 3.2 3.4M22 7.4h3.2a3.4 3.4 0 0 1-3.2 3.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><path d="M14.4 18.2h3.2v3.4h-3.2z"/><rect x="9.8" y="21.4" width="12.4" height="3.2" rx="1.6"/></svg></span>
     <span class="t">模試にチャレンジ<small id="mock-sub">本番と同じ30問・合否判定つき（約20分）</small></span>
     <span class="arrow">›</span>
   </button>
@@ -649,13 +691,20 @@ nav .nbadge[hidden]{display:none}
 
   <!-- 28日ジャーニー -->
   <div class="journey-head">
-    <h2>28日マップ 🏝️</h2>
+    <div><div class="eyebrow">28-Day Journey</div><h2>28日の旅</h2></div>
     <span id="journey-count"></span>
   </div>
-  <div id="journey"></div>
+  <div class="mapcard">
+    <div class="voyage">
+      <div class="track"><i id="voyage-fill"></i></div>
+      <span class="honu" id="voyage-honu"></span>
+      <span class="goal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.2 21.5V3.2"/><path d="M6.2 4.6h10.6l-2 3.6 2 3.6H6.2"/></svg></span>
+    </div>
+    <div id="journey"></div>
+  </div>
 
   <details class="howto">
-    <summary>📲 ホーム画面に追加してアプリにする</summary>
+    <summary>ホーム画面に追加してアプリにする</summary>
     <div class="body">
       一度やっておくと、次からはホーム画面のアイコンを押すだけで開けます。<br><br>
       <b>iPhoneの場合（Safari）：</b>
@@ -726,7 +775,7 @@ nav .nbadge[hidden]{display:none}
   </div>
 
   <div class="panel">
-    <h3>今週のアドバイス 🌴</h3>
+    <h3>今週のアドバイス</h3>
     <div id="advice-list"></div>
   </div>
 
@@ -1172,6 +1221,13 @@ function setMediaSession(){
 const MARU = '<svg class="maru" viewBox="0 0 40 40">' +
   '<path d="M20 5 C30 4 35 11 34.5 20 C34 30 27 35.5 19 35 C10 34.5 5.5 27 6 18.5 C6.5 10 13 5.5 21.5 5.5" fill="none" stroke="var(--pink)" stroke-width="3" stroke-linecap="round"/>' +
   '<path d="M22.5 8 C29 9 31.5 14 31 20 C30.5 27 25.5 31 19.5 30.5" fill="none" stroke="var(--pink)" stroke-width="1.8" stroke-linecap="round" opacity=".5"/></svg>';
+const HIBISCUS = '<svg class="hib-node" viewBox="0 0 40 40">' +
+  '<g fill="currentColor"><ellipse cx="20" cy="10.5" rx="5.6" ry="8.6"/>' +
+  '<ellipse cx="28.8" cy="17" rx="5.6" ry="8.6" transform="rotate(72 28.8 17)"/>' +
+  '<ellipse cx="25.4" cy="27.4" rx="5.6" ry="8.6" transform="rotate(144 25.4 27.4)"/>' +
+  '<ellipse cx="14.6" cy="27.4" rx="5.6" ry="8.6" transform="rotate(216 14.6 27.4)"/>' +
+  '<ellipse cx="11.2" cy="17" rx="5.6" ry="8.6" transform="rotate(288 11.2 17)"/></g>' +
+  '<circle cx="20" cy="20" r="4.2" fill="var(--sun)"/></svg>';
 
 function renderJourney(){
   const wrap = el("journey");
@@ -1180,7 +1236,7 @@ function renderJourney(){
   let cnt = 0;
   for (let w = 0; w < 4; w++){
     const card = document.createElement("div");
-    card.className = "week";
+    card.className = "wkrow";
     card.innerHTML = '<div class="wk-label">Week ' + (w+1) + '</div><div class="nodes"></div>';
     const nodes = card.querySelector(".nodes");
     for (let i = 0; i < 7; i++){
@@ -1193,7 +1249,7 @@ function renderJourney(){
       const sc = scores[d];
       b.innerHTML =
         (d === tIdx ? '<span class="lbl">きょう</span>' : '') +
-        '<span class="c">' + (isDone ? '🌺' : '<span>' + (d+1) + '</span>') + '</span>' +
+        '<span class="c">' + (isDone ? HIBISCUS : '<span>' + (d+1) + '</span>') + '</span>' +
         '<span class="sc' + (sc ? '' : ' none') + '">' + (sc ? sc.s + "/" + sc.t : "・") + '</span>';
       b.addEventListener("click", () => { switchDay(d); window.scrollTo({top:0, behavior:"smooth"}); });
       b.setAttribute("aria-label", "Day " + (d+1));
@@ -1202,6 +1258,13 @@ function renderJourney(){
     wrap.appendChild(card);
   }
   el("journey-count").textContent = cnt + " / 28 日クリア";
+  // ホヌが旅の進み具合を泳ぐ
+  const pct = Math.max(3, Math.min(97, Math.round((tIdx + 1) / 28 * 100)));
+  el("voyage-fill").style.width = pct + "%";
+  const honu = el("voyage-honu");
+  honu.style.left = pct + "%";
+  if (!honu.firstChild) honu.innerHTML = TURTLE_SVG;
+  honu.title = "Day " + (tIdx + 1) + " / 28";
 }
 
 /* ---------- クイズ共通 ---------- */
@@ -1890,13 +1953,14 @@ const EXAMS = [
 EXAMS.forEach(ex => {
   const card = document.createElement("div");
   card.className = "exam-card";
-  card.innerHTML = '<h3></h3><div class="cap">タップすると音声が開きます（各10問）</div>' +
+  card.innerHTML = '<div class="exam-top"><h3></h3><span class="offi">公式</span></div>' +
+    '<div class="cap">タップすると本番の試験音声が開きます（各10問）</div>' +
     '<div class="part-row">' +
     [1,2,3].map(p => '<a href="' + ex.base + '4Q-part' + p + '.mp3" target="_blank" rel="noopener">第' + p + '部<small>' + (p===1?'応答':p===2?'会話':'文章') + '</small></a>').join("") +
     '</div><div class="pdf-row">' +
-    '<a href="' + ex.book + '" target="_blank" rel="noopener">問題冊子PDF</a>' +
-    '<a href="' + ex.script + '" target="_blank" rel="noopener">読まれた英文PDF</a>' +
-    '<a href="' + ex.ans + '" target="_blank" rel="noopener">解答PDF</a></div>';
+    '<a href="' + ex.book + '" target="_blank" rel="noopener">問題冊子</a>' +
+    '<a href="' + ex.script + '" target="_blank" rel="noopener">英文スクリプト</a>' +
+    '<a href="' + ex.ans + '" target="_blank" rel="noopener">解答</a></div>';
   card.querySelector("h3").textContent = ex.name;
   el("exam-list").appendChild(card);
 });
@@ -1925,7 +1989,7 @@ const ONB_PAGES = [
      ["🎤 声で答える","「2番」と声に出すと即判定。正解ならピンポン♪、まちがえた時だけ解説が流れます"],
      ["✏️ 実戦ドリル","おうちで画面を見て解くモード。まちがいは「復習」に自動でたまります"]]},
   {h:"記録が、続ける力になる",
-   p:"やった日はカレンダーに<b>花丸</b>、マップには<b>ハイビスカス</b>が咲きます。<b>パート別の弱点・強み</b>は「きろく」タブが自動で分析。<br><br>力がついたら<b>模試（30問・合否判定つき）</b>にチャレンジ。本番は<b>6〜7割で合格圏</b>です。<br><br>💡 ホーム画面の下にある<b>「📲 ホーム画面に追加してアプリにする」</b>をやっておくと、次からアイコン1タップで開けます。それでは、今日の10問から始めましょう！",
+   p:"やった日はカレンダーに<b>花丸</b>、マップには<b>ハイビスカス</b>が咲きます。<b>パート別の弱点・強み</b>は「きろく」タブが自動で分析。<br><br>力がついたら<b>模試（30問・合否判定つき）</b>にチャレンジ。本番は<b>6〜7割で合格圏</b>です。<br><br>ホーム画面の下にある<b>「ホーム画面に追加してアプリにする」</b>をやっておくと、次からアイコン1タップで開けます。それでは、今日の10問から始めましょう！",
    steps:null}
 ];
 let onbPage = 0;
