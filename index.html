@@ -687,6 +687,190 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 .vq .num.correct::after{content:" \2713"; font-size:19px}
 .vq .num.wrong::after{content:" \2715"; font-size:19px}
 .sr-only{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+/* ============================================================
+   追加：カウントダウン・ミッション・合格予測・文法（島マップ・出題）・週のグラフ
+   色は既存の3役（装飾用 / 文字用 / 白文字を乗せる塗り）だけを使う
+   ============================================================ */
+.toast{
+  position:fixed; left:50%; transform:translateX(-50%); z-index:130;
+  bottom:calc(88px + env(safe-area-inset-bottom,0px)); width:calc(100% - 32px); max-width:480px;
+  background:var(--ink); color:var(--bg); border-radius:var(--r-md); padding:var(--sp-3) var(--sp-4);
+  font-size:var(--fs-sm); font-weight:600; line-height:1.45; box-shadow:var(--shadow-pop); text-align:center;
+}
+.toast[hidden]{display:none}
+
+/* 本番までのカウントダウン */
+.cd{
+  display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3); flex-wrap:wrap;
+  margin-top:var(--sp-4); padding:var(--sp-4); background:var(--card); border:.5px solid var(--line);
+  border-radius:var(--r-xl); box-shadow:var(--shadow-card);
+}
+.cd-big{font-size:var(--fs-lead); font-weight:600; color:var(--ink)}
+.cd-big b{font-size:44px; font-weight:700; letter-spacing:var(--tr-tight); color:var(--coral-text); font-variant-numeric:tabular-nums; margin:0 4px; line-height:1.1}
+.cd-sub{font-size:var(--fs-xs); color:var(--sub); margin-top:2px}
+.cd-set{display:flex; flex-direction:column; gap:3px; font-size:var(--fs-2xs); color:var(--sub); font-weight:600}
+.cd-set input{
+  min-height:var(--tap); border:.5px solid var(--line); border-radius:var(--r-sm); background:var(--card-2);
+  color:var(--ink); font:inherit; font-size:var(--fs-sm); padding:0 var(--sp-2);
+}
+
+/* 今日のミッション */
+.msn{margin-top:var(--sp-3); padding:var(--sp-4); background:var(--card); border:.5px solid var(--line); border-radius:var(--r-xl); box-shadow:var(--shadow-card)}
+.msn-head{display:flex; align-items:baseline; justify-content:space-between; gap:var(--sp-2); flex-wrap:wrap}
+.msn-head h2{margin:0; font-size:var(--fs-h2); font-weight:700; letter-spacing:var(--tr-tight)}
+.msn-sub{font-size:var(--fs-xs); color:var(--gold-text); font-weight:600}
+.msn-strk{display:flex; align-items:baseline; gap:6px; margin-top:var(--sp-2); font-size:var(--fs-sm); color:var(--sub); flex-wrap:wrap}
+.msn-strk b{font-size:var(--fs-h1); color:var(--coral-text); font-variant-numeric:tabular-nums; line-height:1.1}
+.msn-strk .tk{margin-left:auto; background:var(--sun-soft); color:var(--gold-text); border-radius:var(--r-full); padding:3px 11px; font-size:var(--fs-2xs); font-weight:600}
+.ms-list{display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-3)}
+.ms-row{
+  display:flex; align-items:center; gap:var(--sp-3); width:100%; text-align:left; min-height:60px;
+  border:.5px solid var(--line); background:var(--card-2); border-radius:var(--r-md); padding:var(--sp-2) var(--sp-3);
+}
+.ms-row:active{background:var(--fill)}
+.ms-chk{
+  width:30px; height:30px; flex:none; border-radius:50%; border:2px solid var(--sub); color:transparent;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;
+}
+.ms-row.done{background:var(--green-soft); border-color:var(--green-text)}
+.ms-row.done .ms-chk{background:var(--green-solid); border-color:var(--green-solid); color:var(--on-strong)}
+.ms-row .t{flex:1; min-width:0; font-size:var(--fs-body); font-weight:600; line-height:1.3}
+.ms-row .t small{display:block; font-size:var(--fs-xs); font-weight:400; color:var(--sub); margin-top:1px}
+.ms-row .st{font-size:var(--fs-xs); font-weight:600; color:var(--sea-text); white-space:nowrap}
+.ms-row.done .st{color:var(--green-text)}
+
+/* まだ出ていない問題・合格予測・道すじ */
+.sup-line{font-size:var(--fs-sm); color:var(--sub); text-align:center; margin-top:var(--sp-2); line-height:1.5}
+.pr-head{display:flex; align-items:baseline; gap:var(--sp-3); flex-wrap:wrap}
+.pr-num{font-size:44px; font-weight:700; letter-spacing:var(--tr-tight); color:var(--sea-text); font-variant-numeric:tabular-nums; line-height:1.1}
+.pr-st{font-size:var(--fs-sm); font-weight:600; color:var(--ink)}
+.gauge{position:relative; height:14px; border-radius:var(--r-full); background:var(--ring-bg); margin:var(--sp-5) 0 36px}
+.gauge i{display:block; height:100%; border-radius:var(--r-full); background:var(--sea-solid); transition:width .5s ease}
+.gauge i.pass{background:var(--green-solid)}
+.gauge .mark{position:absolute; left:60%; top:-6px; bottom:-6px; width:0; border-left:2px dashed var(--ink)}
+.gauge .mark span{position:absolute; top:100%; left:0; transform:translateX(-50%); margin-top:6px; white-space:nowrap; font-size:var(--fs-2xs); font-weight:600; color:var(--ink)}
+.pr-sub{font-size:var(--fs-xs); color:var(--sub); line-height:1.6}
+.pr-sub b{color:var(--ink)}
+.pr-note{font-size:var(--fs-2xs); color:var(--sub); margin-top:var(--sp-2)}
+.path{margin:0; padding-left:1.2em; font-size:var(--fs-sm); line-height:1.6; color:var(--ink)}
+.path li{margin-bottom:var(--sp-2)}
+
+/* 文法タブ */
+.gr-start{
+  margin-top:var(--sp-4); width:100%; min-height:56px; border:none; border-radius:var(--r-md);
+  background:var(--grad-sea-strong); color:var(--on-strong); font-size:var(--fs-lead); font-weight:600; box-shadow:var(--shadow-raise);
+}
+.gr-start:active{transform:scale(.985); opacity:.92}
+.gr-start:disabled{opacity:.35; box-shadow:none}
+.gr-note{font-size:var(--fs-xs); color:var(--sub); margin-top:var(--sp-2); text-align:center}
+.isl-map{position:relative; width:100%; max-width:420px; margin:var(--sp-4) auto 0}
+.isl-road{position:absolute; inset:0; width:100%; height:100%}
+.isl-road path{fill:none; stroke:var(--line); stroke-width:6; stroke-linecap:round; stroke-dasharray:2 11}
+.isl-road path.done{stroke:var(--sea); stroke-dasharray:none; stroke-width:5; opacity:.8}
+.isl-item{position:absolute; left:0; right:0; height:0}
+.isl{
+  position:absolute; width:76px; height:76px; transform:translate(-50%,-50%); border-radius:50%;
+  border:none; padding:0; background:var(--card); box-shadow:var(--shadow-raise);
+  display:flex; align-items:center; justify-content:center;
+}
+.isl svg{position:absolute; inset:-2px; width:80px; height:80px}
+.isl .rg-bg{fill:none; stroke:var(--ring-bg); stroke-width:6}
+.isl .rg-fg{fill:none; stroke:var(--sea); stroke-width:6; stroke-linecap:round}
+.isl .no{font-size:var(--fs-h2); font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums}
+.isl .ic{position:absolute; right:-4px; top:-6px; font-size:18px; line-height:1}
+.isl.locked{background:var(--fill)}
+.isl.locked .no{color:var(--sub)}
+.isl.clear{background:var(--green-soft)}
+.isl.clear .rg-fg{stroke:var(--green)}
+.isl.cur{box-shadow:0 0 0 3px var(--card), 0 0 0 6px var(--coral), var(--shadow-raise)}
+.isl:active{transform:translate(-50%,-50%) scale(.95)}
+.isl-lb{position:absolute; width:150px; top:0; transform:translateY(-50%); font-size:var(--fs-xs); line-height:1.4; color:var(--ink)}
+.isl-lb.r{text-align:left}
+.isl-lb.l{text-align:right}
+.isl-lb.dim{color:var(--sub)}
+.isl-lb .nm{display:block; font-size:var(--fs-sm); font-weight:700}
+.isl-lb .sb{display:block; color:var(--sub); font-size:var(--fs-2xs)}
+.isl-lb .pg{display:block; font-weight:600; color:var(--sea-text); font-size:var(--fs-2xs)}
+.isl-lb .here{display:inline-block; background:var(--coral-solid); color:var(--on-strong); border-radius:var(--r-full); padding:1px 9px; font-size:var(--fs-2xs); font-weight:600; margin-bottom:2px}
+
+/* 文法の出題 */
+.gq{
+  margin-top:var(--sp-4); background:var(--card); border:.5px solid var(--line); border-radius:var(--r-lg);
+  padding:var(--sp-4); box-shadow:var(--shadow-card); font-size:20px; line-height:1.7; font-weight:500;
+}
+.gq.gja{font-size:var(--fs-lead); font-weight:600}
+.gline + .gline{margin-top:var(--sp-1)}
+.blank{
+  display:inline-block; min-width:3.2em; padding:0 6px; margin:0 2px; text-align:center;
+  border-bottom:3px solid var(--sea-text); font-weight:700; line-height:1.3;
+}
+.blank.filled.ok{color:var(--green-text); border-bottom-color:var(--green-text)}
+.blank.filled.ng{color:var(--pink-text); border-bottom-color:var(--pink-text)}
+.qfb .ex{font-size:var(--fs-sm); margin-top:var(--sp-2); color:var(--ink)}
+.spk-row{margin-top:var(--sp-2)}
+.spk-btn{
+  min-height:var(--tap); border:.5px solid var(--sea-text); background:var(--card); color:var(--sea-text);
+  border-radius:var(--r-full); padding:0 var(--sp-4); font-size:var(--fs-sm); font-weight:600;
+}
+.oline{display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-2); margin-top:var(--sp-4); font-size:20px; font-weight:600}
+.oline .fix{padding:0 2px}
+.slot{
+  position:relative; min-width:56px; min-height:48px; padding:0 var(--sp-3); border-radius:var(--r-sm);
+  border:2px dashed var(--sub); background:var(--card-2); color:var(--sub); font-size:18px; font-weight:600;
+}
+.slot.has{border-style:solid; border-color:var(--sea-text); background:var(--sea-soft); color:var(--ink)}
+.slot.ok{border-color:var(--green-text); background:var(--green-soft)}
+.slot.ng{border-color:var(--pink-text); background:var(--pink-soft)}
+.slot .mk{margin-left:4px; font-size:15px; font-weight:700}
+.slot.ok .mk{color:var(--green-text)}
+.slot.ng .mk{color:var(--pink-text)}
+.bank{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-5)}
+.chip{
+  min-width:56px; min-height:48px; padding:0 var(--sp-4); border-radius:var(--r-full);
+  border:.5px solid var(--line); background:var(--card); color:var(--ink); font-size:18px; font-weight:600; box-shadow:var(--shadow-raise);
+}
+.chip:active{transform:scale(.95)}
+.chip.used{opacity:.3; box-shadow:none; border-style:dashed}
+.qnext:disabled{opacity:.35; box-shadow:none}
+.qresult .rnotes{margin-top:var(--sp-2); font-size:var(--fs-xs); font-weight:600; color:var(--gold-text); line-height:1.6}
+.rev .due{margin-left:auto; font-size:var(--fs-2xs); font-weight:600; color:var(--sub); white-space:nowrap}
+
+/* きろく：週の比べ・折れ線・曜日の棒 */
+.wk-range{font-size:var(--fs-xs); color:var(--sub); margin:-6px 0 var(--sp-3)}
+.wkc{display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-2)}
+.wk{background:var(--card-2); border:.5px solid var(--line); border-radius:var(--r-md); padding:var(--sp-3)}
+.wk .wl{font-size:var(--fs-2xs); color:var(--sub); font-weight:600}
+.wk .wv{font-size:var(--fs-h1); font-weight:700; letter-spacing:var(--tr-tight); font-variant-numeric:tabular-nums; line-height:1.2}
+.wk .wv small{font-size:var(--fs-xs); font-weight:600; color:var(--sub); margin-left:2px}
+.wk .wp{font-size:var(--fs-2xs); color:var(--sub)}
+.wk .wd{font-size:var(--fs-xs); font-weight:700; margin-top:2px; color:var(--sub)}
+.wk .wd.up{color:var(--green-text)}
+.wk .wd.down{color:var(--pink-text)}
+.wk-line svg{display:block; width:100%; height:auto}
+.wk-line .gl{stroke:var(--line); stroke-width:1}
+.wk-line .pass,.legend .pass{stroke:var(--ink); stroke-width:1.5; stroke-dasharray:4 3; opacity:.7}
+.wk-line .tx{fill:var(--sub); font-size:11.5px; font-family:inherit}
+.wk-line .tx.pt{fill:var(--ink); font-weight:600}
+.ln{fill:none; stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round}
+.ln.sl{stroke:var(--sea-text)}
+.ln.sg{stroke:var(--coral-text)}
+.mk.sl{fill:var(--sea-text)}
+.mk.sg{fill:var(--coral-text)}
+.legend{display:flex; flex-wrap:wrap; gap:var(--sp-1) var(--sp-4); margin-top:var(--sp-2); font-size:var(--fs-2xs); color:var(--sub)}
+.legend span{display:inline-flex; align-items:center; gap:4px}
+.legend svg{width:16px; height:12px}
+.legend .sw{display:inline-block; width:12px; height:12px; border-radius:3px}
+.legend .sw.cr{background:var(--sea-solid)}
+.legend .sw.pv{background:var(--sea-soft); border:1.5px solid var(--sea-text)}
+.wk-wd{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; align-items:end}
+.wdc{display:flex; flex-direction:column; align-items:center}
+.wdc .bars{display:flex; align-items:flex-end; gap:2px; height:116px}
+.wdc .bw{display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%}
+.wdc .bw em{font-style:normal; font-size:var(--fs-2xs); color:var(--sub); font-variant-numeric:tabular-nums; min-height:14px; line-height:14px}
+.wdc .bw i{display:block; width:14px; border-radius:4px 4px 0 0; min-height:2px}
+.wdc .bw i.cr{background:var(--sea-solid)}
+.wdc .bw i.pv{background:var(--sea-soft); border:1.5px solid var(--sea-text); border-bottom:none}
+.wdc .dl{font-size:var(--fs-2xs); color:var(--sub); margin-top:4px; font-weight:600}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important; animation:none!important} }
 </style>
 <title>英検4級リスニング講座</title>
@@ -710,7 +894,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
     </div>
   </div>
 
-  <div class="mission"><svg class="ico-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.2 21.5V3.2"/><path d="M6.2 4.6h10.6l-2 3.6 2 3.6H6.2"/></svg><span id="mission-line">今日の目標：<b>10問（約10分）</b></span></div>
+  <div class="cd" id="cd">
+    <div class="cd-main"><div class="cd-big" id="cd-big"></div><div class="cd-sub" id="cd-sub"></div></div>
+    <label class="cd-set">試験日を変える<input type="date" id="exam-date"></label>
+  </div>
+
+  <div class="msn">
+    <div class="msn-head"><h2>今日のミッション</h2><span class="msn-sub" id="ms-sub" aria-live="polite"></span></div>
+    <div class="msn-strk"><span class="fl" aria-hidden="true">🔥</span><b id="ms-streak">0</b><span>日つづけています</span><span class="tk" id="ms-ticket"></span></div>
+    <div class="ms-list" id="ms-list"></div>
+  </div>
   <div class="hawaiiword">きょうのハワイ語<b id="hw-word">Aloha</b><span id="hw-mean">こんにちは</span></div>
 
   <div class="mascot" id="mascot"></div>
@@ -719,13 +912,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   <div class="lesson-card" id="hero-select">
     <svg class="corner" viewBox="0 0 40 40"><g fill="var(--pink)" opacity=".9"><ellipse cx="20" cy="10" rx="5.5" ry="8.5"/><ellipse cx="29" cy="17" rx="5.5" ry="8.5" transform="rotate(72 29 17)"/><ellipse cx="25.5" cy="27.5" rx="5.5" ry="8.5" transform="rotate(144 25.5 27.5)"/><ellipse cx="14.5" cy="27.5" rx="5.5" ry="8.5" transform="rotate(216 14.5 27.5)"/><ellipse cx="11" cy="17" rx="5.5" ry="8.5" transform="rotate(288 11 17)"/></g><circle cx="20" cy="20" r="4" fill="var(--sun)"/></svg>
     <div class="day-row">
-      <button id="day-prev" aria-label="前の日へ">‹</button>
-      <div class="day-title"><span id="day-name">Day 1</span><small id="day-theme"></small></div>
-      <button id="day-next" aria-label="次の日へ">›</button>
+      <div class="day-title"><span id="day-name">今日のリスニング</span><small id="day-theme"></small></div>
     </div>
     <button class="cta" id="btn-mode-listen">
       <span class="ic"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 16.6v-3a1.9 1.9 0 0 1 1.3-1.8l1.8-.6 1.9-3.2A2.6 2.6 0 0 1 11.6 6.7h4.8a2.6 2.6 0 0 1 2.2 1.3l1.9 3.2 1.8.6a1.9 1.9 0 0 1 1.3 1.8v3"/><path d="M6.8 11.2h14.4M4.4 16.6h19.2"/><circle cx="8.7" cy="19" r="2.3"/><circle cx="19.3" cy="19" r="2.3"/></svg></span>
-      <span class="t">聞き流しをはじめる<small>約9分・画面を消しても再生は続きます</small></span>
+      <span class="t">聞き流しをはじめる<small id="listen-cta-sub">約9分・画面を消しても再生は続きます</small></span>
     </button>
     <div class="list">
       <button class="row" id="btn-mode-voice">
@@ -744,7 +935,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
         <span class="chev" aria-hidden="true"></span>
       </button>
     </div>
-    <div id="day-badges"></div>
   </div>
 
 
@@ -771,7 +961,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 
   <!-- 28日ジャーニー -->
   <div class="journey-head">
-    <div><div class="eyebrow">28-Day Journey</div><h2>28日の旅</h2></div>
+    <div><div class="eyebrow">Fresh Questions</div><h2>まだ出ていない問題</h2></div>
     <span id="journey-count"></span>
   </div>
   <div class="mapcard">
@@ -780,8 +970,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
       <span class="honu" id="voyage-honu"></span>
       <span class="goal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.2 21.5V3.2"/><path d="M6.2 4.6h10.6l-2 3.6 2 3.6H6.2"/></svg></span>
     </div>
-    <div id="journey"></div>
+    <div class="sup-line" id="sup-line"></div>
   </div>
+
+  <div class="journey-head">
+    <div><div class="eyebrow">Forecast</div><h2>合格予測</h2></div>
+  </div>
+  <div class="mapcard" id="meter"></div>
+
+  <div class="journey-head">
+    <div><div class="eyebrow">Roadmap</div><h2>合格までの道すじ</h2></div>
+  </div>
+  <div class="mapcard"><ul class="path" id="pathbox"></ul></div>
 
   <details class="howto">
     <summary>ホーム画面に追加してアプリにする</summary>
@@ -814,25 +1014,37 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
         <li><b>🚗 聞き流し</b>…走り出す前に再生を1回押すだけ。<b>画面を消してもポケットの中でも再生は続き</b>、ハンドルの「次の曲」ボタンで次の問題へ飛べます。長い日本語の案内は入っていないので、すぐ第1問から始まります。</li>
         <li><b>🎤 声で答える</b>…問題のあと<b>「2番」と声に出す</b>と、正解ならピンポン♪ですぐ次へ。まちがえた時だけ日本語の解説が流れます。声が使えないときは画面の大きな数字ボタンでもOK。<b>このモードは画面をつけたままで</b>使ってください。</li>
         <li><b>✏️ 実戦ドリル</b>…おうちで画面を見ながら解くモード。英文と解説が文字でも読めます。</li>
+        <li><b>📘 文法</b>…「文法」タブで、空所補充・会話・並べかえの問題を毎日10問。</li>
       </ol>
-      まちがえた問題は、どのモードでも<b>「復習」タブ</b>に自動でたまります。解き直して正解すれば消えます。<br><br>
+      まちがえた問題は、どのモードでも<b>「復習」タブ</b>に自動でたまります。翌日 → 3日後 → 7日後と日をあけて出し直し、正解がつづけば卒業です。<br><br>
       <b>合格までの進め方：</b><br>
-      ・毎日10問（約10分）。28日で一周、本番約9回分の280問。<br>
+      ・毎日、リスニング10問＋文法10問＋復習（約20分）。<b>リスニング280問は、全部出るまで同じ問題を出しません</b>。<br>
+      ・文法は14のステージを島マップで順に進みます。7割できると次の島が開きます。<br>
       ・週に1回は<b>「模試」</b>か「過去問」タブで30問を通しで。<br>
-      ・本番のリスニングは30問。<b>6〜7割</b>の正解で合格圏です。
+      ・本番のリスニングは30問。<b>6割（18問）</b>で合格圏、7割（21問）あれば安心です。
     </div>
   </details>
+</section>
+
+<!-- ================= 文法 ================= -->
+<section id="tab-grammar" role="tabpanel" aria-label="文法" hidden>
+  <div class="eyebrow">Grammar</div>
+  <h1 class="page">文法</h1>
+  <div class="page-sub" id="gr-sub"></div>
+  <button class="gr-start" id="gr-start">📘 今日の文法 10問</button>
+  <div class="gr-note">いまのステージから7問＋おさらい3問。島を押すと、そのステージだけ10問できます。</div>
+  <div class="isl-map" id="gr-map"></div>
 </section>
 
 <!-- ================= 復習 ================= -->
 <section id="tab-review" role="tabpanel" aria-label="復習" hidden>
   <div class="eyebrow">Review</div>
   <h1 class="page">復習</h1>
-  <div class="page-sub">間違えた問題が自動でここにたまります</div>
+  <div class="page-sub">間違えた問題を、日をあけて出し直します</div>
   <div class="rv-hero">
     <div><span class="num" id="rv-count">0</span> <span class="unit">問</span></div>
     <div class="cap" id="rv-cap">解き直して正解すると、リストから消えます</div>
-    <button class="rv-start" id="rv-start">🌊 弱点をつぶす — 解き直しスタート</button>
+    <button class="rv-start" id="rv-start">🌊 今日の復習をはじめる</button>
   </div>
   <div class="rv-list" id="rv-list"></div>
 </section>
@@ -850,7 +1062,25 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   </div>
 
   <div class="panel">
-    <h3>パート別 正答率<small>実戦ドリルと模試の記録から</small></h3>
+    <h3>先週と今週の比べ</h3>
+    <div class="wk-range" id="wk-range"></div>
+    <div class="wkc" id="wk-cards"></div>
+  </div>
+
+  <div class="panel">
+    <h3>8週間の正答率<small>リスニングと文法</small></h3>
+    <div class="wk-line" id="wk-line"></div>
+    <div class="legend"><span><svg viewBox="0 0 16 12" aria-hidden="true"><circle cx="8" cy="6" r="4.5" class="mk sl"/></svg>リスニング</span><span><svg viewBox="0 0 16 12" aria-hidden="true"><rect x="4" y="2" width="8" height="8" class="mk sg"/></svg>文法</span><span><svg viewBox="0 0 16 12" aria-hidden="true"><line x1="0" x2="16" y1="6" y2="6" class="pass"/></svg>合格ライン 60%</span><span>解いていない週は線を切ります</span></div>
+  </div>
+
+  <div class="panel">
+    <h3>曜日ごとの問題数<small>今週と先週</small></h3>
+    <div class="wk-wd" id="wk-wd"></div>
+    <div class="legend"><span><i class="sw cr"></i>今週（濃い）</span><span><i class="sw pv"></i>先週（うすい・枠つき）</span></div>
+  </div>
+
+  <div class="panel">
+    <h3>パート別 正答率<small>リスニングの記録から</small></h3>
     <div id="part-bars"></div>
   </div>
 
@@ -860,7 +1090,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   </div>
 
   <div class="panel">
-    <h3>模試の記録<small>21問以上で合格圏</small></h3>
+    <h3>模試の記録<small>18問で合格圏・21問で安心</small></h3>
     <div class="mockhist" id="mock-hist"></div>
   </div>
 
@@ -895,6 +1125,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 
 <nav role="tablist" aria-label="メインメニュー">
   <button role="tab" aria-selected="true" data-tab="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 L12 4 L20 11 V20 H14 V15 H10 V20 H4 Z"/></svg>ホーム</button>
+  <button role="tab" aria-selected="false" data-tab="grammar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v13H7.5A2.5 2.5 0 0 1 5 17.5Z"/><path d="M5 17.5A2.5 2.5 0 0 1 7.5 15H18"/></svg>文法</button>
   <button role="tab" aria-selected="false" data-tab="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11 A8 8 0 1 0 18 16.5"/><path d="M20 5 V11 H14"/></svg>復習<span class="nbadge" id="nav-rv-badge" hidden></span></button>
   <button role="tab" aria-selected="false" data-tab="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 V14 M10 20 V9 M16 20 V12 M22 20 H2 M22 4 L16 8 L11 6 L5 10"/></svg>きろく</button>
   <button role="tab" aria-selected="false" data-tab="exam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4.5" height="7" rx="2"/><rect x="16.5" y="13" width="4.5" height="7" rx="2"/></svg>過去問</button>
@@ -942,6 +1173,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   </div>
 </div>
 
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
 <!-- 紙吹雪 -->
 <canvas id="confetti" aria-hidden="true" hidden></canvas>
 
@@ -955,6 +1188,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 
 <script src="data.js"></script>
 <script src="meta.js"></script>
+<script src="grammar.js"></script>
 <script>
 "use strict";
 function loadJSON(key, fb){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fb; }catch(e){ return fb; } }
@@ -999,6 +1233,284 @@ const PART_SUBS  = {1:"応答を選ぶ", 2:"会話の内容", 3:"文章の内容
 function partName(n){ const p = partOf(n); return PART_NAMES[p] + "・" + (p===1?"応答":p===2?"会話":"文章"); }
 function enMain(q){ return q.t || (q.d ? q.d.map(l => l.replace(/^[AB]: /, "")).join(" ") : q.p); }
 
+/* ---------- 出題の記録（同じ問題を出さない・日をあけて復習） ---------- */
+const GR = window.GRAMMAR || {stages:[], items:[]};        // grammar.js が読めなくても動くように
+const GBY = {}; GR.items.forEach(i => { GBY[i.id] = i; });
+const LTOTAL = 280;
+let lseen = loadJSON("eiken4.lseen", {});     // "d-n" → {t,c,w,ok,due,box}（d は 1〜28）
+let gseen = loadJSON("eiken4.gseen", {});     // 文法の問題 id → 同じ形
+let lplay = loadJSON("eiken4.lplay", {});     // Day(1〜28) → 最後に聞き流した時刻
+let alog  = loadJSON("eiken4.log", []);       // 解答ごとの記録 {d,k,ok,id}
+let missionSt = loadJSON("eiken4.mission", null);
+let freeze = loadJSON("eiken4.freeze", null);
+const DEFAULT_EXAM = "2027-01-24";            // 2026年度 第3回 一次試験（本会場）
+
+/* ===PURE-START=== （画面にも保存にも触らない部分。node で試せる） */
+const PARTS = {1:[1,4], 2:[5,7], 3:[8,10]};
+const BOX_DAYS = [1, 3, 7, 7];                 // 復習の間隔（日）。box 3 で正解したら復習から外す
+function dateOf(s){ const a = s.split("-").map(Number); return new Date(a[0], a[1]-1, a[2]); }
+function addDaysStr(s, n){ const d = dateOf(s); d.setDate(d.getDate() + n); return keyOf(d); }
+function daysBetween(a, b){ return Math.round((dateOf(b) - dateOf(a)) / 864e5); }
+function lkey(day, n){ return (day + 1) + "-" + n; }          // day は 0 始まり、キーの d は 1 始まり
+function keyToItem(key){ const p = key.split("-").map(Number); return {k:"l", day:p[0]-1, n:p[1]}; }
+function shuffled(a, rnd){
+  const b = a.slice(), r = rnd || Math.random;
+  for (let i = b.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); const t = b[i]; b[i] = b[j]; b[j] = t; }
+  return b;
+}
+function seenOn(rec, ts){ return !!rec && !!rec.t && keyOf(new Date(rec.t)) === ts; }
+// 並び：①一度も出ていない（ランダム。lvOf があれば lv の小さい順）→②最後に出た時刻の古い順→③今日出したもの
+function orderCands(keys, seen, ts, rnd, lvOf){
+  const un = [], old = [], tod = [];
+  shuffled(keys, rnd).forEach(k => {
+    const r = seen[k];
+    if (!r || !r.t) un.push(k); else if (seenOn(r, ts)) tod.push(k); else old.push(k);
+  });
+  if (lvOf) un.sort((a, b) => lvOf(a) - lvOf(b));       // 安定ソート。同じ lv の中はランダムのまま
+  old.sort((a, b) => seen[a].t - seen[b].t);
+  tod.sort((a, b) => seen[a].t - seen[b].t);
+  return un.concat(old, tod);
+}
+function listeningKeys(part){
+  const lo = part ? PARTS[part][0] : 1, hi = part ? PARTS[part][1] : 10, ks = [];
+  for (let d = 1; d <= 28; d++) for (let n = lo; n <= hi; n++) ks.push(d + "-" + n);
+  return ks;
+}
+function pickListeningFrom(seen, count, part, ts, rnd){
+  return orderCands(listeningKeys(part), seen, ts, rnd).slice(0, count);
+}
+function stageInfoFrom(items, seen, sid){
+  let total = 0, ok = 0, sn = 0;
+  items.forEach(i => { if (i.s !== sid) return; total++; const r = seen[i.id]; if (r && r.t){ sn++; if (r.ok) ok++; } });
+  const need = Math.ceil(total * 7 / 10);
+  return {total, ok, seen: sn, need, cleared: total === 0 || ok >= need};
+}
+function stageOpenFrom(items, seen, sid){
+  if (sid <= 1) return true;
+  if (stageInfoFrom(items, seen, sid - 1).cleared) return true;
+  return items.some(i => i.s === sid && seen[i.id] && seen[i.id].t);      // 一度入った島は閉じない
+}
+function currentStageFrom(stages, items, seen){
+  for (const s of stages) if (!stageInfoFrom(items, seen, s.id).cleared) return s.id;
+  return stages.length ? stages[stages.length - 1].id : 1;
+}
+function openMaxFrom(stages, items, seen){
+  let m = 1; stages.forEach(s => { if (stageOpenFrom(items, seen, s.id)) m = Math.max(m, s.id); });
+  return m;
+}
+function pickStageOrdered(items, seen, sid, ts, rnd){
+  const by = {}, ids = [];
+  items.forEach(i => { if (i.s === sid){ by[i.id] = i; ids.push(i.id); } });
+  return orderCands(ids, seen, ts, rnd, id => by[id].lv);
+}
+function pickEarlierOrdered(items, seen, sid, ts, rnd){       // 前のステージ：間違えた→古い→未出題
+  const by = {}, w = [], s = [], u = [], t = [];
+  items.forEach(i => { if (i.s < sid) by[i.id] = i; });
+  shuffled(Object.keys(by), rnd).forEach(id => {
+    const r = seen[id];
+    if (!r || !r.t) u.push(id); else if (seenOn(r, ts)) t.push(id); else if (!r.ok) w.push(id); else s.push(id);
+  });
+  const byT = (a, b) => seen[a].t - seen[b].t;
+  u.sort((a, b) => by[a].lv - by[b].lv);
+  return w.sort(byT).concat(s.sort(byT), u, t.sort(byT));
+}
+function pickGrammarTodayFrom(stages, items, seen, ts, rnd){
+  const cur = currentStageFrom(stages, items, seen);
+  const A = pickStageOrdered(items, seen, cur, ts, rnd);
+  const B = pickEarlierOrdered(items, seen, cur, ts, rnd);
+  const out = A.slice(0, 7).concat(B.slice(0, 3));
+  const rest = A.slice(7).concat(B.slice(3));
+  for (let i = 0; out.length < 10 && i < rest.length; i++) out.push(rest[i]);
+  return out;
+}
+// 解答を1件記録した結果を返す（rec を書き換えない）
+function applyAnswer(rec, ok, now, ts){
+  const r = rec ? Object.assign({}, rec) : {t:0, c:0, w:0, ok:false, due:null, box:0};
+  const wasDue = !!r.due && r.due <= ts;
+  let mastered = false;
+  r.t = now; r.c = (r.c || 0) + 1; r.ok = !!ok;
+  if (!ok){ r.w = (r.w || 0) + 1; r.box = 0; r.due = addDaysStr(ts, 1); }
+  else if (wasDue){
+    if ((r.box || 0) >= 3){ r.due = null; mastered = true; }
+    else { r.box = (r.box || 0) + 1; r.due = addDaysStr(ts, BOX_DAYS[r.box]); }
+  }
+  return {r, wasDue, mastered};
+}
+function dueListFrom(ls, gs, ts, rnd){
+  const out = [];
+  Object.keys(ls).forEach(k => { const r = ls[k]; if (r && r.due && r.due <= ts) out.push(Object.assign(keyToItem(k), {due: r.due})); });
+  Object.keys(gs).forEach(id => { const r = gs[id]; if (r && r.due && r.due <= ts && GBY[id]) out.push({k:"g", id, due: r.due}); });
+  return shuffled(out, rnd).sort((a, b) => a.due < b.due ? -1 : a.due > b.due ? 1 : 0);
+}
+function nextDueFrom(ls, gs, ts){
+  let m = null;
+  [ls, gs].forEach(st => Object.keys(st).forEach(k => { const d = st[k] && st[k].due; if (d && d > ts && (!m || d < m)) m = d; }));
+  return m;
+}
+/* 連続日数：active は {日付:真}（学習した日）、used はおやすみ券で守った日 */
+function calcStreak(active, used, ts){
+  let s = 0, c = ts;
+  if (!active[c]) c = addDaysStr(c, -1);
+  while (active[c] || (used && used[c])){ s++; c = addDaysStr(c, -1); }
+  return s;
+}
+// 昨日から続けて空いた日数（1か2）。券を使える状況でなければ 0
+function freezeGapFrom(active, used, ts){
+  const y = addDaysStr(ts, -1);
+  if (active[ts] || active[y] || used[y]) return 0;
+  for (let m = 1; m <= 2; m++){
+    const before = addDaysStr(y, -m);
+    if (active[before] || used[before]) return m;
+  }
+  return 0;
+}
+/* 週（月曜はじまり） */
+function weekStartStr(ts){ const d = dateOf(ts); return addDaysStr(ts, -((d.getDay() + 6) % 7)); }
+function aggByDate(log){
+  const o = {};
+  log.forEach(e => {
+    const x = o[e.d] || (o[e.d] = {l:{a:0,c:0}, g:{a:0,c:0}});
+    const t = x[e.k]; if (!t) return;
+    t.a++; if (e.ok) t.c++;
+  });
+  return o;
+}
+function weekAgg(byDate, doneKeys, ws){
+  const r = {l:{a:0,c:0}, g:{a:0,c:0}, n:0, days:0, byWd:[0,0,0,0,0,0,0]};
+  for (let i = 0; i < 7; i++){
+    const d = addDaysStr(ws, i), x = byDate[d];
+    let a = 0;
+    if (x){ r.l.a += x.l.a; r.l.c += x.l.c; r.g.a += x.g.a; r.g.c += x.g.c; a = x.l.a + x.g.a; r.byWd[i] = a; }
+    if (a > 0 || (doneKeys && doneKeys[d])) r.days++;
+  }
+  r.n = r.l.a + r.g.a;
+  return r;
+}
+/* 合格予測メーター */
+function predictLFrom(log){
+  let n = 0, c = 0;
+  for (let i = log.length - 1; i >= 0 && n < 60; i--){ if (log[i].k === "l"){ n++; if (log[i].ok) c++; } }
+  return n < 10 ? null : c / n;
+}
+function stageAccFrom(items, seen, sid){
+  let c = 0, w = 0;
+  items.forEach(i => { if (i.s !== sid) return; const r = seen[i.id]; if (r && r.c){ c += r.c; w += (r.w || 0); } });
+  return c ? Math.max(0, (c - w) / c) : null;          // 解いた問題の正答率。まだなら null
+}
+function predictGFrom(stages, items, seen){
+  if (!stages.length) return 0.25;
+  let sum = 0;
+  stages.forEach(s => { const a = stageAccFrom(items, seen, s.id); sum += (a === null ? 0.25 : a); });
+  return sum / stages.length;                           // 未学習のステージは当てずっぽうの 25%
+}
+/* 聞き流し：一番長く流していない Day（未再生が先）。lp のキーは 1〜28 */
+function nextPlayFrom(lp, ts){
+  let best = null;
+  for (let d = 1; d <= 28; d++){
+    const t = lp[d];
+    if (!t) return {day: d, ago: null};
+    if (!best || t < best.t) best = {day: d, t};
+  }
+  return {day: best.day, ago: Math.max(0, daysBetween(keyOf(new Date(best.t)), ts))};
+}
+function pathAdviceFrom(daysLeft, stagesLeft){
+  const out = [];
+  if (stagesLeft > 0){
+    const pace = daysLeft / stagesLeft;
+    if (pace >= 1) out.push("本番まであと" + daysLeft + "日。文法はあと" + stagesLeft + "ステージ → " + Math.floor(pace) + "日で1ステージのペースで間に合います");
+    else out.push("本番まであと" + daysLeft + "日。文法はあと" + stagesLeft + "ステージ → 1日に" + Math.ceil(stagesLeft / daysLeft) + "ステージ進めるペースが必要です。今日の文法のあと、島を選んでもう1ステージ進めましょう");
+  } else {
+    out.push("本番まであと" + daysLeft + "日。文法は全ステージをクリアしました。間違えた問題の復習と模試で仕上げましょう");
+  }
+  out.push("毎日：リスニング10問＋文法10問＋復習（約20分）");
+  out.push("週に1回は模試。6割（18/30）で合格圏、7割（21/30）で安心です");
+  out.push(daysLeft <= 14 ? "いまは本番2週間前。模試と過去問を中心に進めましょう" : "本番2週間前からは、模試と過去問を中心にします");
+  return out;
+}
+/* 過去の記録から復元する（初回の1回だけ使う） */
+function migrateFrom(o){
+  const ls = {}, lp = {}, log = [];
+  const noon = ds => { const p = ds.split("-").map(Number); return new Date(p[0], p[1]-1, p[2], 12).getTime(); };
+  const dayTime = {};
+  Object.keys(o.done || {}).sort().forEach(ds => {
+    const e = o.done[ds], dn = e && e.day;
+    if (dn >= 1 && dn <= 28){ dayTime[dn] = noon(ds); lp[dn] = dayTime[dn]; }
+  });
+  const guess = i => Math.min(o.start + i * 864e5 + 432e5, o.now - 864e5);   // 日付が不明な日は、旧アプリの割り当て日で推定
+  Object.keys(o.daydone || {}).concat(Object.keys(o.scores || {})).forEach(i => {
+    const dn = +i + 1;
+    if (!(dn >= 1 && dn <= 28) || dayTime[dn]) return;
+    if (o.daydone && o.daydone[i] || o.scores && o.scores[i]) dayTime[dn] = guess(+i);
+  });
+  Object.keys(dayTime).forEach(dn => {
+    for (let n = 1; n <= 10; n++) ls[dn + "-" + n] = {t: dayTime[dn], c: 1, w: 0, ok: true, due: null, box: 0};
+  });
+  (o.wrong || []).forEach(w => {
+    if (!w || typeof w.day !== "number" || !(w.n >= 1 && w.n <= 10)) return;
+    const k = (w.day + 1) + "-" + w.n, p = ls[k];
+    ls[k] = {t: p ? p.t : o.now - 864e5, c: p ? p.c : 1, w: (p ? p.w : 0) + 1, ok: false, due: o.today, box: 0};
+  });
+  Object.keys(o.s2days || {}).sort().forEach(d => {
+    const x = o.s2days[d];
+    for (let i = 0; i < x.c; i++) log.push({d, k:"l", ok:1});
+    for (let i = 0; i < x.a - x.c; i++) log.push({d, k:"l", ok:0});
+  });
+  return {ls, lp, log: log.slice(-5000)};
+}
+/* ===PURE-END=== */
+
+/* ---------- 状態を触る関数 ---------- */
+const todayStr = () => keyOf(today());
+function saveL(){ saveJSON("eiken4.lseen", lseen); }
+function pickListening(count, part){ return pickListeningFrom(lseen, count, part, todayStr()); }
+function buildDaily(){                       // 毎日のリスニング10問：第1部4・第2部3・第3部3
+  return pickListening(4, 1).concat(pickListening(3, 2), pickListening(3, 3)).map(keyToItem);
+}
+function dueNow(){ return dueListFrom(lseen, gseen, todayStr()); }
+function gStage(sid){ return stageInfoFrom(GR.items, gseen, sid); }
+function gCurrent(){ return currentStageFrom(GR.stages, GR.items, gseen); }
+function gOpenMax(){ return openMaxFrom(GR.stages, GR.items, gseen); }
+function gTitle(sid){ const s = GR.stages.find(x => x.id === sid); return s ? s.title : ""; }
+// 解答を記録（lseen / gseen と log）。復習の間隔もここで進める
+function recAnswer(kind, key, ok, opts){
+  const store = kind === "l" ? lseen : gseen;
+  const res = applyAnswer(store[key], ok, Date.now(), todayStr());
+  store[key] = res.r;
+  saveJSON(kind === "l" ? "eiken4.lseen" : "eiken4.gseen", store);
+  if (!(opts && opts.nolog)){
+    alog.push({d: todayStr(), k: kind, ok: ok ? 1 : 0, id: key});
+    if (alog.length > 5000) alog = alog.slice(-5000);
+    saveJSON("eiken4.log", alog);
+  }
+  return res;
+}
+function countL(part, ok){                   // 従来の集計（総回答・パート別・日別）
+  stats.answered++; if (ok) stats.correct++;
+  saveJSON("eiken4.stats", stats);
+  const p = String(part);
+  s2.parts[p].a++; if (ok) s2.parts[p].c++;
+  const dk = todayStr();
+  if (!s2.days[dk]) s2.days[dk] = {a:0, c:0};
+  s2.days[dk].a++; if (ok) s2.days[dk].c++;
+  saveJSON("eiken4.stats2", s2);
+}
+
+/* 初回の1回だけ：過去の記録から「どの Day をいつ解いたか」を復元 */
+(function migrate3(){
+  let was = null;
+  try{ was = localStorage.getItem("eiken4.migrated3"); }catch(e){}
+  if (was) return;
+  try{
+    const m = migrateFrom({done, daydone: dayDone, scores, wrong, s2days: s2.days,
+                           start: START.getTime(), now: Date.now(), today: keyOf(today())});
+    Object.keys(m.ls).forEach(k => { if (!lseen[k]) lseen[k] = m.ls[k]; });
+    Object.keys(m.lp).forEach(d => { if (!lplay[d]) lplay[d] = m.lp[d]; });
+    if (!alog.length) alog = m.log;
+    saveL(); saveJSON("eiken4.lplay", lplay); saveJSON("eiken4.log", alog);
+  }catch(e){}
+  try{ localStorage.setItem("eiken4.migrated3", "1"); }catch(e){}
+})();
+
 /* ---------- レベル・XP ---------- */
 const TITLES = ["ビーチルーキー","ヤシの木みならい","ウクレレ奏者","波乗りチャレンジャー","イルカの友だち",
                 "サンセットランナー","フラの達人","アロハマスター","レインボーレジェンド","カメハメハ級"];
@@ -1028,19 +1540,20 @@ function maxStreak(){
   });
   return best;
 }
+function lSeenCount(){ return Object.keys(lseen).filter(k => lseen[k] && lseen[k].t).length; }
 const BADGES = [
   {i:"🌴", n:"はじめの一歩", d:"最初のレッスンを終える", f:() => Object.keys(done).length >= 1},
   {i:"🌺", n:"3日連続", d:"3日つづけて学習", f:() => maxStreak() >= 3},
   {i:"🌈", n:"7日連続", d:"1週間つづけて学習", f:() => maxStreak() >= 7},
   {i:"🐢", n:"14日連続", d:"2週間つづけて学習", f:() => maxStreak() >= 14},
   {i:"👑", n:"28日連続", d:"4週間つづけて学習", f:() => maxStreak() >= 28},
-  {i:"🍍", n:"7日分クリア", d:"マップを7日分修了", f:() => Object.keys(dayDone).length >= 7},
-  {i:"🏄", n:"14日分クリア", d:"マップを14日分修了", f:() => Object.keys(dayDone).length >= 14},
-  {i:"🏆", n:"全28日制覇", d:"マップをすべて修了", f:() => Object.keys(dayDone).length >= 28},
+  {i:"🍍", n:"70問クリア", d:"リスニング70問を出題ずみ", f:() => lSeenCount() >= 70},
+  {i:"🏄", n:"140問クリア", d:"リスニング140問を出題ずみ", f:() => lSeenCount() >= 140},
+  {i:"🏆", n:"全280問制覇", d:"リスニング280問すべてに挑戦", f:() => lSeenCount() >= 280},
   {i:"⭐", n:"ドリル満点", d:"実戦ドリルで10/10", f:() => Object.values(scores).some(s => s.s === s.t && s.t >= 10)},
   {i:"🐚", n:"解き直し名人", d:"復習で10問クリア", f:() => s2.rvc >= 10},
   {i:"🌅", n:"模試デビュー", d:"模試を1回受ける", f:() => mock.hist.length >= 1},
-  {i:"🌟", n:"模試 合格圏", d:"模試で21問以上正解", f:() => mock.best >= 21},
+  {i:"🌟", n:"模試 合格圏", d:"模試で18問以上正解（6割）", f:() => mock.best >= 18},
   {i:"🥥", n:"100問の旅", d:"合計100問に回答", f:() => stats.answered >= 100},
   {i:"🐬", n:"500問の海", d:"合計500問に回答", f:() => stats.answered >= 500},
   {i:"🦜", n:"正答率80%", d:"50問以上で正答率80%", f:() => stats.answered >= 50 && stats.correct/stats.answered >= .8},
@@ -1063,6 +1576,75 @@ function renderBadges(){
   el("bdg-count").textContent = got + " / " + BADGES.length;
 }
 
+/* ---------- おしらせ（小さな通知） ---------- */
+let toastTimer = null;
+function toast(msg, ms){
+  const t = el("toast");
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, ms || 4500);
+}
+
+/* ---------- 試験日・ミッション・連続日数 ---------- */
+function examDate(){ const v = loadJSON("eiken4.examdate", DEFAULT_EXAM); return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : DEFAULT_EXAM; }
+function examLeft(){ return daysBetween(todayStr(), examDate()); }
+function ensureMission(){
+  const ts = todayStr();
+  if (!missionSt || missionSt.date !== ts){
+    missionSt = {date: ts, l: 0, g: 0, r: 0, bonus: 0, rm: dueNow().length ? "r" : "p"};
+    saveJSON("eiken4.mission", missionSt);
+  }
+  return missionSt;
+}
+// ミッションを1つ達成。3つそろった瞬間だけボーナス XP（50）を返す
+function missionDone(which){
+  const m = ensureMission();
+  if (m[which]) return 0;
+  m[which] = 1;
+  let bonus = 0;
+  if (m.l && m.g && m.r && !m.bonus){ m.bonus = 1; bonus = 50; }
+  saveJSON("eiken4.mission", m);
+  return bonus;
+}
+function initFreeze(){
+  if (!freeze){
+    freeze = {n: 0, awarded: Math.floor(calcStreak(done, {}, todayStr()) / 7), used: {}};
+    saveJSON("eiken4.freeze", freeze);
+  }
+  if (!freeze.used) freeze.used = {};
+}
+function useFreezeIfNeeded(){                 // 開いたとき、1日空いていたら自動で券を使う
+  initFreeze();
+  const ts = todayStr();
+  const gap = freezeGapFrom(done, freeze.used, ts);
+  if (gap && freeze.n >= gap){
+    for (let i = 0; i < gap; i++) freeze.used[addDaysStr(ts, -1 - i)] = true;
+    freeze.n -= gap;
+    saveJSON("eiken4.freeze", freeze);
+    toast("おやすみ券を" + gap + "枚使いました。連続 " + streak() + " 日を守りました", 6000);
+  }
+}
+function awardFreeze(){                       // 7日続くごとに券を1枚（最大2枚）
+  initFreeze();
+  const s = streak(), target = Math.floor(s / 7);
+  if (target > freeze.awarded){
+    const gain = target - freeze.awarded;
+    freeze.awarded = target;
+    const add = Math.max(0, Math.min(gain, 2 - freeze.n));
+    freeze.n += add;
+    saveJSON("eiken4.freeze", freeze);
+    if (add) toast("7日つづきました！おやすみ券を" + add + "枚もらいました", 6000);
+  } else if (target < freeze.awarded){
+    freeze.awarded = target; saveJSON("eiken4.freeze", freeze);
+  }
+}
+function markToday(){
+  const k = todayStr();
+  if (!done[k]){ done[k] = {day: 0}; saveJSON("eiken4.done", done); }
+  awardFreeze();
+}
+function streak(){ return calcStreak(done, freeze ? freeze.used : {}, todayStr()); }
+
 /* ---------- コーチのホヌ ---------- */
 const TURTLE_SVG =
   '<svg viewBox="0 0 130 104" fill="none" aria-label="コーチのホヌ">' +
@@ -1083,23 +1665,30 @@ const TURTLE_SVG =
 const doy = () => { const t = today(); return Math.floor((t - new Date(t.getFullYear(),0,1)) / 864e5); };
 function pick(arr){ return arr[doy() % arr.length]; }
 function honuMessage(){
-  const t = today();
-  if (done[keyOf(t)]) return pick([
-    "今日の分、やりきったね！花丸ゲット🌺 また明日！",
-    "Mahalo! 今日もいい波に乗れたね🌊",
+  const m = ensureMission(), left = examLeft(), s = streak(), n = m.l + m.g + m.r;
+  if (m.bonus) return pick([
+    "今日のミッション、ぜんぶ達成！ボーナスもゲット🌺 また明日！",
+    "Mahalo! 3つそろったね。今日もいい波に乗れたよ🌊",
     "えらい！この積み重ねが本番の点になるよ"
   ]);
-  if (wrong.length >= 5) return "復習が" + wrong.length + "問たまってるよ。先にいっしょに片づけよう！";
-  const s = streak();
+  if (left > 0 && left <= 7) return "本番まであと" + left + "日！ここまで来たら、いつもの10問を落ち着いて続けよう";
+  if (n === 2) return "ミッションあと1つ！そろえるとボーナス＋50XP だよ🌺";
+  if (n === 1) return "1つ達成！あと2つでボーナス＋50XP。いっしょにいこう";
+  const due = dueNow().length;
+  if (due >= 5) return "今日の復習が" + due + "問あるよ。先にいっしょに片づけよう！";
   if (s >= 3) return pick([
     "連続" + s + "日目！すごくいい波に乗ってるよ🌊",
     s + "日つづいてる！ホヌもうれしい〜",
     "連続" + s + "日！今日もこの波を切らさないでいこう"
   ]);
-  if (mock.best >= 21) return "模試は合格圏だったね！今日もコツコツいこう";
+  if (left > 0 && left <= 30) return pick([
+    "本番まであと" + left + "日。毎日10分で、ちゃんと間に合うよ",
+    "あと" + left + "日。ミッション3つを毎日そろえていこう🐢"
+  ]);
+  if (mock.best >= 18) return "模試は合格圏だったね！今日もコツコツいこう";
   const h = new Date().getHours();
-  if (h < 11) return pick(["おはよう！今日の10問、いっしょにがんばろう🌺","朝の10分がいちばん頭に入るよ！さあ行こう〜"]);
-  if (h < 18) return pick(["今日の10問、まだなら今がチャンス！","1日10分。コツコツがいちばん強いんだよ🐢"]);
+  if (h < 11) return pick(["おはよう！今日のミッション、いっしょにがんばろう🌺","朝の10分がいちばん頭に入るよ！さあ行こう〜"]);
+  if (h < 18) return pick(["今日のミッション、まだなら今がチャンス！","1日10分。コツコツがいちばん強いんだよ🐢"]);
   return pick(["今日の分、寝る前にサクッとやっちゃおう！","夜の復習は記憶に残りやすいよ。10分だけ！"]);
 }
 function renderMascot(){
@@ -1110,8 +1699,8 @@ function renderMascot(){
   document.getElementById("honu-line").textContent = honuMessage();
 }
 function honuCheer(perfect, good, mode, ok){
-  if (mode === "mock") return ok >= 21 ? "合格圏だ〜！！ホヌ、泣きそう…🌈" : "模試おつかれさま！挑戦したこと自体がすごいよ";
-  if (mode === "review") return wrong.length ? "その調子！弱点がどんどん消えてるよ" : "全部片づいた！ピカピカだね✨";
+  if (mode === "mock") return ok >= 21 ? "安心圏だ〜！！ホヌ、泣きそう…🌈" : ok >= 18 ? "合格圏だ〜！あと少しで安心圏だよ🌺" : "模試おつかれさま！挑戦したこと自体がすごいよ";
+  if (mode === "review") return dueNow().length ? "その調子！弱点がどんどん消えてるよ" : "全部片づいた！ピカピカだね✨";
   if (perfect) return "パーフェクト！！ホヌ、感動しちゃった…🌺";
   if (good) return "いい波きてる！この調子🌊";
   return "だいじょうぶ、ホヌがついてるよ。復習すれば必ず伸びる！";
@@ -1133,22 +1722,121 @@ function renderHawaii(){
 }
 
 /* ---------- タブ ---------- */
-const tabs = {home: el("tab-home"), review: el("tab-review"), cal: el("tab-cal"), exam: el("tab-exam")};
-document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => {
+const tabs = {home: el("tab-home"), grammar: el("tab-grammar"), review: el("tab-review"), cal: el("tab-cal"), exam: el("tab-exam")};
+function showTab(name){
   document.querySelectorAll("nav button").forEach(x => {
-    x.classList.toggle("on", x === b);
-    x.setAttribute("aria-selected", x === b ? "true" : "false");
+    x.classList.toggle("on", x.dataset.tab === name);
+    x.setAttribute("aria-selected", x.dataset.tab === name ? "true" : "false");
   });
-  for (const k in tabs) tabs[k].hidden = (k !== b.dataset.tab);
-  if (b.dataset.tab === "cal") renderInsights();
-  if (b.dataset.tab === "review") renderReview();
-}));
+  for (const k in tabs) tabs[k].hidden = (k !== name);
+  window.scrollTo(0, 0);
+  if (name === "cal") renderInsights();
+  if (name === "review") renderReview();
+  if (name === "grammar") renderGrammar();
+  if (name === "home") renderDay();
+}
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
 
 /* ---------- ホーム ---------- */
-let viewDay = dayIdxToday();
+let listenDay = 0;                // 聞き流しで流す Day（0始まり）
 const player = el("player");
 const RING_LEN = 641;
-let revealed = 0;
+let revealed = 0, playRecorded = false;
+
+function playLabel(p){
+  return "Day " + p.day + "（" + (p.ago === null ? "はじめて" : p.ago === 0 ? "前回 今日" : "前回 " + p.ago + "日前") + "）";
+}
+function renderCountdown(){
+  const ed = examDate(), left = examLeft(), d = dateOf(ed);
+  const box = el("cd-big");
+  if (left > 0) box.innerHTML = '本番まで あと<b>' + left + '</b>日';
+  else if (left === 0) box.innerHTML = '<b style="font-size:28px">今日が本番です！</b>';
+  else box.innerHTML = '<b style="font-size:22px">次の試験日を設定しましょう</b>';
+  el("cd-sub").textContent = d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）" +
+    (ed === DEFAULT_EXAM ? "・2026年度 第3回 一次試験" : "");
+  el("exam-date").value = ed;
+}
+function renderMission(){
+  const m = ensureMission();
+  el("ms-streak").textContent = streak();
+  initFreeze();
+  el("ms-ticket").textContent = "おやすみ券 " + freeze.n + " / 2 枚";
+  const due = dueNow().length;
+  const rows = [
+    {k:"l", t:"リスニング 10問", s:"まだ出ていない問題から", go: () => startQuiz("day")},
+    {k:"g", t:"文法 10問", s:"今のステージ7問＋おさらい3問", go: () => startGrammar("today")},
+    m.rm === "r"
+      ? {k:"r", t:"今日の復習" + (m.r ? "" : " " + due + "問"), s:"間違えた問題を日をあけて解き直す", go: () => startQuiz("review")}
+      : {k:"r", t:"聞き流し 1本", s:"今日は復習がないので、聞き流しを1本", go: () => el("btn-mode-listen").click()}
+  ];
+  const list = el("ms-list");
+  list.innerHTML = "";
+  rows.forEach(r => {
+    const b = document.createElement("button");
+    b.className = "ms-row" + (m[r.k] ? " done" : "");
+    b.innerHTML = '<span class="ms-chk" aria-hidden="true">✓</span><span class="t"><span class="tt"></span><small></small></span><span class="st"></span>';
+    b.querySelector(".tt").textContent = r.t;
+    b.querySelector("small").textContent = r.s;
+    b.querySelector(".st").textContent = m[r.k] ? "できた" : "はじめる ›";
+    b.setAttribute("aria-label", r.t + "。" + (m[r.k] ? "できました" : "まだです"));
+    b.addEventListener("click", r.go);
+    list.appendChild(b);
+  });
+  const n = m.l + m.g + m.r;
+  el("ms-sub").textContent = m.bonus ? "3つ達成！ボーナス＋50XP をもらいました" : n + " / 3　そろえるとボーナス＋50XP";
+}
+function renderSupply(){
+  const ls = Object.keys(lseen).filter(k => lseen[k] && lseen[k].t).length;
+  const gs = GR.items.filter(i => gseen[i.id] && gseen[i.id].t).length;
+  const lr = Math.max(0, LTOTAL - ls), gr = Math.max(0, GR.items.length - gs);
+  el("journey-count").textContent = "あと " + (lr + gr) + " 問";
+  el("sup-line").textContent = "リスニング " + lr + "/" + LTOTAL + "問・文法 " + gr + "/" + GR.items.length + "問が、まだ出ていません";
+  const pct = Math.max(3, Math.min(97, Math.round(ls / LTOTAL * 100)));
+  el("voyage-fill").style.width = pct + "%";
+  const honu = el("voyage-honu");
+  honu.style.left = pct + "%";
+  if (!honu.firstChild) honu.innerHTML = TURTLE_SVG;
+  honu.title = "リスニング " + ls + " / " + LTOTAL + " 問";
+}
+function renderMeter(){
+  const L = predictLFrom(alog), G = predictGFrom(GR.stages, GR.items, gseen);
+  const box = el("meter");
+  const pr = L === null ? null : (L + G) / 2;
+  const pct = x => Math.round(x * 100) + "%";
+  let status;
+  if (pr === null) status = "データを集め中（リスニングを10問解くと表示されます）";
+  else if (pr >= 0.6) status = "合格ラインの上です ✓";
+  else status = "合格ラインまで あと " + Math.max(1, Math.round((0.6 - pr) * 100)) + " ポイント";
+  box.innerHTML =
+    '<div class="pr-head"><span class="pr-num"></span><span class="pr-st"></span></div>' +
+    '<div class="gauge" role="img"><i></i><span class="mark"><span>合格ライン 約6割</span></span></div>' +
+    '<div class="pr-sub"></div><div class="pr-note">目安です。本番の点数を約束するものではありません</div>';
+  box.querySelector(".pr-num").textContent = pr === null ? "–" : pct(pr);
+  box.querySelector(".pr-st").textContent = status;
+  const g = box.querySelector(".gauge");
+  g.setAttribute("aria-label", "合格予測 " + (pr === null ? "データ集め中" : pct(pr)) + "。合格ラインは約6割");
+  const f = g.querySelector("i");
+  f.style.width = (pr === null ? 0 : Math.round(pr * 100)) + "%";
+  if (pr !== null && pr >= 0.6) f.className = "pass";
+  box.querySelector(".pr-sub").innerHTML = "";
+  const sub = box.querySelector(".pr-sub");
+  [["リスニング", L === null ? "データを集め中（直近60回）" : pct(L) + "（直近60回の正答率）"],
+   ["文法", pct(G) + "（14ステージの平均。未学習は25%で計算）"]].forEach(x => {
+    const d = document.createElement("div"); const b = document.createElement("b");
+    b.textContent = x[0]; d.appendChild(b); d.appendChild(document.createTextNode("　" + x[1])); sub.appendChild(d);
+  });
+}
+function renderPath(){
+  const box = el("pathbox");
+  const left = examLeft();
+  box.innerHTML = "";
+  if (left <= 0){
+    box.innerHTML = '<li>次の試験日を設定しましょう（上の「試験日」から変えられます）</li>';
+    return;
+  }
+  const stagesLeft = GR.stages.filter(s => !gStage(s.id).cleared).length;
+  pathAdviceFrom(left, stagesLeft).forEach(t => { const li = document.createElement("li"); li.textContent = t; box.appendChild(li); });
+}
 
 function renderDay(){
   const t = today();
@@ -1156,51 +1844,49 @@ function renderDay(){
   const h = new Date().getHours();
   el("greet").firstChild.textContent = h < 11 ? "おはようございます" : h < 18 ? "こんにちは" : "こんばんは";
   el("streak-num").textContent = streak();
-  el("day-name").textContent = "Day " + (viewDay+1);
-  el("day-theme").textContent = "テーマ：" + META.days[viewDay].theme;
-  el("mission-line").innerHTML = done[keyOf(t)]
-    ? "今日の目標は<b>達成ずみ！</b> あしたも続けましょう"
-    : "今日の目標：<b>10問（約10分）</b>";
-  const bd = el("day-badges");
-  bd.innerHTML = "";
-  if (dayDone[viewDay]) bd.insertAdjacentHTML("beforeend", '<span class="done-badge">クリアずみ</span>');
-  const sc = scores[viewDay];
-  if (sc) bd.insertAdjacentHTML("beforeend", '<span class="score-badge">ドリル最高 ' + sc.s + ' / ' + sc.t + '</span>');
+  el("day-name").textContent = "今日のリスニング";
+  el("day-theme").textContent = "まだ出ていない問題から選びます";
+  el("listen-cta-sub").textContent = playLabel(nextPlayFrom(lplay, todayStr())) + "・約9分・画面を消しても再生は続きます";
   el("mock-sub").textContent = mock.best
-    ? "自己ベスト " + mock.best + "/30" + (mock.best >= 21 ? "（合格圏！）" : "") + "・約20分"
+    ? "自己ベスト " + mock.best + "/30" + (mock.best >= 21 ? "（安心圏！）" : mock.best >= 18 ? "（合格圏！）" : "") + "・約20分"
     : "本番と同じ30問・合否判定つき（約20分）";
+  renderCountdown();
+  renderMission();
   renderLevel();
   renderMascot();
-  renderJourney();
+  renderSupply();
+  renderMeter();
+  renderPath();
   updateNavBadge();
 }
-el("day-prev").addEventListener("click", () => switchDay(viewDay - 1));
-el("day-next").addEventListener("click", () => switchDay(viewDay + 1));
-function switchDay(d){
-  stopPlay();
-  viewDay = (d + 28) % 28;
-  closeListen();
-  renderDay();
-}
+el("exam-date").addEventListener("change", e => {
+  const v = e.target.value;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)){ saveJSON("eiken4.examdate", v); renderDay(); }
+});
 
 el("btn-mode-listen").addEventListener("click", () => {
+  const p = nextPlayFrom(lplay, todayStr());
+  listenDay = p.day - 1;
+  playRecorded = false;
   el("hero-select").hidden = true;
   el("btn-mock").hidden = true;
   el("hero-listen").hidden = false;
-  el("listen-day").textContent = "Day " + (viewDay+1);
-  el("listen-theme").textContent = "テーマ：" + META.days[viewDay].theme;
+  el("listen-day").textContent = playLabel(p);
+  el("listen-theme").textContent = "テーマ：" + META.days[listenDay].theme;
+  showTab("home");
+  window.scrollTo({top: 0});
 });
-el("btn-mode-voice").addEventListener("click", () => startVoiceQuiz(viewDay));
-el("btn-mode-quiz").addEventListener("click", () => startQuiz("day", viewDay));
+el("btn-mode-voice").addEventListener("click", () => startVoiceQuiz());
+el("btn-mode-quiz").addEventListener("click", () => startQuiz("day"));
 el("btn-mock").addEventListener("click", () => startQuiz("mock"));
-el("listen-back").addEventListener("click", () => { pauseIfPlaying(); closeListen(); });
+el("listen-back").addEventListener("click", () => { pauseIfPlaying(); stopPlay(); closeListen(); });
 function closeListen(){
   el("hero-listen").hidden = true;
   el("hero-select").hidden = false;
   el("btn-mock").hidden = false;
   el("review").innerHTML = ""; revealed = 0;
   setRing(0);
-  el("status").textContent = "今日の10問・約10分";
+  el("status").textContent = "10問・約9分";
   el("phase").textContent = "ボタンを1回押すだけ。あとはすべて自動です";
 }
 function pauseIfPlaying(){ if (playing) pausePlay(); }
@@ -1210,15 +1896,21 @@ function setRing(ratio){
 }
 function marksFor(day){ return META.days[day].questions; }
 function currentMark(t){
-  const ms = marksFor(viewDay);
+  const ms = marksFor(listenDay);
   let cur = null;
   for (const m of ms){ if (t >= m.start) cur = m; else break; }
   return cur;
 }
+function recordPlay(){
+  if (playRecorded) return;
+  playRecorded = true;
+  lplay[String(listenDay + 1)] = Date.now();
+  saveJSON("eiken4.lplay", lplay);
+}
 
 let playing = false;
 function startPlay(){
-  const src = META.days[viewDay].file;
+  const src = META.days[listenDay].file;
   if (!player.src.endsWith(src)) { player.src = src; el("review").innerHTML = ""; revealed = 0; }
   player.play().then(() => {
     playing = true;
@@ -1244,13 +1936,13 @@ function stopPlay(){
 el("play-btn").addEventListener("click", () => { playing ? pausePlay() : startPlay(); });
 
 function seekNext(){
-  const ms = marksFor(viewDay);
+  const ms = marksFor(listenDay);
   const t = player.currentTime;
   const nx = ms.find(m => m.start > t + 0.5);
   if (nx) player.currentTime = nx.start;
 }
 function seekBack(){
-  const ms = marksFor(viewDay);
+  const ms = marksFor(listenDay);
   const cur = currentMark(player.currentTime);
   if (!cur) { player.currentTime = 0; return; }
   if (player.currentTime - cur.start < 3){
@@ -1264,8 +1956,9 @@ el("btn-next").addEventListener("click", seekNext);
 el("btn-back").addEventListener("click", seekBack);
 
 player.addEventListener("timeupdate", () => {
-  const dur = META.days[viewDay].duration;
+  const dur = META.days[listenDay].duration;
   setRing(player.currentTime / dur);
+  if (player.currentTime / dur >= 0.6) recordPlay();
   const cur = currentMark(player.currentTime);
   if (cur){
     el("status").textContent = "第" + cur.n + "問 / 10問";
@@ -1274,19 +1967,25 @@ player.addEventListener("timeupdate", () => {
     el("status").textContent = "始まります…";
     el("phase").textContent = "";
   }
-  const ms = marksFor(viewDay);
+  const ms = marksFor(listenDay);
   while (revealed < ms.length && player.currentTime >= ms[revealed].ans + 0.3){
     revealed++;
     addReviewCard(revealed);
   }
 });
 player.addEventListener("ended", () => {
-  markToday(viewDay);
-  const leveledTo = gainXP(20);
-  confetti("light");
+  recordPlay();
+  markToday();
+  let gain = 20;
+  const m = ensureMission();
+  const bonus = m.rm === "p" ? missionDone("r") : 0;     // 復習のない日は「聞き流し1本」が3つ目のミッション
+  gain += bonus;
+  const leveledTo = gainXP(gain);
+  confetti(bonus ? "gold" : "light");
+  if (bonus) toast("今日のミッション3つ達成！ボーナス ＋50 XP", 6000);
   if (leveledTo) setTimeout(showLevelUp, 900);
-  el("status").textContent = "🎉 今日の10問、クリア！";
-  el("phase").textContent = "カレンダーに花丸をつけました（＋20 XP）";
+  el("status").textContent = "🎉 1本、聞ききりました！";
+  el("phase").textContent = "カレンダーに花丸をつけました（＋" + gain + " XP）";
   el("play-btn").classList.remove("playing");
   el("play-btn").innerHTML = '<span class="glyph">▶</span>もう一度';
   playing = false;
@@ -1295,7 +1994,7 @@ player.addEventListener("ended", () => {
 });
 
 function addReviewCard(n){
-  const q = questionData(viewDay, n);
+  const q = questionData(listenDay, n);
   const div = document.createElement("div");
   div.className = "rev";
   div.innerHTML = '<div class="head"><span class="badge"></span><span class="ans-en"></span></div><div class="en"></div><div class="ja"></div>';
@@ -1310,7 +2009,7 @@ function setMediaSession(){
   if (!("mediaSession" in navigator)) return;
   try{
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "Day " + (viewDay+1) + "「" + META.days[viewDay].theme + "」",
+      title: "Day " + (listenDay+1) + "「" + META.days[listenDay].theme + "」",
       artist: "英検4級リスニング講座",
     });
     navigator.mediaSession.setActionHandler("nexttrack", seekNext);
@@ -1318,55 +2017,10 @@ function setMediaSession(){
   }catch(e){}
 }
 
-/* ---------- 28日マップ ---------- */
+/* ---------- カレンダーの花丸 ---------- */
 const MARU = '<svg class="maru" viewBox="0 0 40 40">' +
   '<path d="M20 5 C30 4 35 11 34.5 20 C34 30 27 35.5 19 35 C10 34.5 5.5 27 6 18.5 C6.5 10 13 5.5 21.5 5.5" fill="none" stroke="var(--pink)" stroke-width="3" stroke-linecap="round"/>' +
   '<path d="M22.5 8 C29 9 31.5 14 31 20 C30.5 27 25.5 31 19.5 30.5" fill="none" stroke="var(--pink)" stroke-width="1.8" stroke-linecap="round" opacity=".5"/></svg>';
-const HIBISCUS = '<svg class="hib-node" viewBox="0 0 40 40">' +
-  '<g fill="currentColor"><ellipse cx="20" cy="10.5" rx="5.6" ry="8.6"/>' +
-  '<ellipse cx="28.8" cy="17" rx="5.6" ry="8.6" transform="rotate(72 28.8 17)"/>' +
-  '<ellipse cx="25.4" cy="27.4" rx="5.6" ry="8.6" transform="rotate(144 25.4 27.4)"/>' +
-  '<ellipse cx="14.6" cy="27.4" rx="5.6" ry="8.6" transform="rotate(216 14.6 27.4)"/>' +
-  '<ellipse cx="11.2" cy="17" rx="5.6" ry="8.6" transform="rotate(288 11.2 17)"/></g>' +
-  '<circle cx="20" cy="20" r="4.2" fill="var(--sun)"/></svg>';
-
-function renderJourney(){
-  const wrap = el("journey");
-  wrap.innerHTML = "";
-  const tIdx = dayIdxToday();
-  let cnt = 0;
-  for (let w = 0; w < 4; w++){
-    const card = document.createElement("div");
-    card.className = "wkrow";
-    card.innerHTML = '<div class="wk-label">Week ' + (w+1) + '</div><div class="nodes"></div>';
-    const nodes = card.querySelector(".nodes");
-    for (let i = 0; i < 7; i++){
-      const d = w*7 + i;
-      const b = document.createElement("button");
-      b.className = "node";
-      const isDone = !!dayDone[d];
-      if (isDone){ b.classList.add("done"); cnt++; }
-      if (d === tIdx) b.classList.add("today");
-      const sc = scores[d];
-      b.innerHTML =
-        (d === tIdx ? '<span class="lbl">きょう</span>' : '') +
-        '<span class="c">' + (isDone ? HIBISCUS : '<span>' + (d+1) + '</span>') + '</span>' +
-        '<span class="sc' + (sc ? '' : ' none') + '">' + (sc ? sc.s + "/" + sc.t : "") + '</span>';
-      b.addEventListener("click", () => { switchDay(d); window.scrollTo({top:0, behavior:"smooth"}); });
-      b.setAttribute("aria-label", "Day " + (d+1));
-      nodes.appendChild(b);
-    }
-    wrap.appendChild(card);
-  }
-  el("journey-count").textContent = cnt + " / 28 日クリア";
-  // ホヌが旅の進み具合を泳ぐ
-  const pct = Math.max(3, Math.min(97, Math.round((tIdx + 1) / 28 * 100)));
-  el("voyage-fill").style.width = pct + "%";
-  const honu = el("voyage-honu");
-  honu.style.left = pct + "%";
-  if (!honu.firstChild) honu.innerHTML = TURTLE_SVG;
-  honu.title = "Day " + (tIdx + 1) + " / 28";
-}
 
 /* ---------- クイズ共通 ---------- */
 const qp = el("qplayer");
@@ -1528,32 +2182,32 @@ function segTimes(day, n){
     a0: m.ans + (META.chime || 0),    a1: m.end                 // チャイムを飛ばして解説だけ
   };
 }
-function buildMockList(){
-  const list = [];
-  const pick = (lo, hi, cnt) => {
-    const pool = [];
-    for (let d = 0; d < 28; d++) for (let n = lo; n <= hi; n++) pool.push({day:d, n});
-    for (let i = 0; i < cnt; i++){
-      const j = Math.floor(Math.random() * pool.length);
-      list.push(pool.splice(j, 1)[0]);
-    }
-  };
-  pick(1,4,10); pick(5,7,10); pick(8,10,10);
-  return list;
+function buildMockList(){                    // 第1〜3部を10問ずつ。出ていない問題から選ぶ
+  return pickListening(10, 1).concat(pickListening(10, 2), pickListening(10, 3)).map(keyToItem);
 }
 
-function startQuiz(mode, dayIdx){
+function startQuiz(mode){
   pauseIfPlaying();
   let list;
-  if (mode === "day"){
-    list = marksFor(dayIdx).map(m => ({day: dayIdx, n: m.n}));
-  } else if (mode === "mock"){
-    list = buildMockList();
-  } else {
-    list = wrong.slice(0, 10).map(w => ({day: w.day, n: w.n}));
+  if (mode === "day") list = buildDaily();
+  else if (mode === "mock") list = buildMockList();
+  else {
+    list = dueNow().slice(0, 10);
     if (!list.length) return;
   }
-  quiz = {mode, dayIdx, list, i: 0, ok: 0, answered: false, xp: 0, badgesBefore: earnedBadges().length};
+  openQuiz(mode, list, null);
+}
+function startGrammar(kind, sid){
+  pauseIfPlaying();
+  let ids;
+  if (kind === "stage") ids = pickStageOrdered(GR.items, gseen, sid, todayStr()).slice(0, 10);
+  else ids = pickGrammarTodayFrom(GR.stages, GR.items, gseen, todayStr());
+  if (!ids.length){ toast("このステージの問題はまだありません"); return; }
+  openQuiz(kind === "stage" ? "gstage" : "gtoday", ids.map(id => ({k:"g", id})), sid || null);
+}
+function openQuiz(mode, list, sid){
+  quiz = {mode, sid, list, i: 0, ok: 0, answered: false, xp: 0, notes: [],
+          badgesBefore: earnedBadges().length, gOpen: gOpenMax()};
   el("quiz").hidden = false;
   document.body.style.overflow = "hidden";
   showQ();
@@ -1561,10 +2215,11 @@ function startQuiz(mode, dayIdx){
 
 function endQuiz(){
   stopSeg();
+  try{ if (window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
   quiz = null;
   el("quiz").hidden = true;
   document.body.style.overflow = "";
-  renderDay(); renderReview();
+  renderDay(); renderReview(); renderGrammar();
 }
 let closeArmed = 0;
 el("quiz-close").addEventListener("click", () => {
@@ -1580,6 +2235,7 @@ el("quiz-close").addEventListener("click", () => {
 function showQ(){
   const {list, i} = quiz;
   const it = list[i];
+  if (it.k === "g"){ showGQ(it); return; }
   const q = questionData(it.day, it.n);
   const st = segTimes(it.day, it.n);
   quiz.answered = false;
@@ -1591,7 +2247,7 @@ function showQ(){
   const head = document.createElement("div");
   head.innerHTML = '<div class="qpart"></div><div class="qtitle">音声を聞いて、正しい答えを選んでください</div>';
   head.querySelector(".qpart").textContent =
-    (quiz.mode === "mock" ? "🏆 模試 ─ " : "") + partName(it.n) + (quiz.mode === "review" ? "（Day " + (it.day+1) + "）" : "");
+    (quiz.mode === "mock" ? "🏆 模試 ─ " : quiz.mode === "review" ? "🔁 復習 ─ リスニング " : "") + partName(it.n);
   w.appendChild(head);
 
   const au = document.createElement("div");
@@ -1615,6 +2271,20 @@ function showQ(){
   playSeg(META.days[it.day].file, st.q0, st.q1);
 }
 
+function addNext(){
+  const nx = document.createElement("button");
+  nx.className = "qnext";
+  nx.textContent = (quiz.i + 1 < quiz.list.length) ? "次の問題へ ▶" : "結果を見る";
+  nx.addEventListener("click", () => {
+    stopSeg();
+    try{ if (window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+    quiz.i++;
+    if (quiz.i < quiz.list.length) showQ(); else showResult();
+  });
+  el("qwrap").appendChild(nx);
+  return nx;
+}
+
 function answer(k, btn, opts, q, it, st){
   if (quiz.answered) return;
   quiz.answered = true;
@@ -1623,29 +2293,16 @@ function answer(k, btn, opts, q, it, st){
   if (ok) quiz.ok++;
   beep(ok);
   quiz.xp += ok ? 2 : 1;
-  stats.answered++; if (ok) stats.correct++;
-  saveJSON("eiken4.stats", stats);
-  const p = String(partOf(it.n));
-  s2.parts[p].a++; if (ok) s2.parts[p].c++;
-  const dk = keyOf(today());
-  if (!s2.days[dk]) s2.days[dk] = {a:0, c:0};
-  s2.days[dk].a++; if (ok) s2.days[dk].c++;
+  const res = recAnswer("l", lkey(it.day, it.n), ok);
+  countL(partOf(it.n), ok);
+  if (ok && res.wasDue){ s2.rvc++; quiz.xp += 3; saveJSON("eiken4.stats2", s2); }
+  updateNavBadge();
 
   [...opts.children].forEach((b, idx) => {
     b.disabled = true;
     if (idx + 1 === q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend", '<span class="sr-only">（正解）</span>'); }
     else if (idx + 1 === k && !ok){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend", '<span class="sr-only">（あなたの答え・不正解）</span>'); }
   });
-
-  const inWrong = wrong.findIndex(x => x.day === it.day && x.n === it.n);
-  if (!ok && inWrong < 0){ wrong.push({day: it.day, n: it.n}); }
-  if (ok && quiz.mode === "review" && inWrong >= 0){
-    wrong.splice(inWrong, 1);
-    s2.rvc++; quiz.xp += 3;
-  }
-  saveJSON("eiken4.stats2", s2);
-  saveJSON("eiken4.wrong", wrong);
-  updateNavBadge();
 
   const fb = document.createElement("div");
   fb.className = "qfb " + (ok ? "ok" : "ng");
@@ -1655,44 +2312,259 @@ function answer(k, btn, opts, q, it, st){
   fb.querySelector(".en").textContent = enMain(q) + (q.q ? " ─ " + q.q : "");
   fb.querySelector(".ja").textContent = q.j;
   el("qwrap").appendChild(fb);
-
-  const nx = document.createElement("button");
-  nx.className = "qnext";
-  nx.textContent = (quiz.i + 1 < quiz.list.length) ? "次の問題へ ▶" : "結果を見る";
-  nx.addEventListener("click", () => {
-    stopSeg();
-    quiz.i++;
-    if (quiz.i < quiz.list.length) showQ(); else showResult();
-  });
-  el("qwrap").appendChild(nx);
-  fb.scrollIntoView({behavior:"smooth", block:"nearest"});
+  addNext();
+  fb.scrollIntoView({behavior: reduceMotion() ? "auto" : "smooth", block:"nearest"});
 
   playSeg(META.days[it.day].file, st.a0, st.a1);
 }
 
+/* ---------- 文法の出題 ---------- */
+const CAN_SPEAK = ("speechSynthesis" in window) && (typeof SpeechSynthesisUtterance !== "undefined");
+function speak(text){
+  if (!CAN_SPEAK) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US"; u.rate = 0.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function capFirst(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function orderSentence(g, words){            // pre + 語 + post をつないだ正しい文（文頭は大文字）
+  const post = g.post ? (/^[A-Za-z]/.test(g.post) ? " " + g.post : g.post) : "";
+  const body = (g.pre ? g.pre + " " : "") + words.join(" ") + post;
+  return capFirst(body);
+}
+function addSpeakBtn(parent, text){
+  if (!CAN_SPEAK) return;
+  const b = document.createElement("button");
+  b.className = "spk-btn";
+  b.innerHTML = '<span aria-hidden="true">🔊</span> 英文を聞く';
+  b.addEventListener("click", () => speak(text));
+  parent.appendChild(b);
+}
+function gHead(it, g){
+  const sInfo = GR.stages.find(s => s.id === g.s);
+  const head = document.createElement("div");
+  head.innerHTML = '<div class="qpart" style="text-transform:none"></div><div class="qtitle"></div>';
+  head.querySelector(".qpart").textContent =
+    (quiz.mode === "review" ? "🔁 復習 ─ " : "") + "文法 ─ ステージ" + g.s + (sInfo ? "「" + sInfo.title + "」" : "");
+  head.querySelector(".qtitle").textContent =
+    g.t === "order" ? "日本文に合うように、語をならべかえてください"
+    : g.t === "talk" ? "会話の（　）に入る文を選んでください" : "（　）に入る語を選んでください";
+  return head;
+}
+function gAfter(ok, g, fullText, speakText){      // 解答の記録（共通）
+  if (ok) quiz.ok++;
+  beep(ok);
+  quiz.xp += ok ? 2 : 1;
+  const res = recAnswer("g", g.id, ok);
+  if (ok && res.wasDue){ s2.rvc++; quiz.xp += 3; saveJSON("eiken4.stats2", s2); }
+  updateNavBadge();
+  const now = gOpenMax();
+  if (now > quiz.gOpen){
+    quiz.gOpen = now;
+    const msg = "ステージ" + now + "「" + gTitle(now) + "」の島が開きました！";
+    quiz.notes.push("🏝 " + msg);
+    toast(msg, 5000);
+    confetti("light");                       // reduceMotion のときは中で何もしない
+  }
+}
+function gFeedback(ok, g, sentenceLines, speakText){
+  const fb = document.createElement("div");
+  fb.className = "qfb " + (ok ? "ok" : "ng");
+  fb.setAttribute("role", "status");
+  fb.innerHTML = '<div class="verdict"></div><div class="en"></div><div class="ja"></div><div class="ex"></div><div class="spk-row"></div>';
+  fb.querySelector(".verdict").textContent = ok ? "⭕ 正解！" : "✕ 残念… 正しい文はこちら";
+  const en = fb.querySelector(".en");
+  sentenceLines.forEach(t => { const d = document.createElement("div"); d.textContent = t; en.appendChild(d); });
+  const ja = fb.querySelector(".ja");
+  String(g.ja || "").split("\n").forEach(t => { const d = document.createElement("div"); d.textContent = t; ja.appendChild(d); });
+  const ex = fb.querySelector(".ex");
+  if (g.ex) ex.textContent = "💡 " + g.ex; else ex.remove();
+  addSpeakBtn(fb.querySelector(".spk-row"), speakText);
+  el("qwrap").appendChild(fb);
+  addNext();
+  fb.scrollIntoView({behavior: reduceMotion() ? "auto" : "smooth", block:"nearest"});
+}
+
+function showGQ(it){
+  const g = GBY[it.id];
+  quiz.answered = false;
+  el("qcount").textContent = (quiz.i+1) + " / " + quiz.list.length;
+  el("qbar-fill").style.width = (quiz.i / quiz.list.length * 100) + "%";
+  const w = el("qwrap");
+  w.innerHTML = "";
+  w.appendChild(gHead(it, g));
+  if (g.t === "order"){ showOrder(g); return; }
+
+  const box = document.createElement("div");
+  box.className = "gq";
+  const blanks = [];
+  String(g.q).split("\n").forEach(line => {
+    const row = document.createElement("div");
+    row.className = "gline";
+    line.split(/\(\s*\)/).forEach((part, idx, arr) => {
+      row.appendChild(document.createTextNode(part));
+      if (idx < arr.length - 1){
+        const b = document.createElement("span");
+        b.className = "blank";
+        b.innerHTML = '<span class="sr-only">空所</span>';
+        row.appendChild(b); blanks.push(b);
+      }
+    });
+    box.appendChild(row);
+  });
+  w.appendChild(box);
+
+  const opts = document.createElement("div");
+  opts.className = "opts";
+  g.c.forEach((o, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = '<span class="no">' + (k+1) + '</span><span class="tx"></span>';
+    b.querySelector(".tx").textContent = o;
+    b.addEventListener("click", () => {
+      if (quiz.answered) return;
+      quiz.answered = true;
+      const ok = (k + 1 === g.a), right = g.c[g.a - 1];
+      [...opts.children].forEach((x, idx) => {
+        x.disabled = true;
+        if (idx + 1 === g.a){ x.classList.add("correct"); x.insertAdjacentHTML("beforeend", '<span class="sr-only">（正解）</span>'); }
+        else if (idx === k && !ok){ x.classList.add("wrong"); x.insertAdjacentHTML("beforeend", '<span class="sr-only">（あなたの答え・不正解）</span>'); }
+      });
+      blanks.forEach((bl, bi) => {
+        bl.textContent = bi === 0 ? right : "";
+        bl.classList.add("filled", ok ? "ok" : "ng");
+      });
+      const lines = String(g.q).split("\n").map(l => l.replace(/\(\s*\)/, right));
+      const spoken = lines.map(l => l.replace(/^[AB]:\s*/, "")).join(" ");
+      gAfter(ok, g);
+      gFeedback(ok, g, lines, spoken);
+    });
+    opts.appendChild(b);
+  });
+  w.appendChild(opts);
+}
+
+function showOrder(g){
+  const words = g.w.map((t, i) => ({t, i}));
+  let chips = words.slice();
+  for (let n = 0; n < 20; n++){                 // 正解の並びと同じにならないように混ぜる
+    chips = shuffled(words);
+    if (chips.map(c => c.t).join(" ") !== g.w.join(" ")) break;
+  }
+  const placed = g.w.map(() => null);           // スロットごとに、置いたチップの番号（chips の添字）
+  const w = el("qwrap");
+
+  const ja = document.createElement("div");
+  ja.className = "gq gja";
+  ja.textContent = g.ja;
+  w.appendChild(ja);
+  const line = document.createElement("div");
+  line.className = "oline";
+  w.appendChild(line);
+  const bank = document.createElement("div");
+  bank.className = "bank";
+  bank.setAttribute("aria-label", "語のチップ");
+  w.appendChild(bank);
+  const chk = document.createElement("button");
+  chk.className = "qnext";
+  chk.textContent = "答え合わせ";
+  chk.disabled = true;
+  w.appendChild(chk);
+  let locked = false;
+
+  function draw(){
+    line.innerHTML = "";
+    if (g.pre){
+      const s = document.createElement("span"); s.className = "fix"; s.textContent = capFirst(g.pre); line.appendChild(s);
+    }
+    placed.forEach((ci, si) => {
+      const b = document.createElement("button");
+      b.className = "slot" + (ci === null ? "" : " has");
+      if (ci === null){
+        b.setAttribute("aria-label", (si+1) + "番目の空きスロット");
+        b.innerHTML = '<span aria-hidden="true">' + (si+1) + '</span>';
+      } else {
+        const t = chips[ci].t;
+        b.textContent = (si === 0 && !g.pre) ? capFirst(t) : t;
+        b.setAttribute("aria-label", (si+1) + "番目 " + t + "。押すと戻します");
+      }
+      b.addEventListener("click", () => { if (locked || ci === null) return; placed[si] = null; draw(); });
+      line.appendChild(b);
+    });
+    if (g.post){
+      const s = document.createElement("span"); s.className = "fix"; s.textContent = g.post; line.appendChild(s);
+    }
+    bank.innerHTML = "";
+    chips.forEach((c, ci) => {
+      const b = document.createElement("button");
+      b.className = "chip";
+      const used = placed.indexOf(ci) >= 0;
+      b.textContent = c.t;
+      if (used){ b.classList.add("used"); b.disabled = true; b.setAttribute("aria-label", c.t + "（置きました）"); }
+      b.addEventListener("click", () => {
+        if (locked) return;
+        const si = placed.indexOf(null);
+        if (si < 0) return;
+        placed[si] = ci; draw();
+      });
+      bank.appendChild(b);
+    });
+    chk.disabled = placed.indexOf(null) >= 0;
+  }
+  draw();
+
+  chk.addEventListener("click", () => {
+    if (locked || placed.indexOf(null) >= 0) return;
+    locked = true; quiz.answered = true;
+    const mine = placed.map(ci => chips[ci].t);
+    const ok = mine.join(" ") === g.w.join(" ");         // 語の文字列で比べる（同じ語のチップの入れ替えも正解）
+    [...line.querySelectorAll(".slot")].forEach((b, si) => {
+      b.disabled = true;
+      const good = mine[si] === g.w[si];
+      b.classList.add(good ? "ok" : "ng");
+      b.insertAdjacentHTML("beforeend", '<span class="mk" aria-hidden="true">' + (good ? "✓" : "✕") + '</span><span class="sr-only">' + (good ? "（合っています）" : "（ちがいます）") + '</span>');
+    });
+    [...bank.children].forEach(b => { b.disabled = true; });
+    chk.remove();
+    const sentence = orderSentence(g, g.w);
+    gAfter(ok, g);
+    gFeedback(ok, g, [sentence], sentence);
+  });
+}
+
 function showResult(){
-  const {list, ok, mode, dayIdx} = quiz;
+  const {list, ok, mode} = quiz;
   el("qbar-fill").style.width = "100%";
   el("qcount").textContent = list.length + " / " + list.length;
   const perfect = ok === list.length;
-  const mockPass = mode === "mock" && ok >= 21;
+  const mockPass = mode === "mock" && ok >= 18;
   const good = mode === "mock" ? mockPass : ok >= Math.ceil(list.length * 0.7);
+  const full = mode === "gtoday" || list.length >= 10;
 
+  let bonus = 0;
+  markToday();                                   // どれか1つでもやれば、その日は連続日数に数える
   if (mode === "day"){
-    const prev = scores[dayIdx];
-    if (!prev || ok > prev.s) scores[dayIdx] = {s: ok, t: list.length};
+    const dk = todayStr(), prev = scores[dk];
+    if (!prev || ok > prev.s) scores[dk] = {s: ok, t: list.length};
     saveJSON("eiken4.scores", scores);
-    markToday(dayIdx);
     quiz.xp += 15;
-  }
-  if (mode === "mock"){
+    bonus = missionDone("l");
+  } else if (mode === "mock"){
     mock.hist.unshift({d: (today().getMonth()+1) + "/" + today().getDate(), s: ok});
     mock.hist = mock.hist.slice(0, 10);
     if (ok > mock.best) mock.best = ok;
     saveJSON("eiken4.mock", mock);
-    markToday(dayIdxToday());
     quiz.xp += 30 + (mockPass ? 20 : 0);
+    bonus = missionDone("l");
+  } else if (mode === "gtoday" || mode === "gstage"){
+    if (full){ quiz.xp += 15; bonus = missionDone("g"); }
+  } else if (mode === "review"){
+    if (ensureMission().rm === "r") bonus = missionDone("r");
   }
+  if (bonus){ quiz.xp += bonus; quiz.notes.push("🌺 今日のミッション3つ達成！ボーナス ＋" + bonus + " XP"); }
   const leveledTo = gainXP(quiz.xp);
   const newBadges = earnedBadges().length - quiz.badgesBefore;
 
@@ -1713,24 +2585,29 @@ function showResult(){
     '<h2>' + h2 + '</h2>' +
     '<div class="score"><span id="res-score">' + ok + '</span><small> / ' + list.length + ' 問</small></div>' +
     '<div class="xp">＋' + quiz.xp + ' XP</div>' +
+    '<div class="rnotes"></div>' +
     (newBadges > 0 ? '<div class="newbadges">🎖️ 新しいごほうびバッジを ' + newBadges + ' 個ゲット！「きろく」タブで見られます</div>' : '') +
     '<span class="honu">' + TURTLE_SVG + '</span>' +
     '<div class="honuline">「' + honuCheer(perfect, good, mode, ok) + '」</div>' +
     '<div class="msg">' + resultMsg(perfect, good, mode, ok) + '</div>' +
     '<div class="acts"></div>';
+  const notes = r.querySelector(".rnotes");
+  if (quiz.notes.length) quiz.notes.forEach(t => { const d = document.createElement("div"); d.textContent = t; notes.appendChild(d); });
+  else notes.remove();
   const acts = r.querySelector(".acts");
 
-  if (wrong.length){
+  const due = dueNow().length;
+  if (due){
     const b1 = document.createElement("button");
     b1.className = "rv-start";
-    b1.textContent = (mode === "review" ? "つづけて解き直す（" : "間違いを解き直す（") + Math.min(wrong.length,10) + "問）";
-    b1.addEventListener("click", () => startQuiz("review"));
+    b1.textContent = (mode === "review" ? "つづけて解き直す（" : "今日の復習を解く（") + Math.min(due, 10) + "問）";
+    b1.addEventListener("click", () => { endQuiz(); startQuiz("review"); });
     acts.appendChild(b1);
   }
   const b2 = document.createElement("button");
   b2.className = "qnext";
   b2.textContent = "ホームにもどる";
-  b2.addEventListener("click", endQuiz);
+  b2.addEventListener("click", () => { endQuiz(); showTab("home"); });
   acts.appendChild(b2);
   w.appendChild(r);
 
@@ -1747,16 +2624,23 @@ function showResult(){
 function resultMsg(perfect, good, mode, ok){
   if (mode === "mock"){
     if (ok >= 27) return "ほぼ満点！本番でも余裕の合格ラインです";
-    if (ok >= 21) return "本番の合格ライン（6〜7割）を超えています。この調子！";
-    if (ok >= 15) return "合格ラインまであと" + (21 - ok) + "問。間違いの解き直しが近道です";
+    if (ok >= 21) return "7割を超えて安心圏です。この調子！";
+    if (ok >= 18) return "合格圏（6割）です。あと" + (21 - ok) + "問で安心圏（7割）";
+    if (ok >= 12) return "合格圏（6割＝18問）まであと" + (18 - ok) + "問。間違いの解き直しが近道です";
     return "まだ伸びしろたっぷり。毎日の10問と解き直しで必ず上がります";
   }
   if (mode === "review"){
-    return wrong.length ? "復習リストは残り " + wrong.length + " 問です" : "復習リストがすべて片付きました！";
+    const d = dueNow().length;
+    return d ? "今日の復習は残り " + d + " 問です" : "今日の復習がすべて片付きました！";
+  }
+  if (mode === "gtoday" || mode === "gstage"){
+    if (perfect) return "文法もこの調子！間違えなかった問題も、またあとで出てきます";
+    if (good) return "文法は7割できれば次の島が開きます。いい調子です";
+    return "間違えた問題は、明日から「復習」に出ます。出てきたときに覚えていれば大丈夫です";
   }
   if (perfect) return "この調子！カレンダーに花丸をつけました";
-  if (good) return "本番の合格ラインは6〜7割。十分に合格圏です";
-  return "間違えた問題は「復習」タブに保存しました。解き直しが最短の近道です";
+  if (good) return "7割できています。本番の合格ラインは約6割なので十分に合格圏です";
+  return "間違えた問題は、明日から「復習」タブに出ます。解き直しが最短の近道です";
 }
 
 /* ---------- 声で答えるモード ---------- */
@@ -1821,7 +2705,7 @@ function buildNums(n){
     w.appendChild(b);
   }
 }
-function startVoiceQuiz(dayIdx){
+function startVoiceQuiz(){
   pauseIfPlaying();
   audioCtx();
   if (SR_CLS && !rec) rec = makeRec();
@@ -1829,7 +2713,7 @@ function startVoiceQuiz(dayIdx){
     recWarmed = true;
     try{ rec.start(); recActive = true; setTimeout(recStop, 250); }catch(e){}
   }
-  vq = {day: dayIdx, list: marksFor(dayIdx).map(m => ({day: dayIdx, n: m.n})),
+  vq = {list: buildDaily(),
         i: 0, ok: 0, xp: 0, max: 4, phase: "", mic: !!SR_CLS, timer: null,
         badgesBefore: earnedBadges().length};
   el("vq").hidden = false;
@@ -1882,19 +2766,13 @@ function vqAnswer(k, byVoice){
 
   if (answered){
     vq.xp += ok ? 2 : 1;
-    stats.answered++; if (ok) stats.correct++;
-    saveJSON("eiken4.stats", stats);
-    const p = String(partOf(it.n));
-    s2.parts[p].a++; if (ok) s2.parts[p].c++;
-    const dk = keyOf(today());
-    if (!s2.days[dk]) s2.days[dk] = {a:0, c:0};
-    s2.days[dk].a++; if (ok) s2.days[dk].c++;
-    saveJSON("eiken4.stats2", s2);
-    const iw = wrong.findIndex(x => x.day === it.day && x.n === it.n);
-    if (!ok && iw < 0) wrong.push({day: it.day, n: it.n});
-    saveJSON("eiken4.wrong", wrong);
-    updateNavBadge();
+    const res = recAnswer("l", lkey(it.day, it.n), ok);
+    countL(partOf(it.n), ok);
+    if (ok && res.wasDue){ s2.rvc++; vq.xp += 3; saveJSON("eiken4.stats2", s2); }
+  } else {
+    recAnswer("l", lkey(it.day, it.n), false, {nolog: true});   // 時間切れ：復習には回すが、正答率の記録には入れない
   }
+  updateNavBadge();
 
   if (ok){
     vq.ok++;
@@ -1922,8 +2800,8 @@ function vqNext(){
 function vqFinish(){
   const v = vq;
   closeVq(true);
-  quiz = {mode: "day", dayIdx: v.day, list: v.list, i: v.list.length,
-          ok: v.ok, answered: true, xp: v.xp, badgesBefore: v.badgesBefore};
+  quiz = {mode: "day", sid: null, list: v.list, i: v.list.length, notes: [],
+          ok: v.ok, answered: true, xp: v.xp, badgesBefore: v.badgesBefore, gOpen: gOpenMax()};
   el("quiz").hidden = false;
   document.body.style.overflow = "hidden";
   showResult();
@@ -1946,45 +2824,137 @@ el("vq-close").addEventListener("click", () => {
   closeVq(false);
 });
 
-/* ---------- 復習タブ ---------- */
+/* ---------- 復習タブ（日をあけて出す） ---------- */
+function mdLabel(ds){ const d = dateOf(ds); return (d.getMonth()+1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+function waitingList(){                       // 復習の予定がある問題すべて（期日が近い順）
+  const out = [];
+  Object.keys(lseen).forEach(k => { const r = lseen[k]; if (r && r.due) out.push(Object.assign(keyToItem(k), {due: r.due})); });
+  Object.keys(gseen).forEach(id => { const r = gseen[id]; if (r && r.due && GBY[id]) out.push({k:"g", id, due: r.due}); });
+  return out.sort((a, b) => a.due < b.due ? -1 : a.due > b.due ? 1 : 0);
+}
 function renderReview(){
-  el("rv-count").textContent = wrong.length;
-  el("rv-cap").textContent = wrong.length
-    ? "解き直して正解すると、リストから消えます"
-    : "いまはゼロ！間違えた問題が出るとここにたまります";
-  el("rv-start").disabled = !wrong.length;
+  const ts = todayStr();
+  const dueN = dueNow().length;
+  el("rv-count").textContent = dueN;
+  const all = waitingList();
+  if (dueN){
+    el("rv-cap").textContent = "今日の分は先に10問まで。正解すると、1日 → 3日 → 7日と間をあけて出し直します";
+  } else {
+    const nx = nextDueFrom(lseen, gseen, ts);
+    el("rv-cap").textContent = nx
+      ? "今日の復習はありません。次の予定は " + mdLabel(nx) + " です"
+      : "今日の復習はありません。間違えた問題が出ると、ここにたまります";
+  }
+  el("rv-start").disabled = !dueN;
   const lst = el("rv-list");
   lst.innerHTML = "";
-  wrong.forEach(it => {
-    const q = questionData(it.day, it.n);
+  all.slice(0, 60).forEach(it => {
     const div = document.createElement("div");
     div.className = "rev";
-    div.innerHTML = '<div class="head"><span class="badge"></span></div><div class="en"></div>';
-    div.querySelector(".badge").textContent = "Day " + (it.day+1) + "・" + partName(it.n);
-    div.querySelector(".en").textContent = enMain(q) + (q.q ? " ─ " + q.q : "");
+    div.innerHTML = '<div class="head"><span class="badge"></span><span class="due"></span></div><div class="en"></div>';
+    let text;
+    if (it.k === "g"){
+      const g = GBY[it.id];
+      div.querySelector(".badge").textContent = "文法・ステージ" + g.s;
+      text = g.t === "order" ? g.ja : String(g.q).replace(/\n/g, "　");
+    } else {
+      const q = questionData(it.day, it.n);
+      div.querySelector(".badge").textContent = "リスニング・" + partName(it.n);
+      text = enMain(q) + (q.q ? " ─ " + q.q : "");
+    }
+    div.querySelector(".due").textContent = it.due <= ts ? "⏰ 今日" : "待機中 ─ " + mdLabel(it.due);
+    div.querySelector(".en").textContent = text;
     lst.appendChild(div);
   });
+  if (all.length > 60){
+    const m = document.createElement("div");
+    m.className = "cap"; m.style.padding = "8px 4px";
+    m.textContent = "ほか " + (all.length - 60) + " 問が待機中です";
+    lst.appendChild(m);
+  }
 }
 el("rv-start").addEventListener("click", () => startQuiz("review"));
 function updateNavBadge(){
   const b = el("nav-rv-badge");
-  b.hidden = !wrong.length;
-  b.textContent = wrong.length;
+  const n = dueNow().length;
+  b.hidden = !n;
+  b.textContent = n;
 }
 
-/* ---------- 記録 ---------- */
-function markToday(dayIdx){
-  const k = keyOf(today());
-  if (!done[k]){ done[k] = {day: dayIdx+1}; saveJSON("eiken4.done", done); }
-  dayDone[dayIdx] = true; saveJSON("eiken4.daydone", dayDone);
+/* ---------- 文法タブ（島マップ） ---------- */
+function renderGrammar(){
+  const box = el("gr-map");
+  if (!box) return;
+  const N = GR.stages.length;
+  const cur = gCurrent();
+  const cleared = GR.stages.filter(s => gStage(s.id).total && gStage(s.id).cleared).length;
+  el("gr-sub").textContent = N
+    ? "いま ステージ" + cur + "「" + gTitle(cur) + "」・クリア " + cleared + " / " + N
+    : "文法の問題を読み込めませんでした";
+  el("gr-start").disabled = !GR.items.length;
+  box.innerHTML = "";
+  if (!N) return;
+  const ROW = 104, W = 360, H = ROW * N + 24, XS = [100, 260];
+  const yOf = i => 12 + ROW * i + ROW / 2, xOf = i => XS[i % 2];
+  box.style.aspectRatio = W + " / " + H;
+
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  svg.setAttribute("class", "isl-road");
+  svg.setAttribute("aria-hidden", "true");
+  for (let i = 0; i < N - 1; i++){
+    const p = document.createElementNS(NS, "path");
+    const x0 = xOf(i), y0 = yOf(i), x1 = xOf(i+1), y1 = yOf(i+1);
+    p.setAttribute("d", "M" + x0 + " " + y0 + " C" + x0 + " " + (y0 + ROW/2) + " " + x1 + " " + (y1 - ROW/2) + " " + x1 + " " + y1);
+    p.setAttribute("class", gStage(GR.stages[i].id).cleared ? "done" : "");
+    svg.appendChild(p);
+  }
+  box.appendChild(svg);
+
+  GR.stages.forEach((s, i) => {
+    const info = gStage(s.id), open = stageOpenFrom(GR.items, gseen, s.id);
+    const isCur = s.id === cur && open, isClear = info.cleared && info.total > 0;
+    const state = !open ? "まだ" : isClear ? "クリア" : "挑戦中";
+    const x = xOf(i), left = (i % 2 === 0);
+    const row = document.createElement("div");
+    row.className = "isl-item";
+    row.style.top = (yOf(i) / H * 100) + "%";
+
+    const b = document.createElement("button");
+    b.className = "isl " + (!open ? "locked" : isClear ? "clear" : "open") + (isCur ? " cur" : "");
+    b.style.left = (x / W * 100) + "%";
+    const frac = info.total ? info.ok / info.total : 0;
+    b.innerHTML =
+      '<svg viewBox="0 0 80 80" aria-hidden="true"><circle class="rg-bg" cx="40" cy="40" r="35"/>' +
+      '<circle class="rg-fg" cx="40" cy="40" r="35" stroke-dasharray="' + (219.9 * frac).toFixed(1) + ' 219.9" transform="rotate(-90 40 40)"/></svg>' +
+      '<span class="no"></span><span class="ic" aria-hidden="true"></span>';
+    b.querySelector(".no").textContent = s.id;
+    b.querySelector(".ic").textContent = !open ? "🔒" : isClear ? "🚩" : "";
+    const prev = s.id > 1 ? gStage(s.id - 1) : null;
+    const lack = prev ? Math.max(0, prev.need - prev.ok) : 0;
+    b.setAttribute("aria-label", "ステージ" + s.id + " " + s.title + "、" + info.ok + "/" + info.total + "問、" + state +
+      (isCur ? "、いまここ" : "") + (!open ? "。前のステージをあと" + lack + "問正解すると開きます" : ""));
+    b.addEventListener("click", () => {
+      if (!open) toast("ステージ" + (s.id - 1) + "「" + gTitle(s.id - 1) + "」を7割クリアすると開きます（あと" + lack + "問正解）", 5500);
+      else startGrammar("stage", s.id);
+    });
+    row.appendChild(b);
+
+    const lb = document.createElement("div");
+    lb.className = "isl-lb " + (left ? "r" : "l") + (open ? "" : " dim");
+    if (left) lb.style.left = "calc(" + (x / W * 100) + "% + 46px)";
+    else lb.style.right = "calc(" + ((W - x) / W * 100) + "% + 46px)";
+    lb.innerHTML = (isCur ? '<span class="here">▶ いまここ</span>' : '') +
+      '<b class="nm"></b><span class="sb"></span><span class="pg"></span>';
+    lb.querySelector(".nm").textContent = s.title;
+    lb.querySelector(".sb").textContent = s.sub || "";
+    lb.querySelector(".pg").textContent = (isClear ? "✓ " : !open ? "🔒 " : "") + state + "　" + info.ok + "/" + info.total + "問";
+    row.appendChild(lb);
+    box.appendChild(row);
+  });
 }
-function streak(){
-  let s = 0;
-  const c = new Date(today());
-  if (!done[keyOf(c)]) c.setDate(c.getDate() - 1);
-  while (done[keyOf(c)]){ s++; c.setDate(c.getDate() - 1); }
-  return s;
-}
+el("gr-start").addEventListener("click", () => startGrammar("today"));
 
 /* ---------- 分析タブ ---------- */
 function renderInsights(){
@@ -1992,8 +2962,12 @@ function renderInsights(){
   renderBadges();
   el("streak-now").textContent = streak();
   el("streak-total").textContent = Object.keys(done).length;
-  el("stat-n").textContent = stats.answered;
-  el("stat-acc").textContent = stats.answered ? Math.round(stats.correct / stats.answered * 100) + "%" : "–";
+  let gc = 0, gw = 0;
+  Object.keys(gseen).forEach(k => { const r = gseen[k]; if (r && r.c){ gc += r.c; gw += (r.w || 0); } });
+  const totA = stats.answered + gc, totC = stats.correct + Math.max(0, gc - gw);
+  el("stat-n").textContent = totA;
+  el("stat-acc").textContent = totA ? Math.round(totC / totA * 100) + "%" : "–";
+  renderWeekly();
 
   const bars = el("part-bars");
   bars.innerHTML = "";
@@ -2032,8 +3006,8 @@ function renderInsights(){
   } else {
     mock.hist.forEach(h => {
       const d = document.createElement("div");
-      d.className = "mh" + (h.s >= 21 ? " pass" : "");
-      d.textContent = h.d + "　" + h.s + "/30" + (h.s >= 21 ? " 🌟" : "");
+      d.className = "mh" + (h.s >= 18 ? " pass" : "");
+      d.textContent = h.d + "　" + h.s + "/30" + (h.s >= 21 ? " 🌟安心" : h.s >= 18 ? " 🌟" : "");
       mh.appendChild(d);
     });
   }
@@ -2055,6 +3029,98 @@ function renderInsights(){
     col.innerHTML = '<div class="bar" style="height:' + Math.max(3,h) + 'px"><i style="height:' + hc + 'px"></i></div><div class="dl">' + x.label + '</div>';
     col.title = x.v.a + "問中 " + x.v.c + "問正解";
     ch.appendChild(col);
+  });
+}
+
+/* ---------- きろくタブ：週の比較・8週の折れ線・曜日別の棒 ---------- */
+function pctOf(x){ return x.a ? Math.round(x.c / x.a * 100) : null; }
+function renderWeekly(){
+  const ts = todayStr(), ws = weekStartStr(ts), pws = addDaysStr(ws, -7);
+  const bd = aggByDate(alog);
+  const cur = weekAgg(bd, done, ws), prv = weekAgg(bd, done, pws);
+
+  const cards = el("wk-cards");
+  cards.innerHTML = "";
+  const metrics = [
+    {l:"リスニング正答率", c:pctOf(cur.l), p:pctOf(prv.l), u:"%", d:"pt"},
+    {l:"文法 正答率", c:pctOf(cur.g), p:pctOf(prv.g), u:"%", d:"pt"},
+    {l:"解いた問題数", c:cur.n, p:prv.n, u:"問", d:"問"},
+    {l:"勉強した日数", c:cur.days, p:prv.days, u:"日", d:"日"}
+  ];
+  metrics.forEach(m => {
+    const d = document.createElement("div");
+    d.className = "wk";
+    let diff = "", cls = "";
+    if (m.c !== null && m.p !== null){
+      const x = m.c - m.p;
+      diff = x > 0 ? "▲ +" + x + m.d : x < 0 ? "▼ " + x + m.d : "＝ 変わらず";
+      cls = x > 0 ? " up" : x < 0 ? " down" : "";
+    } else diff = "比べるデータなし";
+    d.innerHTML = '<div class="wl"></div><div class="wv"></div><div class="wp"></div><div class="wd' + cls + '"></div>';
+    d.querySelector(".wl").textContent = m.l;
+    d.querySelector(".wv").innerHTML = (m.c === null ? "–" : m.c + "<small>" + m.u + "</small>");
+    d.querySelector(".wp").textContent = "先週 " + (m.p === null ? "–" : m.p + m.u);
+    d.querySelector(".wd").textContent = diff;
+    cards.appendChild(d);
+  });
+  el("wk-range").textContent = "今週 " + (dateOf(ws).getMonth()+1) + "/" + dateOf(ws).getDate() + "〜（月曜はじまり）と先週の比べ";
+
+  /* 8週の折れ線 */
+  const weeks = [];
+  for (let i = 7; i >= 0; i--){
+    const s = addDaysStr(ws, -7 * i), a = weekAgg(bd, done, s);
+    weeks.push({s, l: pctOf(a.l), g: pctOf(a.g), la: a.l.a, ga: a.g.a});
+  }
+  const VW = 300, VH = 196, X0 = 34, X1 = 270, Y0 = 14, Y1 = 148;
+  const xi = i => X0 + (X1 - X0) * i / 7, yv = p => Y1 - (Y1 - Y0) * p / 100;
+  let s = '';
+  [0, 50, 100].forEach(p => {
+    s += '<line class="gl" x1="' + X0 + '" x2="' + X1 + '" y1="' + yv(p) + '" y2="' + yv(p) + '"/>' +
+         '<text class="tx" x="' + (X0 - 5) + '" y="' + (yv(p) + 4) + '" text-anchor="end">' + p + '%</text>';
+  });
+  s += '<line class="pass" x1="' + X0 + '" x2="' + X1 + '" y1="' + yv(60) + '" y2="' + yv(60) + '"/>' +
+       '<text class="tx pt" x="' + (X0 + 4) + '" y="' + (yv(60) - 4) + '" text-anchor="start">合格ライン 60%</text>';
+  weeks.forEach((w, i) => {
+    const dd = dateOf(w.s);
+    s += '<text class="tx" x="' + xi(i) + '" y="' + (Y1 + 16 + (i % 2) * 14) + '" text-anchor="middle">' + (dd.getMonth()+1) + '/' + dd.getDate() + '〜</text>';
+  });
+  function series(key, cls, mark){
+    let seg = [], out = '';
+    const flush = () => { if (seg.length > 1) out += '<polyline class="ln ' + cls + '" points="' + seg.join(" ") + '"/>'; seg = []; };
+    weeks.forEach((w, i) => { if (w[key] === null) flush(); else seg.push(xi(i).toFixed(1) + "," + yv(w[key]).toFixed(1)); });
+    flush();
+    weeks.forEach((w, i) => {
+      if (w[key] === null) return;
+      const x = xi(i), y = yv(w[key]);
+      out += mark === "c"
+        ? '<circle class="mk ' + cls + '" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="4.5"/>'
+        : '<rect class="mk ' + cls + '" x="' + (x - 4).toFixed(1) + '" y="' + (y - 4).toFixed(1) + '" width="8" height="8"/>';
+    });
+    return out;
+  }
+  s += series("l", "sl", "c") + series("g", "sg", "r");
+  const aria = "8週間の正答率の折れ線グラフ。" + weeks.map(w => {
+    const d = dateOf(w.s);
+    return (d.getMonth()+1) + "月" + d.getDate() + "日の週、リスニング " + (w.l === null ? "なし" : w.l + "%") + "、文法 " + (w.g === null ? "なし" : w.g + "%");
+  }).join("。") + "。合格ラインは60%";
+  el("wk-line").innerHTML = '<svg viewBox="0 0 ' + VW + ' ' + VH + '" role="img" aria-label="' + aria + '">' + s + '</svg>';
+
+  /* 曜日別の棒 */
+  const wb = el("wk-wd");
+  wb.innerHTML = "";
+  const mx = Math.max(10, ...cur.byWd, ...prv.byWd);
+  ["月","火","水","木","金","土","日"].forEach((n, i) => {
+    const col = document.createElement("div");
+    col.className = "wdc";
+    const hp = Math.round(prv.byWd[i] / mx * 84), hc = Math.round(cur.byWd[i] / mx * 84);
+    col.innerHTML = '<div class="bars"><span class="bw"><em></em><i class="pv" style="height:' + hp + 'px"></i></span>' +
+      '<span class="bw"><em></em><i class="cr" style="height:' + hc + 'px"></i></span></div><div class="dl"></div>';
+    const ems = col.querySelectorAll("em");
+    ems[0].textContent = prv.byWd[i] || ""; ems[1].textContent = cur.byWd[i] || "";
+    col.querySelector(".dl").textContent = n;
+    col.setAttribute("role", "img");
+    col.setAttribute("aria-label", n + "曜日 今週" + cur.byWd[i] + "問、先週" + prv.byWd[i] + "問");
+    wb.appendChild(col);
   });
 }
 
@@ -2087,8 +3153,9 @@ function buildAdvice(){
         text:"ここは得点源です。模試や過去問の同じパートで満点を狙うと、本番の合計が安定します。"});
     }
   }
-  if (wrong.length >= 5){
-    tips.push({kind:"weak", label:"復習が " + wrong.length + " 問たまっています",
+  const dueN = dueNow().length;
+  if (dueN >= 5){
+    tips.push({kind:"weak", label:"復習が " + dueN + " 問たまっています",
       text:"新しい問題より先に「復習」タブの解き直しを。間違えた問題を消す方が得点は速く伸びます。"});
   }
   const acc = stats.correct / stats.answered;
@@ -2097,11 +3164,11 @@ function buildAdvice(){
       text:"全体正答率 " + Math.round(acc*100) + "%。ホームの「模試にチャレンジ」で本番形式30問を試してみましょう。"});
   } else if (acc < 0.6){
     tips.push({kind:"", label:"焦らなくて大丈夫",
-      text:"合格ラインは6〜7割。「聞くレッスン」で同じDayをもう一周してからドリルに戻ると、正答率が目に見えて上がります。"});
+      text:"合格ラインは約6割。「聞くレッスン」で音声をもう一周聞いてからドリルに戻ると、正答率が目に見えて上がります。"});
   }
-  if (mock.best >= 21){
+  if (mock.best >= 18){
     tips.push({kind:"strong", label:"模試 自己ベスト " + mock.best + "/30",
-      text:"本番の合格ラインを超えています。あとは週1回の模試でこの感覚を保ちましょう。"});
+      text: mock.best >= 21 ? "7割を超えて安心圏です。あとは週1回の模試でこの感覚を保ちましょう。" : "合格圏（6割）に届いています。あと" + (21 - mock.best) + "問で安心圏（7割）です。"});
   }
   if (streak() >= 3){
     tips.push({kind:"", label:"連続 " + streak() + " 日目",
@@ -2189,16 +3256,17 @@ const ONB_ART =
   '</svg>';
 const ONB_PAGES = [
   {h:"英検4級リスニング講座",
-   p:"1日10問・約10分。28日で本番およそ9回分（280問）を聞き切る、通勤時間のためのリスニング講座です。音声はすべてプロ品質のナレーションで収録。相棒の<b>コーチのホヌ🐢</b>が、毎日いっしょに応援します。",
+   p:"1日のリスニング10問と文法10問で、リスニング280問・文法の14ステージを進める講座です。リスニングは、出きるまで同じ問題を出しません。音声はすべてプロ品質のナレーションで収録。相棒の<b>コーチのホヌ🐢</b>が、毎日いっしょに応援します。",
    steps:null},
   {h:"毎日の流れは、3つだけ",
    p:"",
    steps:[
      ["🚗 聞き流し","再生を1回押すだけ。すぐ第1問から始まり、画面を消しても流れつづけます"],
      ["🎤 声で答える","「2番」と声に出すと即判定。正解ならピンポン♪、まちがえた時だけ解説が流れます"],
-     ["✏️ 実戦ドリル","おうちで画面を見て解くモード。まちがいは「復習」に自動でたまります"]]},
+     ["✏️ 実戦ドリル","おうちで画面を見て解くモード。まちがいは日をあけて「復習」に出ます"],
+     ["📘 文法","文法タブの島を、ひとつずつ進めます。毎日10問"]]},
   {h:"記録が、続ける力になる",
-   p:"やった日はカレンダーに<b>花丸</b>、マップには<b>ハイビスカス</b>が咲きます。<b>パート別の弱点・強み</b>は「きろく」タブが自動で分析。<br><br>力がついたら<b>模試（30問・合否判定つき）</b>にチャレンジ。本番は<b>6〜7割で合格圏</b>です。<br><br>ホーム画面の下にある<b>「ホーム画面に追加してアプリにする」</b>をやっておくと、次からアイコン1タップで開けます。それでは、今日の10問から始めましょう！",
+   p:"やった日はカレンダーに<b>花丸</b>がつき、<b>今日のミッション</b>を3つそろえるとボーナスがもらえます。<b>パート別の弱点・強み</b>は「きろく」タブが自動で分析。<br><br>力がついたら<b>模試（30問・合否判定つき）</b>にチャレンジ。本番は<b>6割で合格圏、7割あれば安心</b>です。<br><br>ホーム画面の下にある<b>「ホーム画面に追加してアプリにする」</b>をやっておくと、次からアイコン1タップで開けます。それでは、今日の10問から始めましょう！",
    steps:null}
 ];
 let onbPage = 0;
@@ -2238,6 +3306,7 @@ function closeOnb(){
   }
 })();
 
+useFreezeIfNeeded();
 renderHawaii();
 renderDay();
 updateNavBadge();

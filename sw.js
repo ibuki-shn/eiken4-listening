@@ -1,6 +1,6 @@
 // アプリの骨組みだけオフライン対応にする（音声はブラウザのHTTPキャッシュに任せる）
-const CACHE = "eiken4-v2";
-const CORE = ["./", "index.html", "data.js", "meta.js", "manifest.json", "icon-192.png", "icon-512.png"];
+const CACHE = "eiken4-v3";
+const CORE = ["./", "index.html", "data.js", "meta.js", "grammar.js", "manifest.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {}));
