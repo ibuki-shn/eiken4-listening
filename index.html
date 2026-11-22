@@ -129,7 +129,7 @@ h1.page{font-size:var(--fs-h1); font-weight:700; letter-spacing:var(--tr-tight);
 
 /* ---------- ホーム：大見出し ---------- */
 .top-row{display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3)}
-.date-line{font-size:var(--fs-xs); color:var(--sub); font-weight:600; letter-spacing:.01em}
+.date-line{font-size:var(--fs-xs); color:color-mix(in srgb, var(--sub) 75%, var(--ink)); font-weight:600; letter-spacing:.01em}
 .streak-chip{
   display:inline-flex; align-items:center; gap:5px;
   background:var(--glass); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px);
@@ -211,7 +211,7 @@ h1.page{font-size:var(--fs-h1); font-weight:700; letter-spacing:var(--tr-tight);
 .cta .ic{width:30px; height:30px; flex:none; display:flex; align-items:center; justify-content:center}
 .cta .ic svg{width:30px; height:30px}
 .cta .t{font-size:var(--fs-lead); font-weight:600; letter-spacing:-.01em; line-height:1.3}
-.cta .t small{display:block; font-size:var(--fs-xs); font-weight:400; opacity:.86; margin-top:2px}
+.cta .t small{display:block; font-size:var(--fs-xs); font-weight:400; opacity:.92; margin-top:2px}
 
 /* グループ化リスト（iOSの設定画面の作法） */
 .list{
@@ -722,17 +722,17 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 .msn-strk{display:flex; align-items:baseline; gap:6px; margin-top:var(--sp-2); font-size:var(--fs-sm); color:var(--sub); flex-wrap:wrap}
 .msn-strk b{font-size:var(--fs-h1); color:var(--coral-text); font-variant-numeric:tabular-nums; line-height:1.1}
 .msn-strk .tk{margin-left:auto; background:var(--sun-soft); color:var(--gold-text); border-radius:var(--r-full); padding:3px 11px; font-size:var(--fs-2xs); font-weight:600}
-.ms-list{display:flex; flex-direction:column; gap:var(--sp-2); margin-top:var(--sp-3)}
+.ms-list{margin-top:var(--sp-3); background:var(--card-2); border:.5px solid var(--line); border-radius:var(--r-md); overflow:hidden}
 .ms-row{
   display:flex; align-items:center; gap:var(--sp-3); width:100%; text-align:left; min-height:60px;
-  border:.5px solid var(--line); background:var(--card-2); border-radius:var(--r-md); padding:var(--sp-2) var(--sp-3);
+  background:none; border:none; padding:var(--sp-3);
 }
+.ms-row + .ms-row{box-shadow:inset 0 .5px 0 var(--line)}
 .ms-row:active{background:var(--fill)}
 .ms-chk{
   width:30px; height:30px; flex:none; border-radius:50%; border:2px solid var(--sub); color:transparent;
   display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;
 }
-.ms-row.done{background:var(--green-soft); border-color:var(--green-text)}
 .ms-row.done .ms-chk{background:var(--green-solid); border-color:var(--green-solid); color:var(--on-strong)}
 .ms-row .t{flex:1; min-width:0; font-size:var(--fs-body); font-weight:600; line-height:1.3}
 .ms-row .t small{display:block; font-size:var(--fs-xs); font-weight:400; color:var(--sub); margin-top:1px}
@@ -756,12 +756,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 .path li{margin-bottom:var(--sp-2)}
 
 /* 文法タブ */
-.gr-start{
-  margin-top:var(--sp-4); width:100%; min-height:56px; border:none; border-radius:var(--r-md);
-  background:var(--grad-sea-strong); color:var(--on-strong); font-size:var(--fs-lead); font-weight:600; box-shadow:var(--shadow-raise);
-}
-.gr-start:active{transform:scale(.985); opacity:.92}
-.gr-start:disabled{opacity:.35; box-shadow:none}
+.cta:disabled{opacity:.35; box-shadow:none}
 .gr-note{font-size:var(--fs-xs); color:var(--sub); margin-top:var(--sp-2); text-align:center}
 .isl-map{position:relative; width:100%; max-width:420px; margin:var(--sp-4) auto 0}
 .isl-road{position:absolute; inset:0; width:100%; height:100%}
@@ -796,7 +791,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 /* 文法の出題 */
 .gq{
   margin-top:var(--sp-4); background:var(--card); border:.5px solid var(--line); border-radius:var(--r-lg);
-  padding:var(--sp-4); box-shadow:var(--shadow-card); font-size:20px; line-height:1.7; font-weight:500;
+  padding:var(--sp-4); box-shadow:var(--shadow-card); font-size:var(--fs-h2); line-height:1.7; font-weight:400;
 }
 .gq.gja{font-size:var(--fs-lead); font-weight:600}
 .gline + .gline{margin-top:var(--sp-1)}
@@ -812,22 +807,22 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   min-height:var(--tap); border:.5px solid var(--sea-text); background:var(--card); color:var(--sea-text);
   border-radius:var(--r-full); padding:0 var(--sp-4); font-size:var(--fs-sm); font-weight:600;
 }
-.oline{display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-2); margin-top:var(--sp-4); font-size:20px; font-weight:600}
+.oline{display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-2); margin-top:var(--sp-4); font-size:var(--fs-h2); font-weight:600}
 .oline .fix{padding:0 2px}
 .slot{
   position:relative; min-width:56px; min-height:48px; padding:0 var(--sp-3); border-radius:var(--r-sm);
-  border:2px dashed var(--sub); background:var(--card-2); color:var(--sub); font-size:18px; font-weight:600;
+  border:2px dashed var(--sub); background:var(--card-2); color:var(--sub); font-size:var(--fs-body); font-weight:600;
 }
 .slot.has{border-style:solid; border-color:var(--sea-text); background:var(--sea-soft); color:var(--ink)}
 .slot.ok{border-color:var(--green-text); background:var(--green-soft)}
 .slot.ng{border-color:var(--pink-text); background:var(--pink-soft)}
-.slot .mk{margin-left:4px; font-size:15px; font-weight:700}
+.slot .mk{margin-left:4px; font-size:var(--fs-sm); font-weight:700}
 .slot.ok .mk{color:var(--green-text)}
 .slot.ng .mk{color:var(--pink-text)}
 .bank{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-5)}
 .chip{
   min-width:56px; min-height:48px; padding:0 var(--sp-4); border-radius:var(--r-full);
-  border:.5px solid var(--line); background:var(--card); color:var(--ink); font-size:18px; font-weight:600; box-shadow:var(--shadow-raise);
+  border:.5px solid var(--line); background:var(--card); color:var(--ink); font-size:var(--fs-body); font-weight:600; box-shadow:var(--shadow-raise);
 }
 .chip:active{transform:scale(.95)}
 .chip.used{opacity:.3; box-shadow:none; border-style:dashed}
@@ -1031,8 +1026,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   <div class="eyebrow">Grammar</div>
   <h1 class="page">文法</h1>
   <div class="page-sub" id="gr-sub"></div>
-  <button class="gr-start" id="gr-start">📘 今日の文法 10問</button>
-  <div class="gr-note">いまのステージから7問＋おさらい3問。島を押すと、そのステージだけ10問できます。</div>
+  <button class="cta" id="gr-start">
+    <span class="ic"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7.6c-2.3-1.7-5.3-2.4-9.2-2.1v15.2c3.9-.3 6.9.4 9.2 2.1 2.3-1.7 5.3-2.4 9.2-2.1V5.5c-3.9-.3-6.9.4-9.2 2.1z"/><path d="M14 7.6v15.2"/></svg></span>
+    <span class="t">今日の文法 10問<small>いまのステージから7問＋おさらい3問</small></span>
+  </button>
+  <div class="gr-note">島を押すと、そのステージだけ10問できます。</div>
   <div class="isl-map" id="gr-map"></div>
 </section>
 
