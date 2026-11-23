@@ -1523,6 +1523,18 @@ function weekAgg(byDate, doneKeys, ws){
   r.n = r.l.a + r.g.a;
   return r;
 }
+/* リスニングの日ごとの数を s2.days（9月から全期間の日ごとの合計）で補う。
+   alog は11/22から始まり、最大5000件で古い分が切れる。s2.days の方が多い日はそちらを使う
+   （11/22以降は両方に同じ問題が入るので、足さずに多い方を採る） */
+function withS2Days(byDate, s2days){
+  Object.keys(s2days || {}).forEach(d => {
+    const s = s2days[d], a = +(s && s.a) || 0;
+    if (!a) return;
+    const x = byDate[d] || (byDate[d] = {l:{a:0,c:0}, g:{a:0,c:0}});
+    if (a > x.l.a) x.l = {a, c: Math.min(a, +s.c || 0)};
+  });
+  return byDate;
+}
 /* 合格予測メーター */
 function predictLFrom(log){
   let n = 0, c = 0;
@@ -3323,7 +3335,7 @@ function renderReport(){
     (rest ? 'あと' + rest + '問<br>1日' + per + '問で届きます' : '<span class="win">達成！</span>') + '<br>先週は' + pn + '問</div></div></div></div>';
 
   /* ⑤ 正答率の移り変わり（8週間）と模試 */
-  const bd = aggByDate(alog), weeks = [];
+  const bd = withS2Days(aggByDate(alog), s2.days), weeks = [];
   for (let i = 7; i >= 0; i--){ const s = addDaysStr(ws, -7 * i), a = weekAgg(bd, done, s); weeks.push({s, l: pctOf(a.l), g: pctOf(a.g)}); }
   h += '<div class="panel rp"><h3>正答率の移り変わり<small>8週間</small></h3>';
   if (weeks.every(w => w.l === null && w.g === null)){

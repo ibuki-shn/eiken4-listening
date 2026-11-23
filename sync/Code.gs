@@ -6,6 +6,7 @@
  *  - アプリ（お母さんのスマホ）から送られてきた記録の写しを、タブ「受信データ」に端末ごと1行で保存する。
  *  - 家族の「見るだけ」表示が ?k=<鍵> で取りに来たら、n（解いた問題数）が一番多い端末の写しを返す。
  *  - タブ「毎日の記録」に、日ごとの解いた問題・正解・正答率を書き直す。
+ *    11/22 より前の日は、リスニングの日ごと合計（stats2.days）から出す（文法は0）。
  *
  * デプロイ手順
  *  1. 記録を入れたいスプレッドシートを開き、拡張機能 > Apps Script を開く（シートに紐づいたスクリプト）。
@@ -166,7 +167,34 @@ function doGet(e){
   }
 }
 
-// いちばん問題数の多い端末の log から、日ごとに集計して書き直す
+// 日ごとの集計（シートに触らない。node で試せる）
+// log（11/22から・1問ごと）に、stats2.days（9月からのリスニングの日ごと合計）を補う。
+// stats2 の方が多い日はリスニングをその数にする（11/22以降は両方に同じ問題が入るので、足さずに多い方）
+function dailyRows_(log, s2days){
+  const days = {};
+  const day = function(d){ return days[d] || (days[d] = {l:0, lc:0, g:0, gc:0}); };
+  (Array.isArray(log) ? log : []).forEach(function(x){
+    if (!x || typeof x.d !== "string") return;
+    const v = day(x.d);
+    if (x.k === "l"){ v.l++; if (x.ok) v.lc++; }
+    else if (x.k === "g"){ v.g++; if (x.ok) v.gc++; }
+  });
+  if (s2days && typeof s2days === "object"){
+    Object.keys(s2days).forEach(function(d){
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+      const s = s2days[d], a = Number(s && s.a) || 0;
+      if (a <= 0) return;
+      const v = day(d);
+      if (a > v.l){ v.l = a; v.lc = Math.min(a, Number(s.c) || 0); }
+    });
+  }
+  return Object.keys(days).sort().reverse().map(function(d){
+    const v = days[d], a = v.l + v.g, c = v.lc + v.gc;
+    return {d: d, a: a, c: c, l: v.l, g: v.g};
+  }).filter(function(r){ return r.a > 0; });
+}
+
+// いちばん問題数の多い端末の記録から、日ごとに集計して書き直す
 function rebuildDaily_(){
   const b = best_(readDevices_());
   const sh = sheet_(SHEET_DAILY);
@@ -175,25 +203,15 @@ function rebuildDaily_(){
   sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight("bold");
   sh.setFrozenRows(1);
   if (!b) return;
-  let log = [];
+  let log = [], s2days = null;
   try{ log = JSON.parse(b.data["eiken4.log"]); }catch(e){}
-  if (!Array.isArray(log)) return;
-  const days = {};
-  log.forEach(function(x){
-    if (!x || typeof x.d !== "string") return;
-    const d = days[x.d] || (days[x.d] = {a:0, c:0, l:0, g:0});
-    d.a++;
-    if (x.ok) d.c++;
-    if (x.k === "l") d.l++;
-    else if (x.k === "g") d.g++;
-  });
-  const keys = Object.keys(days).sort().reverse();
-  if (!keys.length) return;
-  const rows = keys.map(function(d){
-    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d);
+  try{ const s2 = JSON.parse(b.data["eiken4.stats2"]); s2days = s2 && s2.days; }catch(e){}
+  const list = dailyRows_(log, s2days);
+  if (!list.length) return;
+  const rows = list.map(function(r){
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(r.d);
     const wd = m ? "月火水木金土日".charAt(Number(Utilities.formatDate(new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 3)), "Asia/Tokyo", "u")) - 1) : "";
-    const v = days[d];
-    return [d, wd, v.a, v.c, v.a ? v.c / v.a : 0, v.l, v.g];
+    return [r.d, wd, r.a, r.c, r.a ? r.c / r.a : 0, r.l, r.g];
   });
   sh.getRange(2, 1, rows.length, 1).setNumberFormat("@");
   sh.getRange(2, 1, rows.length, head.length).setValues(rows);
