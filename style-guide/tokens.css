@@ -51,6 +51,8 @@
   --shadow-card:0 1px 2px rgba(25,24,23,.05);
   --shadow-raise:0 4px 16px -6px rgba(25,24,23,.18);
   --shadow-pop:0 10px 30px -10px rgba(25,24,23,.3);
+  /* グラフの4色（きろく）：第1部・第2部・第3部・文法。色覚の検査済み。文字には使わない */
+  --c1:#0E9AA8; --c2:#5A63D8; --c3:#E8486F; --c4:#D98A10;
 }
 /* ---------- ダーク ---------- */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
@@ -70,6 +72,7 @@
   --shadow-card:0 1px 2px rgba(0,0,0,.35);
   --shadow-raise:0 6px 20px -8px rgba(0,0,0,.6);
   --shadow-pop:0 12px 34px -10px rgba(0,0,0,.7);
+  --c1:#159AA6; --c2:#8A80F0; --c3:#E5577E; --c4:#BE8420;
 }}
 :root[data-theme="dark"]{
   --bg:#0B1113; --card:#171E20; --card-2:#131A1C;
@@ -88,5 +91,6 @@
   --shadow-card:0 1px 2px rgba(0,0,0,.35);
   --shadow-raise:0 6px 20px -8px rgba(0,0,0,.6);
   --shadow-pop:0 12px 34px -10px rgba(0,0,0,.7);
+  --c1:#159AA6; --c2:#8A80F0; --c3:#E5577E; --c4:#BE8420;
 }
 
