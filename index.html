@@ -954,6 +954,19 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 .rp-honu .tx{min-width:0}
 .rp-honu .tx span{color:var(--sub)}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important; animation:none!important} }
+/* ---------- 見る専用の帯（?mama=鍵 のとき） ---------- */
+#viewbar{position:fixed; top:0; left:0; right:0; z-index:90; display:flex; align-items:center; gap:var(--sp-3);
+  padding:calc(8px + env(safe-area-inset-top,0px)) var(--sp-4) 8px; min-height:calc(60px + env(safe-area-inset-top,0px));
+  background:var(--sea-soft); color:var(--ink); border-bottom:1px solid var(--line)}
+#viewbar .vb-txt{flex:1; min-width:0}
+#viewbar .vb-t{font-size:14px; font-weight:700; line-height:1.35}
+#viewbar .vb-s{font-size:12px; color:var(--sub); line-height:1.4; overflow-wrap:anywhere}
+#viewbar .vb-s.err{color:var(--coral-solid)}
+#viewbar button{flex:none; min-width:64px; min-height:44px; padding:0 14px; border-radius:12px; border:1px solid var(--sea-text);
+  background:var(--card); color:var(--sea-text); font-size:14px; font-weight:700}
+body.viewmode{padding-top:calc(60px + env(safe-area-inset-top,0px))}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #viewbar .vb-s.err{color:#FF9A7A} }
+:root[data-theme="dark"] #viewbar .vb-s.err{color:#FF9A7A}
 </style>
 <title>英検4級リスニング講座</title>
 <style>img{max-width:100%}</style>
@@ -1244,8 +1257,79 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 <script src="grammar.js"></script>
 <script>
 "use strict";
-function loadJSON(key, fb){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fb; }catch(e){ return fb; } }
-function saveJSON(key, o){ try{ localStorage.setItem(key, JSON.stringify(o)); }catch(e){} }
+const SYNC_URL = "https://script.google.com/macros/s/AKfycbw-L0nVcHl2m662n3ToX9cAH_0UfROzNJHZayWZOBu_Q59CWRq8o6CGAOjxuCUU21q-Kg/exec";   // 記録の写しの送り先（Apps Script ウェブアプリ）
+/* ---------- 記録の写しの送信・見る専用（?mama=鍵） ---------- */
+const VIEW_KEY = (function(){ try{ return new URLSearchParams(location.search).get("mama") || ""; }catch(e){ return ""; } })();
+const VIEW = !!VIEW_KEY;
+const viewMem = {};
+let viewSnap = null;
+if (VIEW){
+  viewMem["eiken4.calview"] = '"report"';
+  viewMem["eiken4.onboarded"] = "1";
+  viewMem["eiken4.migrated3"] = "1";
+  try{ const t = sessionStorage.getItem("eiken4view.snap"); if (t){ const o = JSON.parse(t); if (o && o.data && typeof o.data === "object") viewSnap = o; } }catch(e){}
+}
+function lsGet(k){
+  if (VIEW){
+    if (Object.prototype.hasOwnProperty.call(viewMem, k)) return viewMem[k];
+    if (viewSnap && viewSnap.data && typeof viewSnap.data[k] === "string") return viewSnap.data[k];
+    return null;
+  }
+  try{ return localStorage.getItem(k); }catch(e){ return null; }
+}
+function lsSet(k, v){
+  if (VIEW){ viewMem[k] = String(v); return; }
+  localStorage.setItem(k, v);
+  try{
+    if (k.indexOf("eiken4.") === 0 && k.indexOf("eiken4.sync.") !== 0 && k !== "eiken4.calview") syncChanged();
+  }catch(e){}
+}
+let syncSeq = 0, syncTimer = 0;
+function syncChanged(){
+  if (VIEW || !SYNC_URL) return;
+  syncSeq++;
+  try{ localStorage.setItem("eiken4.sync.dirty", "1"); }catch(e){}
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(syncSend, 15000);
+}
+function syncSend(){
+  try{
+    if (VIEW || !SYNC_URL) return;
+    clearTimeout(syncTimer); syncTimer = 0;
+    let dev = localStorage.getItem("eiken4.sync.dev");
+    if (!dev || !/^[a-z0-9]{8,40}$/.test(dev)){
+      const cs = "abcdefghijklmnopqrstuvwxyz0123456789"; dev = "";
+      for (let i = 0; i < 16; i++) dev += cs[Math.floor(Math.random() * cs.length)];
+      localStorage.setItem("eiken4.sync.dev", dev);
+    }
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++){
+      const k = localStorage.key(i);
+      if (k && k.indexOf("eiken4.") === 0 && k.indexOf("eiken4.sync.") !== 0) data[k] = localStorage.getItem(k);
+    }
+    const body = JSON.stringify({v:1, dev:dev, t:Date.now(), data:data});
+    const seq0 = syncSeq;
+    fetch(SYNC_URL, {method:"POST", mode:"no-cors", body:body, keepalive: body.length < 60000}).then(() => {
+      try{
+        localStorage.setItem("eiken4.sync.last", String(Date.now()));
+        if (syncSeq === seq0) localStorage.removeItem("eiken4.sync.dirty");
+      }catch(e){}
+    }).catch(() => {});
+  }catch(e){}
+}
+try{
+  if (!VIEW && SYNC_URL){
+    document.addEventListener("visibilitychange", () => {
+      try{ if (document.visibilityState === "hidden" && localStorage.getItem("eiken4.sync.dirty")) syncSend(); }catch(e){}
+    });
+    setTimeout(() => {
+      try{ if (localStorage.getItem("eiken4.sync.dirty") || !localStorage.getItem("eiken4.sync.last")) syncSend(); }catch(e){}
+    }, 3000);
+  }
+}catch(e){}
+
+function loadJSON(key, fb){ try{ const v = lsGet(key); return v ? JSON.parse(v) : fb; }catch(e){ return fb; } }
+function saveJSON(key, o){ try{ lsSet(key, JSON.stringify(o)); }catch(e){} }
 function el(id){ return document.getElementById(id); }
 
 let done   = loadJSON("eiken4.done", {});
@@ -1551,7 +1635,7 @@ function countL(part, ok){                   // 従来の集計（総回答・�
 /* 初回の1回だけ：過去の記録から「どの Day をいつ解いたか」を復元 */
 (function migrate3(){
   let was = null;
-  try{ was = localStorage.getItem("eiken4.migrated3"); }catch(e){}
+  try{ was = lsGet("eiken4.migrated3"); }catch(e){}
   if (was) return;
   try{
     const m = migrateFrom({done, daydone: dayDone, scores, wrong, s2days: s2.days,
@@ -1561,7 +1645,7 @@ function countL(part, ok){                   // 従来の集計（総回答・�
     if (!alog.length) alog = m.log;
     saveL(); saveJSON("eiken4.lplay", lplay); saveJSON("eiken4.log", alog);
   }catch(e){}
-  try{ localStorage.setItem("eiken4.migrated3", "1"); }catch(e){}
+  try{ lsSet("eiken4.migrated3", "1"); }catch(e){}
 })();
 
 /* ---------- レベル・XP ---------- */
@@ -3498,11 +3582,11 @@ function renderOnb(){
 function closeOnb(){
   el("onb").hidden = true;
   document.body.style.overflow = "";
-  try{ localStorage.setItem("eiken4.onboarded", "1"); }catch(e){}
+  try{ lsSet("eiken4.onboarded", "1"); }catch(e){}
 }
 (function(){
   let seen = false;
-  try{ seen = !!localStorage.getItem("eiken4.onboarded"); }catch(e){}
+  try{ seen = !!lsGet("eiken4.onboarded"); }catch(e){}
   if (!seen){
     el("onb").hidden = false;
     document.body.style.overflow = "hidden";
@@ -3521,6 +3605,64 @@ try{
     navigator.serviceWorker.register("sw.js").catch(() => {});
   }
 }catch(e){}
+
+/* ---------- 見る専用：帯・取得 ---------- */
+(function(){
+  if (!VIEW) return;
+  document.body.classList.add("viewmode");
+  const bar = document.createElement("div");
+  bar.id = "viewbar";
+  bar.innerHTML = '<div class="vb-txt"><div class="vb-t">お母さんの記録（見るだけ）</div><div class="vb-s" id="vb-s" role="status"></div></div>' +
+                  '<button type="button" id="vb-reload">更新</button>';
+  document.body.insertBefore(bar, document.body.firstChild);
+  const st = el("vb-s");
+  function two(n){ return String(n).padStart(2, "0"); }
+  function say(kind){
+    let t = "", err = false;
+    if (kind === "ok"){
+      const d = new Date(viewSnap.updated), w = "日月火水木金土"[d.getDay()];
+      t = "最終更新 " + (d.getMonth() + 1) + "月" + d.getDate() + "日(" + w + ") " + two(d.getHours()) + ":" + two(d.getMinutes());
+    }
+    else if (kind === "loading") t = "読み込み中…";
+    else if (kind === "empty") t = "まだ記録が届いていません。お母さんのスマホでアプリを開くと届きます";
+    else if (kind === "key"){ t = "このリンクでは見られません。リンクを確かめてください"; err = true; }
+    else { t = "読み込めませんでした。電波を確かめて「更新」を押してください"; err = true; }
+    st.textContent = t; st.classList.toggle("err", err);
+  }
+  function snapSave(){ sessionStorage.setItem("eiken4view.snap", JSON.stringify(viewSnap)); }
+  function pull(){
+    say("loading");
+    try{
+      if (!SYNC_URL){ say("err"); return; }
+      fetch(SYNC_URL + "?k=" + encodeURIComponent(VIEW_KEY), {cache:"no-store"})
+        .then(r => r.json())
+        .then(j => {
+          try{
+            if (!j || !j.ok){ say(j && j.err === "key" ? "key" : "err"); return; }
+            if (j.empty || !j.data || typeof j.data !== "object"){ say("empty"); return; }
+            if (!viewSnap || viewSnap.updated !== j.updated){
+              const prev = viewSnap;
+              viewSnap = {at:Date.now(), updated:j.updated, n:j.n, data:j.data};
+              try{ snapSave(); }catch(e){ viewSnap = prev; say("err"); return; }
+              location.reload();
+              return;
+            }
+            viewSnap.at = Date.now();
+            try{ snapSave(); }catch(e){}
+            say("ok");
+          }catch(e){ say("err"); }
+        })
+        .catch(() => say("err"));
+    }catch(e){ say("err"); }
+  }
+  el("vb-reload").addEventListener("click", pull);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && (!viewSnap || Date.now() - (viewSnap.at || 0) > 300000)) pull();
+  });
+  if (viewSnap){ say("ok"); if (Date.now() - (viewSnap.at || 0) > 60000) pull(); }
+  else pull();
+  showTab("cal");
+})();
 </script>
 
 </html>
